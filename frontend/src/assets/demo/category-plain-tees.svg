@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" width="100%" height="100%">
+  <rect width="600" height="700" fill="#EFECE5"/>
+  <rect x="20" y="20" width="560" height="660" fill="none" stroke="#DAD7CE" stroke-width="1"/>
+  
+  <!-- Silhouette of minimal plain boxy tee -->
+  <g transform="translate(100, 110)">
+    <!-- Tee body -->
+    <path d="M 50,110 L 130,100 Q 200,115 270,100 L 350,110 L 380,240 L 320,255 L 315,190 L 320,410 L 80,410 L 85,190 L 80,255 L 20,240 Z" 
+          fill="#FAF9F6" 
+          stroke="#DAD7CE" 
+          stroke-width="1.5"/>
+    <!-- Ribbed crewneck -->
+    <path d="M 150,100 Q 200,125 250,100 Q 200,115 150,100" fill="#E8E5DD" stroke="#B8B4A8" stroke-width="1"/>
+    <!-- Dropped shoulder seam indicators -->
+    <line x1="90" y1="130" x2="110" y2="195" stroke="#E0DDD4" stroke-width="2"/>
+    <line x1="310" y1="130" x2="290" y2="195" stroke="#E0DDD4" stroke-width="2"/>
+  </g>
+
+  <!-- Editorial typography overlay -->
+  <text x="50" y="580" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#5C6548" letter-spacing="3">CATEGORY 01</text>
+  <text x="50" y="615" font-family="'Inter', sans-serif" font-size="24" font-weight="600" fill="#202020" letter-spacing="-0.5">Plain Tees</text>
+  <text x="50" y="640" font-family="'Inter', sans-serif" font-size="13" font-weight="400" fill="#5A5A5A">Pure silhouette. Clean 240 GSM drop.</text>
+</svg>

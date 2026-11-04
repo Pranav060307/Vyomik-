@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #F4F3EE;
+    --color-charcoal: #202020;
+    --color-olive: #5C6548;
+    --color-stone: #DAD7CE;
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-charcoal);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Sharp rectangular buttons as per brand guideline: no rounded corners */
+  button, input, select, textarea {
+    border-radius: 0 !important;
+  }
+}
+
+/* Subtle custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F4F3EE;
+}
+::-webkit-scrollbar-thumb {
+  background: #DAD7CE;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B8B4A8;
+}

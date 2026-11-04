@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="100%" height="100%">
+  <!-- Background with warm minimal tone -->
+  <rect width="800" height="1000" fill="#E6E4DE"/>
+  
+  <defs>
+    <linearGradient id="charcoalFabric" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2D2D2D"/>
+      <stop offset="50%" stop-color="#202020"/>
+      <stop offset="100%" stop-color="#161616"/>
+    </linearGradient>
+    <linearGradient id="charcoalTrousers" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3A3835"/>
+      <stop offset="100%" stop-color="#2A2826"/>
+    </linearGradient>
+    <linearGradient id="skinToneDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C59B7D"/>
+      <stop offset="100%" stop-color="#A57A5C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Studio backdrop lighting effect -->
+  <ellipse cx="400" cy="550" rx="350" ry="420" fill="#D8D4C8" opacity="0.6"/>
+
+  <!-- Minimal Silhouette of Fashion Model -->
+  <!-- Head & Neck -->
+  <ellipse cx="400" cy="220" rx="60" ry="75" fill="url(#skinToneDark)"/>
+  <rect x="375" y="270" width="50" height="70" fill="url(#skinToneDark)"/>
+
+  <!-- Oversized Tee Silhouette (Charcoal Black) -->
+  <path d="M 220,340 
+           L 320,330 
+           Q 400,345 480,330 
+           L 580,340 
+           L 630,520 
+           L 540,545 
+           L 535,465 
+           L 540,780 
+           L 260,780 
+           L 265,465 
+           L 260,545 
+           L 170,520 Z" 
+        fill="url(#charcoalFabric)" 
+        stroke="#181818" 
+        stroke-width="1.5"/>
+
+  <!-- Collar detail -->
+  <path d="M 345,330 Q 400,360 455,330 Q 400,350 345,330" fill="#323232" stroke="#404040" stroke-width="1"/>
+
+  <!-- Fabric fold highlights for deep charcoal dimension -->
+  <path d="M 270,390 Q 320,440 330,580" stroke="#3D3D3D" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 530,390 Q 480,440 470,580" stroke="#3D3D3D" stroke-width="2" fill="none" opacity="0.6"/>
+  <path d="M 380,420 Q 400,530 395,740" stroke="#383838" stroke-width="2" fill="none" opacity="0.7"/>
+
+  <!-- Lower Body / Silhouette Trousers -->
+  <path d="M 275,780 L 390,780 L 385,1000 L 265,1000 Z" fill="url(#charcoalTrousers)"/>
+  <path d="M 410,780 L 525,780 L 535,1000 L 415,1000 Z" fill="url(#charcoalTrousers)"/>
+
+  <!-- Clean Editorial Demo Watermark / Badge -->
+  <rect x="36" y="36" width="220" height="32" fill="#5C6548" opacity="0.95"/>
+  <text x="48" y="57" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#F4F3EE" letter-spacing="1.5">DEMO · EDITORIAL (BLACK)</text>
+
+  <!-- Spec annotation -->
+  <text x="36" y="960" font-family="'Inter', sans-serif" font-size="12" font-weight="500" fill="#202020" letter-spacing="2">VYOMIK ESSENTIAL OVERSIZED TEE / PITCH BLACK</text>
+  <text x="36" y="978" font-family="'Inter', sans-serif" font-size="10" font-weight="400" fill="#5A5A5A">240 GSM COMBED COTTON · RELAXED DRAPE</text>
+</svg>

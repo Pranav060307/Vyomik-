@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" width="100%" height="100%">
+  <rect width="600" height="700" fill="#EAE7DF"/>
+  <rect x="20" y="20" width="560" height="660" fill="none" stroke="#DAD7CE" stroke-width="1"/>
+  
+  <!-- Silhouette of wordmark tee with VYOMIK on chest -->
+  <g transform="translate(100, 110)">
+    <path d="M 50,110 L 130,100 Q 200,115 270,100 L 350,110 L 380,240 L 320,255 L 315,190 L 320,410 L 80,410 L 85,190 L 80,255 L 20,240 Z" 
+          fill="#202020" 
+          stroke="#181818" 
+          stroke-width="1.5"/>
+    <path d="M 150,100 Q 200,125 250,100 Q 200,115 150,100" fill="#2E2E2E" stroke="#404040" stroke-width="1"/>
+    
+    <!-- Wordmark on chest in warm ivory -->
+    <text x="200" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="16" font-weight="500" fill="#F4F3EE" letter-spacing="7">VYOMIK</text>
+  </g>
+
+  <!-- Typography -->
+  <text x="50" y="580" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#5C6548" letter-spacing="3">CATEGORY 02</text>
+  <text x="50" y="615" font-family="'Inter', sans-serif" font-size="24" font-weight="600" fill="#202020" letter-spacing="-0.5">Wordmark Tees</text>
+  <text x="50" y="640" font-family="'Inter', sans-serif" font-size="13" font-weight="400" fill="#5A5A5A">Subtle signature typography branding.</text>
+</svg>
