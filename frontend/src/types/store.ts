@@ -8,6 +8,9 @@ export interface StoreConfig {
   store_name: string;
   store_mode: StoreMode;
   launch_date: string;
+  launch_at: string;
+  server_time: string;
+  gate_enabled: boolean;
   payment_provider: string;
   cod_available: boolean;
   free_shipping_threshold_paise: number;

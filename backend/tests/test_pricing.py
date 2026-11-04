@@ -67,3 +67,4 @@ def test_paise_to_inr_display():
     assert paise_to_inr_display(279900) == "₹2,799"
     assert paise_to_inr_display(9900) == "₹99"
     assert paise_to_inr_display(149950) == "₹1,499.50"
+

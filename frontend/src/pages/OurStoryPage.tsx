@@ -86,3 +86,4 @@ export const OurStoryPage: React.FC = () => {
     </div>
   );
 };
+

@@ -177,3 +177,4 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
     </div>
   );
 };
+

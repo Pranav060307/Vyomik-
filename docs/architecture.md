@@ -87,3 +87,4 @@ Configured via `STORE_MODE` in `.env` and exposed through `GET /api/v1/config`:
 |---|---|---|
 | `coming_soon` | Announcement banner shows countdown to 8 Nov 2026. "Notify me at launch" triggers email modal saving to `waitlist_signups`. Category cards display inline coming soon panels. | Disabled with explanatory message. |
 | `live` | Full product catalog, interactive size/color picker, active shopping bag drawer, and payment checkout enabled. | Enabled (prepaid + COD). |
+

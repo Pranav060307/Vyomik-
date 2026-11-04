@@ -168,3 +168,4 @@ export const CategoryEditSection: React.FC<CategoryEditSectionProps> = ({
     </section>
   );
 };
+

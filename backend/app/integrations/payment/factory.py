@@ -25,3 +25,4 @@ def get_payment_provider() -> PaymentProvider:
         f"Payment provider '{provider}' is not implemented yet. "
         f"Available options: 'mock'."
     )
+

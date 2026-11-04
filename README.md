@@ -146,14 +146,20 @@ npm test
 
 | Variable | Description | Default |
 |---|---|---|
-| `STORE_MODE` | Store launch flag: `"coming_soon"` or `"live"` | `coming_soon` |
+| `STORE_MODE` | Store shopping flag: `"coming_soon"` or `"live"` | `coming_soon` |
+| `LAUNCH_AT` | Launch timestamp ISO 8601 with timezone (confirm with CEO) | `2026-11-08T00:00:00+05:30` |
+| `LAUNCH_GATE_ENABLED` | Manual kill switch for pre-launch Coming Soon gate (`true`/`false`) | `true` |
+| `PREVIEW_KEY` | Secret key for team preview bypass via `/?preview=<key>` | `vyomik_team_preview_2026` |
 | `PAYMENT_PROVIDER` | Decoupled payment adapter: `"mock"`, `"razorpay"`, `"cashfree"` | `mock` |
 | `QIKINK_MODE` | Qikink environment: `"mock"`, `"sandbox"`, `"live"` | `mock` |
-| `DATABASE_URL` | Async PostgreSQL connection URI | `postgresql+asyncpg://...` |
+| `DATABASE_URL` | Async database connection URI | `postgresql+asyncpg://...` (or local SQLite) |
 | `FREE_SHIPPING_THRESHOLD_PAISE` | Free shipping minimum (in Paise: 149900 = ₹1,499) | `149900` |
 | `DEFAULT_SHIPPING_FEE_PAISE` | Flat shipping fee (in Paise: 9900 = ₹99) | `9900` |
 | `COD_AVAILABLE` | Enable or disable Cash on Delivery | `true` |
 | `COD_FEE_PAISE` | COD handling fee (in Paise: 4900 = ₹49) | `4900` |
+
+> **IMPORTANT: Independence of `STORE_MODE` and the Launch Gate:**  
+> Reaching the `LAUNCH_AT` timestamp automatically lifts the full-screen Coming Soon gate at `/`, so visitors see the full storefront without needing a redeploy. However, **`STORE_MODE` stays independent**: product purchases and cart checkout remain disabled in `coming_soon` mode until explicitly toggled to `STORE_MODE=live` when the operations and warehouse team is fully ready to accept customer orders.
 
 ---
 
@@ -177,3 +183,4 @@ Before launching on **8 November 2026**, execute the following steps:
 4. [ ] **Switch Store Mode to Live:**
    - Update `.env`: `STORE_MODE=live`
    - Re-deploy to enable public shopping cart and instant order creation.
+

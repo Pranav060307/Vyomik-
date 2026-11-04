@@ -45,3 +45,4 @@ def validate_order_number(order_number: str) -> bool:
     if not order_number.startswith(ORDER_PREFIX):
         return False
     return True
+

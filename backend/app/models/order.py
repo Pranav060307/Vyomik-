@@ -137,3 +137,4 @@ class Return(Base, TimestampMixin):
 
     # Relationships
     order: Mapped["Order"] = relationship("Order", back_populates="returns")
+

@@ -51,3 +51,4 @@ async def signup_waitlist(
         message="You're on the list. We'll email you 1 hour before the first drop opens.",
         created_at=signup.created_at,
     )
+

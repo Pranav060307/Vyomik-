@@ -10,3 +10,4 @@ export function paise_to_inr_display(paise: number): string {
     maximumFractionDigits: rupees % 1 === 0 ? 0 : 2,
   }).format(rupees);
 }
+

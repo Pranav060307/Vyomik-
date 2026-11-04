@@ -45,3 +45,4 @@ class ProductRead(BaseModel):
     images: List[ProductImageRead] = []
 
     model_config = {"from_attributes": True}
+

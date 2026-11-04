@@ -29,6 +29,24 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         f"Starting {settings.PROJECT_NAME} v{settings.VERSION} "
         f"[Store Mode: {settings.STORE_MODE.upper()} | Payment: {settings.PAYMENT_PROVIDER.upper()} | Qikink: {settings.QIKINK_MODE.upper()}]"
     )
+
+    # For local SQLite development, automatically create tables if needed
+    if "sqlite" in settings.DATABASE_URL:
+        from app.core.database import engine, Base, AsyncSessionLocal
+        from app.core.seeder import seed_demo_products_if_empty
+        from app.models import (  # noqa: F401
+            Product, ProductVariant, VariantQikinkSku, ProductImage,
+            Customer, Address, Order, OrderItem, Return, Payment,
+            WaitlistSignup, WebhookEvent
+        )
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        
+        async with AsyncSessionLocal() as session:
+            await seed_demo_products_if_empty(session)
+
+        logger.info("Local SQLite database initialized with all 12 tables and seeded catalog.")
+
     yield
     logger.info("Gracefully shutting down VYOMIK application.")
 
@@ -77,3 +95,4 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={"detail": "An internal server error occurred. Please try again later."},
     )
+

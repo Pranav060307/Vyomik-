@@ -189,3 +189,4 @@ def get_qikink_client() -> QikinkClient:
         f"Qikink mode '{q_settings.mode}' requires verified API credentials and endpoint testing. "
         f"Currently running in 'mock' mode."
     )
+

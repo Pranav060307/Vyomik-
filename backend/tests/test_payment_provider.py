@@ -74,3 +74,4 @@ def test_payment_provider_factory():
     provider = get_payment_provider()
     assert isinstance(provider, MockPaymentProvider)
     assert provider.provider_name == "mock"
+

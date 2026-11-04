@@ -22,6 +22,10 @@ async def test_store_config_endpoint(client: AsyncClient):
     assert data["store_name"] == "VYOMIK"
     assert data["store_mode"] in ["coming_soon", "live"]
     assert data["launch_date"] == "2026-11-08"
+    assert "launch_at" in data
+    assert "server_time" in data
+    assert isinstance(data["gate_enabled"], bool)
     assert data["payment_provider"] == "mock"
     assert data["cod_available"] is True
     assert data["free_shipping_threshold_paise"] == 149900
+

@@ -42,3 +42,4 @@ async def test_waitlist_signup_invalid_email(client: AsyncClient):
         json={"email": "not-an-email", "source": "hero_cta"},
     )
     assert response.status_code == 422
+

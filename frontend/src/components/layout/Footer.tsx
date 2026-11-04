@@ -99,3 +99,4 @@ export const Footer: React.FC<FooterProps> = ({ onOpenNotifyModal }) => {
     </footer>
   );
 };
+

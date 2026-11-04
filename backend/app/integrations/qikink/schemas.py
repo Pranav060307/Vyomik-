@@ -86,3 +86,4 @@ class QikinkReversePickupResponse(BaseModel):
     reverse_ref: str
     status: str
     raw_response: Dict[str, Any] = Field(default_factory=dict)
+

@@ -96,3 +96,4 @@ export const BagDrawer: React.FC<BagDrawerProps> = ({
     </div>
   );
 };
+

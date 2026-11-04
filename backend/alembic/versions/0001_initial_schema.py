@@ -229,3 +229,4 @@ def downgrade() -> None:
     sa.Enum(name='payment_status_enum').drop(op.get_bind(), checkfirst=True)
     sa.Enum(name='payment_method_enum').drop(op.get_bind(), checkfirst=True)
     sa.Enum(name='qikink_env_enum').drop(op.get_bind(), checkfirst=True)
+

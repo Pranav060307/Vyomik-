@@ -35,3 +35,4 @@ class WebhookEvent(Base):
 
     def __repr__(self) -> str:
         return f"<WebhookEvent(source='{self.source}', event_id='{self.event_id}')>"
+

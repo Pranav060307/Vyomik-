@@ -110,3 +110,4 @@ class ProductImage(Base):
 
     # Relationship
     product: Mapped["Product"] = relationship("Product", back_populates="images")
+

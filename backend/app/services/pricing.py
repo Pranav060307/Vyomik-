@@ -77,3 +77,4 @@ def paise_to_inr_display(paise: int) -> str:
     if rupees.is_integer():
         return f"₹{int(rupees):,}"
     return f"₹{rupees:,.2f}"
+

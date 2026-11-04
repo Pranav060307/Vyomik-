@@ -44,3 +44,4 @@ def test_order_number_exceeding_max_raises_value_error():
     """Assert generating an order number beyond 15 chars raises ValueError."""
     with pytest.raises(ValueError, match="exceeds maximum length"):
         generate_public_order_number(random_length=10)
+

@@ -66,3 +66,4 @@ async def get_product_by_slug(
             detail=f"Product with slug '{slug}' not found.",
         )
     return product
+

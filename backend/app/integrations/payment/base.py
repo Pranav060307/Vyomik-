@@ -94,3 +94,4 @@ class PaymentProvider(ABC):
     ) -> Dict[str, Any]:
         """Validates webhook authenticity and returns parsed payload."""
         pass
+

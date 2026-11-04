@@ -16,3 +16,4 @@ class WaitlistSignupResponse(BaseModel):
     email: str
     message: str
     created_at: datetime
+

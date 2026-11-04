@@ -20,3 +20,4 @@ async def health_check() -> Dict[str, Any]:
         "payment_provider": settings.PAYMENT_PROVIDER,
         "qikink_mode": settings.QIKINK_MODE,
     }
+

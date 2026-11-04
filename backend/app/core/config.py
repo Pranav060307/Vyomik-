@@ -27,6 +27,21 @@ class Settings(BaseSettings):
     STORE_MODE: Literal["coming_soon", "live"] = "coming_soon"
     LAUNCH_DATE: str = "2026-11-08"
 
+    # Pre-Launch Coming Soon Gate & Live Countdown
+    # Value to confirm with CEO: default 2026-11-08T00:00:00+05:30 (IST)
+    LAUNCH_AT: str = Field(
+        default="2026-11-08T00:00:00+05:30",
+        description="Exact launch timestamp in ISO 8601 with timezone offset (confirm with CEO)",
+    )
+    LAUNCH_GATE_ENABLED: bool = Field(
+        default=True,
+        description="Manual kill switch to enable/disable the pre-launch coming soon gate",
+    )
+    PREVIEW_KEY: str = Field(
+        default="vyomik_team_preview_2026",
+        description="Internal team preview bypass secret key for /?preview=<key>",
+    )
+
     # Security
     SECRET_KEY: str = Field(
         default="dev_secret_key_change_in_production_min_32_chars_long",
@@ -91,3 +106,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

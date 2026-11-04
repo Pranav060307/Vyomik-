@@ -355,3 +355,4 @@ export const DEMO_CATEGORIES: DemoCategoryInfo[] = [
     comingSoonMessage: 'Oversized hoodies. Coming soon. Follow @vyomik for the first drop.',
   },
 ];
+

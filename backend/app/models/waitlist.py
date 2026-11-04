@@ -28,3 +28,4 @@ class WaitlistSignup(Base):
 
     def __repr__(self) -> str:
         return f"<WaitlistSignup(email='{self.email}', source='{self.source}')>"
+

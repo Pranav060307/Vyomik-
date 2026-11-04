@@ -37,3 +37,4 @@ class QikinkOrderNumberLengthError(QikinkError):
 class QikinkRateLimitError(QikinkError):
     """Raised when Qikink API returns 429 Too Many Requests."""
     pass
+

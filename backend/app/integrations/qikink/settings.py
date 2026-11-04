@@ -37,3 +37,4 @@ class QikinkSettings(BaseModel):
         logger.info(
             f"[Qikink API] Action: '{action}' | Active Mode: '{self.mode.upper()}'"
         )
+

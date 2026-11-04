@@ -52,3 +52,4 @@ class Payment(Base):
 
     def __repr__(self) -> str:
         return f"<Payment(id={self.id}, order_id={self.order_id}, provider='{self.provider}', status='{self.status}')>"
+
