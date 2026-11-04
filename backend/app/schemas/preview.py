@@ -12,3 +12,4 @@ class PreviewVerifyRequest(BaseModel):
 class PreviewVerifyResponse(BaseModel):
     valid: bool
     message: str
+

@@ -28,3 +28,4 @@ async def verify_preview_key(payload: PreviewVerifyRequest) -> PreviewVerifyResp
         valid=False,
         message="Invalid preview key. Access denied.",
     )
+

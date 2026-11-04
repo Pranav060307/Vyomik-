@@ -70,3 +70,4 @@ async def test_preview_verify_empty_key(client: AsyncClient):
         json={"key": ""},
     )
     assert res.status_code == 422
+
