@@ -1,6 +1,12 @@
 import pytest
 from pydantic import ValidationError
-from app.integrations.qikink.client import get_qikink_client, MockQikinkClient
+from app.core.config import settings
+from app.integrations.qikink.client import (
+    get_qikink_client,
+    MockQikinkClient,
+    HttpQikinkClient,
+)
+from app.integrations.qikink.settings import QikinkSettings
 from app.integrations.qikink.schemas import (
     QikinkCreateOrderRequest,
     QikinkShippingAddress,
@@ -13,23 +19,41 @@ from app.integrations.qikink.exceptions import (
 )
 from app.integrations.qikink.constants import (
     AUTH_HEADER_CLIENT_ID,
+    AUTH_HEADER_ACCESS_TOKEN,
     AUTH_HEADER_API_KEY,
     MAX_QIKINK_ORDER_NUMBER_LEN,
 )
 
 
+@pytest.fixture
+def mock_client() -> MockQikinkClient:
+    return MockQikinkClient(QikinkSettings(mode="mock"))
+
+
 def test_qikink_auth_headers_exact_keys():
     """Assert authentication header constants match required case-sensitive keys."""
-    assert AUTH_HEADER_CLIENT_ID == "X-Qikink-Client-Id"
+    assert AUTH_HEADER_CLIENT_ID == "ClientId"
+    assert AUTH_HEADER_ACCESS_TOKEN == "Accesstoken"
     assert AUTH_HEADER_API_KEY == "X-Qikink-Api-Key"
     assert MAX_QIKINK_ORDER_NUMBER_LEN == 15
 
 
-@pytest.mark.asyncio
-async def test_qikink_mock_submit_order_success():
-    client = get_qikink_client()
-    assert isinstance(client, MockQikinkClient)
+def test_qikink_client_factory_switching(monkeypatch):
+    """Assert get_qikink_client respects QIKINK_MODE configuration."""
+    monkeypatch.setattr(settings, "QIKINK_MODE", "mock")
+    client_mock = get_qikink_client()
+    assert isinstance(client_mock, MockQikinkClient)
 
+    monkeypatch.setattr(settings, "QIKINK_MODE", "sandbox")
+    monkeypatch.setattr(settings, "QIKINK_CLIENT_ID", "977241055248744")
+    monkeypatch.setattr(settings, "QIKINK_API_KEY", "5035a27d101638bea11c2220543016821d7320522f779599aa3a007582b5abb8")
+    client_sandbox = get_qikink_client()
+    assert isinstance(client_sandbox, HttpQikinkClient)
+    assert client_sandbox.settings.is_sandbox is True
+
+
+@pytest.mark.asyncio
+async def test_qikink_mock_submit_order_success(mock_client: MockQikinkClient):
     req = QikinkCreateOrderRequest(
         order_number="VY261108A7K9M",  # 13 chars <= 15 chars
         shipping_address=QikinkShippingAddress(
@@ -50,7 +74,7 @@ async def test_qikink_mock_submit_order_success():
         cod_amount_paise=0,
     )
 
-    res = await client.submit_order(req)
+    res = await mock_client.submit_order(req)
     assert res.success is True
     assert res.order_number == "VY261108A7K9M"
     assert res.qikink_order_id.startswith("QK-")
@@ -80,15 +104,13 @@ async def test_qikink_order_number_length_boundary_rejection():
 
 @pytest.mark.asyncio
 async def test_qikink_missing_sku_rejection():
-    client = get_qikink_client()
     with pytest.raises(ValidationError):
         QikinkLineItem(sku="", quantity=1)
 
 
 @pytest.mark.asyncio
-async def test_qikink_wallet_balance_check():
-    client = get_qikink_client()
-    res = await client.check_wallet_balance()
+async def test_qikink_wallet_balance_check(mock_client: MockQikinkClient):
+    res = await mock_client.check_wallet_balance()
 
     assert res.currency == "INR"
     assert res.balance_paise > 0
@@ -96,23 +118,20 @@ async def test_qikink_wallet_balance_check():
 
 
 @pytest.mark.asyncio
-async def test_qikink_pincode_serviceability():
-    client = get_qikink_client()
-    assert await client.check_pincode_serviceability("560038") is True
-    assert await client.check_pincode_serviceability("000000") is False
+async def test_qikink_pincode_serviceability(mock_client: MockQikinkClient):
+    assert await mock_client.check_pincode_serviceability("560038") is True
+    assert await mock_client.check_pincode_serviceability("000000") is False
 
 
 @pytest.mark.asyncio
-async def test_qikink_reverse_pickup_request():
-    client = get_qikink_client()
+async def test_qikink_reverse_pickup_request(mock_client: MockQikinkClient):
     req = QikinkReversePickupRequest(
         order_number="VY261108A7K9M",
         qikink_order_id="QK-984210",
         reason="Size too large, exchange requested",
         items=[QikinkLineItem(sku="VY-PL-IVO-M", quantity=1)],
     )
-    res = await client.request_reverse_pickup(req)
+    res = await mock_client.request_reverse_pickup(req)
     assert res.success is True
     assert res.reverse_ref.startswith("QK-REV-")
     assert res.status == "PICKUP_SCHEDULED"
-

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { instagramUrl, instagramHandle, contactEmail, mailtoUrl } from '../../config/brand';
 import { InstagramIcon } from '../common/InstagramIcon';
+import { useCart } from '../../context/CartContext';
 
 interface HeaderProps {
   bagCount?: number;
@@ -13,12 +14,24 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   bagCount = 0,
   onOpenBag,
-  onOpenNotifyModal,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { itemCount } = useCart();
+
+  const effectiveCount = bagCount > 0 ? bagCount : itemCount;
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const handleBagClick = () => {
+    closeMobileMenu();
+    if (onOpenBag) {
+      onOpenBag();
+    } else {
+      navigate('/bag');
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-[#F4F3EE]/95 backdrop-blur-md border-b border-[#DAD7CE] transition-all">
@@ -62,12 +75,14 @@ export const Header: React.FC<HeaderProps> = ({
           </Link>
           <button
             type="button"
-            onClick={onOpenBag}
-            className="flex items-center space-x-2 transition-colors hover:text-[#5C6548] focus:outline-none"
-            aria-label={`Shopping bag with ${bagCount} items`}
+            onClick={handleBagClick}
+            className={`flex items-center space-x-2 transition-colors hover:text-[#5C6548] focus:outline-none pb-0.5 border-b-2 ${
+              location.pathname === '/bag' ? 'border-[#202020]' : 'border-transparent'
+            }`}
+            aria-label={`Shopping bag with ${effectiveCount} items`}
           >
             <ShoppingBag className="w-4 h-4 stroke-[1.5]" />
-            <span>Bag ({bagCount})</span>
+            <span>Bag ({effectiveCount})</span>
           </button>
         </nav>
 
@@ -75,15 +90,15 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center space-x-4 md:hidden">
           <button
             type="button"
-            onClick={onOpenBag}
+            onClick={handleBagClick}
             className="p-1.5 text-[#202020] hover:text-[#5C6548] focus:outline-none"
             aria-label="Bag"
           >
             <div className="relative">
               <ShoppingBag className="w-5 h-5 stroke-[1.5]" />
-              {bagCount > 0 && (
+              {effectiveCount > 0 && (
                 <span className="absolute -top-1.5 -right-2 bg-[#202020] text-[#F4F3EE] text-[9px] w-4 h-4 flex items-center justify-center font-bold">
-                  {bagCount}
+                  {effectiveCount}
                 </span>
               )}
             </div>
@@ -100,73 +115,61 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#F4F3EE] border-b border-[#DAD7CE] px-6 py-8 space-y-6 animate-fadeIn">
-          <nav className="flex flex-col space-y-5 text-sm uppercase font-medium tracking-[0.18em] text-[#202020]">
+        <div className="md:hidden fixed inset-x-0 top-20 bg-[#F4F3EE] border-b border-[#DAD7CE] px-6 py-8 shadow-xl animate-fadeIn">
+          <nav className="flex flex-col space-y-6 text-sm uppercase font-semibold tracking-[0.2em] text-[#202020]">
             <Link
               to="/collections"
               onClick={closeMobileMenu}
-              className="py-1 border-b border-[#DAD7CE]/50 flex justify-between items-center"
+              className="hover:text-[#5C6548] transition-colors"
             >
-              <span>Collections</span>
-              <span className="text-[10px] text-[#5C6548]">DROP 01</span>
+              Collections
+            </Link>
+            <Link
+              to="/bag"
+              onClick={closeMobileMenu}
+              className="hover:text-[#5C6548] transition-colors flex items-center justify-between"
+            >
+              <span>Shopping Bag</span>
+              <span className="bg-[#202020] text-[#F4F3EE] text-[10px] px-2 py-0.5">
+                {effectiveCount}
+              </span>
             </Link>
             <Link
               to="/our-story"
               onClick={closeMobileMenu}
-              className="py-1 border-b border-[#DAD7CE]/50"
+              className="hover:text-[#5C6548] transition-colors"
             >
-              Our story
+              Our Story
             </Link>
             <Link
               to="/contact"
               onClick={closeMobileMenu}
-              className="py-1 border-b border-[#DAD7CE]/50"
+              className="hover:text-[#5C6548] transition-colors"
             >
               Contact
             </Link>
-            <button
-              type="button"
-              onClick={() => {
-                closeMobileMenu();
-                if (onOpenNotifyModal) onOpenNotifyModal();
-              }}
-              className="py-1 text-left text-[#5C6548] flex items-center justify-between"
-            >
-              <span>Notify me at launch</span>
-              <span>↗</span>
-            </button>
           </nav>
-
-          {/* Mobile Drawer Connect Footer */}
-          <div className="pt-6 border-t border-[#DAD7CE] space-y-3">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5C6548] block">
-              Connect
-            </span>
-            <div className="flex flex-col space-y-2 text-xs tracking-wider">
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="VYOMIK on Instagram"
-                className="flex items-center space-x-2 text-[#202020] hover:text-[#5C6548] transition-colors"
-              >
-                <InstagramIcon className="w-4 h-4 text-current" />
-                <span>Instagram ({instagramHandle}) ↗</span>
-              </a>
-              <a
-                href={mailtoUrl}
-                aria-label="Email VYOMIK"
-                className="text-[#202020]/80 hover:text-[#5C6548] transition-colors lowercase"
-              >
-                {contactEmail}
-              </a>
-            </div>
+          <div className="mt-8 pt-6 border-t border-[#DAD7CE] flex items-center justify-between">
+            <a
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 text-xs text-[#202020] hover:text-[#5C6548]"
+            >
+              <InstagramIcon className="w-4 h-4" />
+              <span>{instagramHandle}</span>
+            </a>
+            <a
+              href={mailtoUrl}
+              className="text-xs text-[#202020]/70 hover:text-[#202020]"
+            >
+              {contactEmail}
+            </a>
           </div>
         </div>
       )}
     </header>
   );
 };
-

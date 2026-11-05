@@ -1,6 +1,6 @@
 """
 Pytest configuration and test fixtures.
-Sets up an in-memory SQLite async engine per test function.
+Sets up an in-memory SQLite async engine per test function and isolates .txt waitlist files.
 """
 
 import pytest
@@ -13,8 +13,32 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
+from app.core.config import settings
 from app.core.database import Base, get_db
+from app.services.waitlist_file import get_txt_file_paths
 from app.main import app
+
+
+@pytest.fixture(autouse=True)
+def clean_test_txt_files():
+    original_path = settings.WAITLIST_TXT_PATH
+    settings.WAITLIST_TXT_PATH = "test_preregistrations.txt"
+    # Clean up before test
+    for path in get_txt_file_paths():
+        if path.exists():
+            path.unlink(missing_ok=True)
+        detailed = path.parent / f"{path.stem}_detailed.log"
+        if detailed.exists():
+            detailed.unlink(missing_ok=True)
+    yield
+    # Clean up after test
+    for path in get_txt_file_paths():
+        if path.exists():
+            path.unlink(missing_ok=True)
+        detailed = path.parent / f"{path.stem}_detailed.log"
+        if detailed.exists():
+            detailed.unlink(missing_ok=True)
+    settings.WAITLIST_TXT_PATH = original_path
 
 
 @pytest.fixture(scope="function")

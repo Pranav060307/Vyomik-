@@ -144,7 +144,9 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
     renderWithProviders(<App />, '/collections');
 
     expect(await screen.findByRole('heading', { name: /The Complete Edit/i })).toBeInTheDocument();
-    expect(screen.getByText(/All Silhouettes/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Oversized Tees/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Hoodies/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sweatshirts/i })).toBeInTheDocument();
   });
 
   it('renders live state "We\'re live" and "Enter the store" when countdown reaches zero', async () => {

@@ -83,7 +83,7 @@ export interface DemoProduct {
   id: string;
   slug: string;
   name: string;
-  category: 'plain-tees' | 'wordmark-tees' | 'hoodies';
+  category: 'plain-tees' | 'wordmark-tees' | 'hoodies' | 'sweatshirts' | 'oversized-tees';
   categoryLabel: string;
   headline: string;
   description: string;
@@ -317,6 +317,144 @@ export const DEMO_PRODUCTS: DemoProduct[] = [
       { id: 'v-023', size: 'S', color: 'Pitch Black', colorHex: '#202020', pricePaise: 279900, inStock: true, qikinkSkuMock: 'VY-HD-BLK-S' },
       { id: 'v-024', size: 'M', color: 'Pitch Black', colorHex: '#202020', pricePaise: 279900, inStock: true, qikinkSkuMock: 'VY-HD-BLK-M' },
       { id: 'v-025', size: 'L', color: 'Pitch Black', colorHex: '#202020', pricePaise: 279900, inStock: true, qikinkSkuMock: 'VY-HD-BLK-L' },
+    ],
+    isDemo: true,
+  },
+  {
+    id: 'prod-009',
+    slug: 'heavyweight-boxy-zip-hoodie-black',
+    name: 'Heavyweight Boxy Zip Hoodie — Vintage Black',
+    category: 'hoodies',
+    categoryLabel: 'Hoodies',
+    headline: 'Double-slide YKK zipper with custom boxy silhouette.',
+    description: 'Constructed from 450 GSM diagonal-loop French Terry. Featuring dropped shoulders, double-layered hood, and deep set-in hand pockets.',
+    fabricSpecs: '450 GSM French Terry · YKK Two-Way Metal Zipper',
+    basePricePaise: 299900, // Rs. 2,999.00
+    defaultColor: 'Pitch Black',
+    availableColors: [
+      { name: 'Pitch Black', hex: '#202020', key: 'black' },
+      { name: 'Raw Stone', hex: '#DAD7CE', key: 'stone' },
+    ],
+    availableSizes: ['S', 'M', 'L', 'XL'],
+    images: {
+      black: DEMO_IMAGES.products['hoodie-black'],
+      stone: DEMO_IMAGES.products['hoodie-stone'],
+    },
+    variants: [
+      { id: 'v-026', size: 'S', color: 'Pitch Black', colorHex: '#202020', pricePaise: 299900, inStock: true, qikinkSkuMock: 'VY-HD-ZIP-S' },
+      { id: 'v-027', size: 'M', color: 'Pitch Black', colorHex: '#202020', pricePaise: 299900, inStock: true, qikinkSkuMock: 'VY-HD-ZIP-M' },
+      { id: 'v-028', size: 'L', color: 'Pitch Black', colorHex: '#202020', pricePaise: 299900, inStock: true, qikinkSkuMock: 'VY-HD-ZIP-L' },
+    ],
+    isDemo: true,
+  },
+  {
+    id: 'prod-010',
+    slug: 'architectural-crewneck-sweatshirt-stone',
+    name: 'Architectural Crewneck Sweatshirt — Raw Stone',
+    category: 'sweatshirts',
+    categoryLabel: 'Sweatshirts',
+    headline: 'Sculpted boxy fit in 400 GSM heavyweight French fleece.',
+    description: 'A clean, collarbone-grazing crewneck neckline with ribbed side panels for structural retention and all-day comfort.',
+    fabricSpecs: '400 GSM 100% Combed Cotton Fleece · Ribbed Side Gussets',
+    basePricePaise: 249900, // Rs. 2,499.00
+    defaultColor: 'Raw Stone',
+    availableColors: [
+      { name: 'Raw Stone', hex: '#DAD7CE', key: 'stone' },
+      { name: 'Pitch Black', hex: '#202020', key: 'black' },
+      { name: 'Washed Olive', hex: '#5C6548', key: 'olive' },
+    ],
+    availableSizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    images: {
+      stone: DEMO_IMAGES.products['hoodie-stone'],
+      black: DEMO_IMAGES.products['hoodie-black'],
+      olive: DEMO_IMAGES.products['hoodie-olive'],
+    },
+    variants: [
+      { id: 'v-029', size: 'S', color: 'Raw Stone', colorHex: '#DAD7CE', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-STN-S' },
+      { id: 'v-030', size: 'M', color: 'Raw Stone', colorHex: '#DAD7CE', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-STN-M' },
+      { id: 'v-031', size: 'L', color: 'Raw Stone', colorHex: '#DAD7CE', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-STN-L' },
+      { id: 'v-032', size: 'XL', color: 'Raw Stone', colorHex: '#DAD7CE', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-STN-XL' },
+    ],
+    isDemo: true,
+  },
+  {
+    id: 'prod-011',
+    slug: 'relaxed-minimalist-sweatshirt-olive',
+    name: 'Relaxed Minimalist Sweatshirt — Washed Olive',
+    category: 'sweatshirts',
+    categoryLabel: 'Sweatshirts',
+    headline: 'Earthy tone pigment dye with dropped shoulder seams.',
+    description: 'Designed for effortless layering over our oversized tees. Finished with heavy 2x2 ribbing on collar, cuffs, and hem.',
+    fabricSpecs: '400 GSM French Terry · Garment Washed · Pre-Shrunk',
+    basePricePaise: 249900, // Rs. 2,499.00
+    defaultColor: 'Washed Olive',
+    availableColors: [
+      { name: 'Washed Olive', hex: '#5C6548', key: 'olive' },
+      { name: 'Raw Stone', hex: '#DAD7CE', key: 'stone' },
+    ],
+    availableSizes: ['S', 'M', 'L', 'XL'],
+    images: {
+      olive: DEMO_IMAGES.products['hoodie-olive'],
+      stone: DEMO_IMAGES.products['hoodie-stone'],
+    },
+    variants: [
+      { id: 'v-033', size: 'S', color: 'Washed Olive', colorHex: '#5C6548', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-OLV-S' },
+      { id: 'v-034', size: 'M', color: 'Washed Olive', colorHex: '#5C6548', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-OLV-M' },
+      { id: 'v-035', size: 'L', color: 'Washed Olive', colorHex: '#5C6548', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-OLV-L' },
+    ],
+    isDemo: true,
+  },
+  {
+    id: 'prod-012',
+    slug: 'core-boxy-sweatshirt-black',
+    name: 'Core Boxy Sweatshirt — Pitch Black',
+    category: 'sweatshirts',
+    categoryLabel: 'Sweatshirts',
+    headline: 'Deep monochromatic black essentials for everyday comfort.',
+    description: 'The definitive daily crewneck sweatshirt. Resists pilling and keeps its sharp boxy shape through endless wears.',
+    fabricSpecs: '400 GSM Heavyweight Fleece · Anti-Pilling Cotton Blend',
+    basePricePaise: 249900, // Rs. 2,499.00
+    defaultColor: 'Pitch Black',
+    availableColors: [
+      { name: 'Pitch Black', hex: '#202020', key: 'black' },
+      { name: 'Warm Ivory', hex: '#F4F3EE', key: 'ivory' },
+    ],
+    availableSizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    images: {
+      black: DEMO_IMAGES.products['hoodie-black'],
+      ivory: DEMO_IMAGES.products['plain-tee-ivory'],
+    },
+    variants: [
+      { id: 'v-036', size: 'S', color: 'Pitch Black', colorHex: '#202020', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-BLK-S' },
+      { id: 'v-037', size: 'M', color: 'Pitch Black', colorHex: '#202020', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-BLK-M' },
+      { id: 'v-038', size: 'L', color: 'Pitch Black', colorHex: '#202020', pricePaise: 249900, inStock: true, qikinkSkuMock: 'VY-SW-BLK-L' },
+    ],
+    isDemo: true,
+  },
+  {
+    id: 'prod-013',
+    slug: 'heavyweight-raglan-sweatshirt-ivory',
+    name: 'Heavyweight Raglan Sweatshirt — Warm Ivory',
+    category: 'sweatshirts',
+    categoryLabel: 'Sweatshirts',
+    headline: 'Diagonal raglan sleeve cut for fluid arm mobility.',
+    description: 'An architectural silhouette in organic ecru warm ivory. Subtle tonal flatlock stitching along raglan seams.',
+    fabricSpecs: '400 GSM Unbleached Organic Cotton · Flatlock Seam Construction',
+    basePricePaise: 239900, // Rs. 2,399.00
+    defaultColor: 'Warm Ivory',
+    availableColors: [
+      { name: 'Warm Ivory', hex: '#F4F3EE', key: 'ivory' },
+      { name: 'Raw Stone', hex: '#DAD7CE', key: 'stone' },
+    ],
+    availableSizes: ['S', 'M', 'L', 'XL'],
+    images: {
+      ivory: DEMO_IMAGES.products['plain-tee-ivory'],
+      stone: DEMO_IMAGES.products['hoodie-stone'],
+    },
+    variants: [
+      { id: 'v-039', size: 'S', color: 'Warm Ivory', colorHex: '#F4F3EE', pricePaise: 239900, inStock: true, qikinkSkuMock: 'VY-SW-IVO-S' },
+      { id: 'v-040', size: 'M', color: 'Warm Ivory', colorHex: '#F4F3EE', pricePaise: 239900, inStock: true, qikinkSkuMock: 'VY-SW-IVO-M' },
+      { id: 'v-041', size: 'L', color: 'Warm Ivory', colorHex: '#F4F3EE', pricePaise: 239900, inStock: true, qikinkSkuMock: 'VY-SW-IVO-L' },
     ],
     isDemo: true,
   },

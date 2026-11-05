@@ -27,6 +27,7 @@ class QikinkLineItem(BaseModel):
     """
     sku: str = Field(min_length=1, description="Pre-created SKU from Qikink Dashboard")
     quantity: int = Field(gt=0, description="Item quantity")
+    price_paise: int = Field(default=0, ge=0, description="Unit price in paise")
 
 
 class QikinkCreateOrderRequest(BaseModel):
@@ -38,6 +39,7 @@ class QikinkCreateOrderRequest(BaseModel):
     line_items: List[QikinkLineItem] = Field(min_length=1)
     is_cod: bool = False
     cod_amount_paise: int = Field(default=0, ge=0)
+    total_order_value_paise: int = Field(default=0, ge=0)
 
     @field_validator("order_number")
     @classmethod
@@ -53,7 +55,7 @@ class QikinkCreateOrderResponse(BaseModel):
     success: bool
     order_number: str
     qikink_order_id: str
-    status: str  # e.g., "SUBMITTED", "IN_PRODUCTION", "REJECTED"
+    status: str  # e.g., "SUBMITTED", "IN_PRODUCTION", "REJECTED", "FAILED"
     raw_response: Dict[str, Any] = Field(default_factory=dict)
 
 
@@ -86,4 +88,3 @@ class QikinkReversePickupResponse(BaseModel):
     reverse_ref: str
     status: str
     raw_response: Dict[str, Any] = Field(default_factory=dict)
-

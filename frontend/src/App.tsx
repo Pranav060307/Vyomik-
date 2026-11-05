@@ -8,6 +8,7 @@ import { ShippingReturnsPage } from './pages/ShippingReturnsPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsPage } from './pages/TermsPage';
 import { ComingSoon } from './pages/ComingSoon';
+import { BagPage } from './pages/BagPage';
 import { useLaunchGate } from './hooks/useLaunchGate';
 
 /**
@@ -34,6 +35,8 @@ export const App: React.FC = () => {
 
       {/* Direct deep links: never blocked by the gate */}
       <Route path="/collections" element={<CollectionsPage />} />
+      <Route path="/bag" element={<BagPage />} />
+      <Route path="/cart" element={<BagPage />} />
       <Route path="/our-story" element={<OurStoryPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/shipping-returns" element={<ShippingReturnsPage />} />

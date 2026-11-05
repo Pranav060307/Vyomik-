@@ -51,6 +51,10 @@ class Settings(BaseSettings):
         default="https://www.instagram.com/simplyvyomik",
         description="Official VYOMIK Instagram profile URL",
     )
+    WAITLIST_TXT_PATH: str = Field(
+        default="preregistrations.txt",
+        description="File path where pre-registered email IDs are stored in .txt format",
+    )
 
     # Security
     SECRET_KEY: str = Field(
