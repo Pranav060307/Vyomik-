@@ -35,16 +35,16 @@ export const CollectionsPage: React.FC = () => {
         }}
       />
 
-      <main className="flex-1 max-w-7xl mx-auto px-6 sm:px-8 py-16 w-full">
+      <main className="flex-1 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 py-16 md:py-24 w-full">
         {/* Page Header */}
         <div className="border-b border-[#DAD7CE] pb-8 mb-12">
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#5C6548]">
             CATALOGUE · FIRST DROP
           </span>
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#202020] mt-2">
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#202020] mt-2 text-balance">
             The Complete Edit
           </h1>
-          <p className="text-xs sm:text-sm text-[#202020]/70 mt-2 max-w-lg leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#202020]/70 mt-2 max-w-[65ch] leading-relaxed">
             Everyday oversized essentials engineered with boxy silhouettes and heavyweight fabrics.
           </p>
 
@@ -60,7 +60,7 @@ export const CollectionsPage: React.FC = () => {
                 key={tab.id}
                 type="button"
                 onClick={() => setSelectedCategory(tab.id)}
-                className={`px-4 py-2 text-xs uppercase tracking-wider font-medium border transition-colors ${
+                className={`px-4 py-2 text-xs uppercase tracking-wider font-medium border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#202020] ${
                   selectedCategory === tab.id
                     ? 'bg-[#202020] text-[#F4F3EE] border-[#202020]'
                     : 'bg-white text-[#202020] border-[#DAD7CE] hover:border-[#202020]'
@@ -73,7 +73,7 @@ export const CollectionsPage: React.FC = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {filteredProducts.map((product) => {
             const firstColorKey = product.availableColors[0]?.key || 'ivory';
             const displayImage = product.images[firstColorKey] || Object.values(product.images)[0];
@@ -83,10 +83,11 @@ export const CollectionsPage: React.FC = () => {
                 key={product.id}
                 className="group border border-[#DAD7CE] bg-white flex flex-col justify-between hover:border-[#202020] transition-colors"
               >
-                <div className="relative aspect-[3/4] bg-[#EAE8E1]/50 border-b border-[#DAD7CE] overflow-hidden">
+                <div className="relative aspect-[4/5] bg-[#EAE8E1]/50 border-b border-[#DAD7CE] overflow-hidden">
                   <img
                     src={displayImage}
                     alt={product.name}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-3 left-3 bg-[#202020] text-[#F4F3EE] text-[9px] uppercase tracking-wider px-2 py-0.5">
@@ -94,7 +95,7 @@ export const CollectionsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-5 flex flex-col justify-between flex-1">
+                <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 min-h-[140px]">
                   <div>
                     <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#5C6548]">
                       {product.categoryLabel}
@@ -114,7 +115,7 @@ export const CollectionsPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleNotifyProduct(product)}
-                      className="text-[11px] font-medium uppercase tracking-wider text-[#5C6548] hover:text-[#202020] underline underline-offset-4"
+                      className="text-[11px] font-medium uppercase tracking-wider text-[#5C6548] hover:text-[#202020] underline underline-offset-4 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#202020]"
                     >
                       Notify ↗
                     </button>

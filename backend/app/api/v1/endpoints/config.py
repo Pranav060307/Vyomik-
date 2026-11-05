@@ -52,4 +52,6 @@ async def get_store_config() -> StoreConfigResponse:
         default_shipping_fee_paise=settings.DEFAULT_SHIPPING_FEE_PAISE,
         cod_fee_paise=settings.COD_FEE_PAISE,
         demo_content=True,
+        contact_email=settings.CONTACT_EMAIL,
+        instagram_url=settings.INSTAGRAM_URL,
     )

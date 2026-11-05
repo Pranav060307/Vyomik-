@@ -28,6 +28,7 @@ import productHoodieStone from '../assets/demo/product-hoodie-stone.svg';
 import productHoodieOlive from '../assets/demo/product-hoodie-olive.svg';
 import productHoodieBlack from '../assets/demo/product-hoodie-black.svg';
 import ourStoryImage from '../assets/demo/our-story.svg';
+import { instagramHandle } from './brand';
 
 export const DEMO_CONTENT = true;
 
@@ -337,14 +338,14 @@ export const DEMO_CATEGORIES: DemoCategoryInfo[] = [
     title: 'Plain tees',
     tagline: 'Pure silhouettes. Zero logos. Combed 240 GSM cotton.',
     image: DEMO_IMAGES.categories.plainTees,
-    comingSoonMessage: 'Plain oversized tees. Coming soon. Follow @vyomik for the first drop.',
+    comingSoonMessage: `Plain oversized tees. Coming soon. Follow ${instagramHandle} for the first drop.`,
   },
   {
     id: 'wordmark-tees',
     title: 'Wordmark tees',
     tagline: 'Subtle typographic identity. Architectural proportions.',
     image: DEMO_IMAGES.categories.wordmarkTees,
-    comingSoonMessage: 'Wordmark tees. Coming soon. Follow @vyomik for the first drop.',
+    comingSoonMessage: `Wordmark tees. Coming soon. Follow ${instagramHandle} for the first drop.`,
   },
   {
     id: 'hoodies',
@@ -352,7 +353,7 @@ export const DEMO_CATEGORIES: DemoCategoryInfo[] = [
     tagline: '450 GSM French Terry. Distraction-free hood construction.',
     image: DEMO_IMAGES.categories.hoodies,
     isHighlighted: true, // Olive-highlighted card as required by screenshot
-    comingSoonMessage: 'Oversized hoodies. Coming soon. Follow @vyomik for the first drop.',
+    comingSoonMessage: `Oversized hoodies. Coming soon. Follow ${instagramHandle} for the first drop.`,
   },
 ];
 

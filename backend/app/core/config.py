@@ -42,6 +42,16 @@ class Settings(BaseSettings):
         description="Internal team preview bypass secret key for /?preview=<key>",
     )
 
+    # Brand Details & Public Links
+    CONTACT_EMAIL: str = Field(
+        default="simplyvyomik@gmail.com",
+        description="Official brand contact email address",
+    )
+    INSTAGRAM_URL: str = Field(
+        default="https://www.instagram.com/simplyvyomik",
+        description="Official VYOMIK Instagram profile URL",
+    )
+
     # Security
     SECRET_KEY: str = Field(
         default="dev_secret_key_change_in_production_min_32_chars_long",

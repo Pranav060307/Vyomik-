@@ -19,28 +19,30 @@ export const OurStoryPage: React.FC = () => {
         onOpenNotifyModal={() => setIsWaitlistOpen(true)}
       />
 
-      <main className="flex-1 max-w-5xl mx-auto px-6 sm:px-8 py-20 w-full">
-        {/* Eyebrow */}
-        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#5C6548] block mb-3">
-          ORIGIN & PHILOSOPHY
-        </span>
+      <main className="flex-1 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 py-16 md:py-24 w-full">
+        <div className="max-w-3xl">
+          {/* Eyebrow */}
+          <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#5C6548] block mb-3">
+            ORIGIN & PHILOSOPHY
+          </span>
 
-        {/* Title */}
-        <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight text-[#202020] mb-8 leading-[1.08]">
-          Quiet confidence.<br />Room to be you.
-        </h1>
+          {/* Title */}
+          <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight text-[#202020] mb-8 leading-[1.08] text-balance">
+            Quiet confidence.<br />Room to be you.
+          </h1>
+        </div>
 
         {/* Feature Story Image */}
-        <div className="border border-[#DAD7CE] my-10 aspect-[16/9] w-full overflow-hidden bg-[#EAE7DF]">
+        <div className="border border-[#DAD7CE] my-10 aspect-[16/9] w-full max-w-4xl overflow-hidden bg-[#EAE7DF]">
           <img
             src={DEMO_IMAGES.story}
-            alt="VYOMIK Studio moodboard"
+            alt="VYOMIK design moodboard"
             className="w-full h-full object-cover"
           />
         </div>
 
         {/* Editorial Text */}
-        <div className="prose prose-stone max-w-none space-y-6 text-sm sm:text-base text-[#202020]/80 leading-relaxed">
+        <div className="max-w-3xl space-y-6 text-sm sm:text-base text-[#202020]/80 leading-relaxed">
           <p className="text-lg sm:text-xl font-normal text-[#202020] leading-relaxed">
             VYOMIK was conceived around a single deliberate question: what if clothing gave you space rather than demanding attention?
           </p>
@@ -53,7 +55,7 @@ export const OurStoryPage: React.FC = () => {
         </div>
 
         {/* CTA Banner */}
-        <div className="mt-16 p-8 border border-[#202020] bg-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="mt-16 p-8 border border-[#202020] bg-white max-w-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <h2 className="text-xl font-semibold text-[#202020]">
               Be part of First Drop.

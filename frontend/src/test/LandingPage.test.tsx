@@ -50,7 +50,7 @@ describe('VYOMIK Landing Page', () => {
 
     // 5. Footer
     expect(screen.getByText('ROOM TO BE YOU')).toBeInTheDocument();
-    expect(screen.getByText(/contact@vyomik.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/simplyvyomik@gmail\.com/i)).toBeInTheDocument();
   });
 
   it('toggles hero model image when clicking colour chips (Ivory vs Black)', () => {
@@ -86,9 +86,7 @@ describe('VYOMIK Landing Page', () => {
     // Inline panel appears with required message
     const panel = screen.getByTestId('category-inline-panel');
     expect(panel).toBeInTheDocument();
-    expect(
-      screen.getByText(/Oversized hoodies\. Coming soon\. Follow @vyomik for the first drop\./i)
-    ).toBeInTheDocument();
+    expect(panel.textContent).toMatch(/Oversized hoodies\. Coming soon\. Follow @simplyvyomik for the first drop\./i);
 
     // Click close (×) button on panel
     const closeBtn = screen.getByRole('button', { name: /Close coming soon panel/i });

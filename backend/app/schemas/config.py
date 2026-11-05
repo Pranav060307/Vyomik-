@@ -19,3 +19,5 @@ class StoreConfigResponse(BaseModel):
     default_shipping_fee_paise: int
     cod_fee_paise: int
     demo_content: bool
+    contact_email: str = Field(description="Official public brand email")
+    instagram_url: str = Field(description="Official public brand Instagram URL")

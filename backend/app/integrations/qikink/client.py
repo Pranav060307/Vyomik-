@@ -165,7 +165,7 @@ class MockQikinkClient(QikinkClient):
             raw_response={
                 "mock": True,
                 "reverse_reference": mock_reverse_ref,
-                "warehouse_hub": "Qikink Tirupur Hub",
+                "warehouse_hub": "Qikink Central Fulfillment Hub",
                 "message": "Reverse pickup scheduled with courier partner.",
             },
         )

@@ -17,6 +17,8 @@ export interface StoreConfig {
   default_shipping_fee_paise: number;
   cod_fee_paise: number;
   demo_content: boolean;
+  contact_email: string;
+  instagram_url: string;
 }
 
 export interface WaitlistPayload {

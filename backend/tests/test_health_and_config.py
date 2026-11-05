@@ -28,4 +28,6 @@ async def test_store_config_endpoint(client: AsyncClient):
     assert data["payment_provider"] == "mock"
     assert data["cod_available"] is True
     assert data["free_shipping_threshold_paise"] == 149900
+    assert data["contact_email"] == "simplyvyomik@gmail.com"
+    assert data["instagram_url"] == "https://www.instagram.com/simplyvyomik"
 

@@ -4,6 +4,8 @@ import { Countdown } from '../components/Countdown';
 import { useLaunchGate } from '../hooks/useLaunchGate';
 import { useWaitlist } from '../hooks/useWaitlist';
 import { DEMO_IMAGES } from '../config/demoContent';
+import { instagramUrl, contactEmail, mailtoUrl } from '../config/brand';
+import { InstagramIcon } from '../components/common/InstagramIcon';
 
 function formatLaunchDateDisplay(isoString?: string): string {
   if (!isoString) return '08.11.2026';
@@ -98,20 +100,20 @@ export const ComingSoon: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen w-full bg-[#F4F3EE] text-[#202020] flex flex-col justify-between transition-opacity duration-400 ${
+      className={`min-h-[100dvh] w-full bg-[#F4F3EE] text-[#202020] flex flex-col justify-between transition-opacity duration-400 ${
         isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
       }`}
     >
       {/* Top Header: Centered Brand Wordmark */}
-      <header className="w-full pt-8 sm:pt-10 pb-4 px-6 text-center">
+      <header className="w-full pt-6 sm:pt-8 pb-2 px-4 sm:px-6 lg:px-12 text-center shrink-0">
         <span className="text-2xl sm:text-3xl font-light tracking-[0.28em] uppercase text-[#202020] select-none inline-block">
           VYOMIK
         </span>
       </header>
 
       {/* Main Centre Block */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-12 py-6 sm:py-10 flex items-center">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <main className="flex-1 max-w-[1280px] mx-auto w-full px-4 sm:px-6 lg:px-12 py-6 sm:py-8 flex items-center">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           {/* Left Column: Hero Content, Countdown & Waitlist */}
           <div className="lg:col-span-7 flex flex-col justify-center space-y-6 sm:space-y-7">
             {/* Eyebrow */}
@@ -126,12 +128,12 @@ export const ComingSoon: React.FC = () => {
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-semibold text-[#202020] leading-[1.06] tracking-[-0.03em]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-semibold text-[#202020] leading-[1.06] tracking-[-0.03em] text-balance">
               Room to be you.
             </h1>
 
             {/* Subcopy with dynamic launch date */}
-            <p className="text-base sm:text-lg text-[#202020]/80 font-normal leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-[#202020]/80 font-normal leading-relaxed max-w-[65ch]">
               Easy silhouettes. Quiet confidence. Something new is arriving on{' '}
               <span className="font-medium text-[#202020]">{dateFormatted}</span>.
             </p>
@@ -149,7 +151,7 @@ export const ComingSoon: React.FC = () => {
             <div className="pt-2 max-w-lg">
               {!isSuccess ? (
                 <form onSubmit={handleInlineSubmit} className="space-y-3">
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2.5">
                     <label htmlFor="gate-email" className="sr-only">
                       Email address for launch notification
                     </label>
@@ -161,12 +163,12 @@ export const ComingSoon: React.FC = () => {
                       placeholder="Enter your email for private access"
                       required
                       disabled={waitlistMutation.isPending}
-                      className="flex-1 px-4 py-3 bg-white border border-[#DAD7CE] text-sm text-[#202020] placeholder:text-[#202020]/40 focus:border-[#202020] focus:ring-1 focus:ring-[#202020] outline-none transition-colors"
+                      className="flex-1 h-12 px-4 bg-white border border-[#DAD7CE] text-sm text-[#202020] placeholder:text-[#202020]/40 focus:border-[#202020] focus:ring-1 focus:ring-[#202020] outline-none transition-colors"
                     />
                     <button
                       type="submit"
                       disabled={waitlistMutation.isPending}
-                      className="inline-flex items-center justify-center space-x-2 bg-[#202020] text-[#F4F3EE] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] hover:bg-[#333333] transition-colors disabled:opacity-60 shrink-0"
+                      className="inline-flex items-center justify-center space-x-2 bg-[#202020] text-[#F4F3EE] h-12 px-6 text-xs font-semibold uppercase tracking-[0.16em] hover:bg-[#333333] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#202020] transition-colors disabled:opacity-60 shrink-0"
                     >
                       {waitlistMutation.isPending ? (
                         <>
@@ -254,7 +256,7 @@ export const ComingSoon: React.FC = () => {
       </main>
 
       {/* Pinned Bottom Block (Visible without scrolling) */}
-      <footer className="w-full mt-4 pb-6 px-6 flex flex-col items-center">
+      <footer className="w-full shrink-0 pb-6 pt-2 px-4 sm:px-6 lg:px-12 flex flex-col items-center">
         {/* Explore Button with Tracked Caption */}
         <div className="text-center mb-6">
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#5C6548] font-medium mb-2.5">
@@ -263,7 +265,7 @@ export const ComingSoon: React.FC = () => {
           <button
             type="button"
             onClick={handleExploreClick}
-            className="group inline-flex items-center space-x-3 bg-[#202020] text-[#F4F3EE] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-[#333333] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#202020] transition-all shadow-sm active:scale-[0.99]"
+            className="group inline-flex items-center space-x-3 bg-[#202020] text-[#F4F3EE] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-[#333333] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#202020] focus-visible:ring-offset-2 transition-all shadow-sm active:scale-[0.99]"
             aria-label={liveState ? 'Enter the store' : 'Explore preview of store'}
           >
             <span>{liveState ? 'Enter the store' : 'Explore'}</span>
@@ -272,19 +274,29 @@ export const ComingSoon: React.FC = () => {
         </div>
 
         {/* Thin Stone Divider & Mini Footer Row */}
-        <div className="w-full max-w-5xl border-t border-[#DAD7CE] pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#202020]/60 space-y-2 sm:space-y-0">
+        <div className="w-full max-w-[1280px] border-t border-[#DAD7CE] pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] uppercase tracking-[0.16em] text-[#202020]/70 space-y-2.5 sm:space-y-0">
           <span>VYOMIK · ROOM TO BE YOU</span>
-          <div className="flex items-center space-x-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
             <a
-              href="https://instagram.com/vyomik"
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#202020] transition-colors"
+              aria-label="VYOMIK on Instagram"
+              className="inline-flex items-center space-x-1.5 text-[#202020] hover:text-[#5C6548] transition-colors"
             >
-              Instagram ↗
+              <InstagramIcon className="w-3.5 h-3.5 text-current" />
+              <span>Instagram ↗</span>
             </a>
             <span className="text-[#DAD7CE]">·</span>
-            <span>PUBLIC DROP: {dateFormatted}</span>
+            <a
+              href={mailtoUrl}
+              aria-label="Email VYOMIK"
+              className="lowercase text-[#202020] hover:text-[#5C6548] transition-colors"
+            >
+              {contactEmail}
+            </a>
+            <span className="text-[#DAD7CE]">·</span>
+            <span className="text-[#202020]/60">PUBLIC DROP: {dateFormatted}</span>
           </div>
         </div>
       </footer>

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { StoreConfig } from '../types/store';
+import { contactEmail, instagramUrl } from '../config/brand';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -16,6 +17,8 @@ export const DEFAULT_FALLBACK_CONFIG: StoreConfig = {
   default_shipping_fee_paise: 9900,
   cod_fee_paise: 4900,
   demo_content: true,
+  contact_email: contactEmail,
+  instagram_url: instagramUrl,
 };
 
 export function useStoreConfig() {

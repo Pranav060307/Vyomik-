@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
+import { instagramUrl, instagramHandle, contactEmail, mailtoUrl } from '../../config/brand';
+import { InstagramIcon } from '../common/InstagramIcon';
 
 interface HeaderProps {
   bagCount?: number;
@@ -20,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-[#F4F3EE]/95 backdrop-blur-md border-b border-[#DAD7CE] transition-all">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between">
         {/* Left: Brand Wordmark */}
         <div className="flex items-center">
           <Link
@@ -49,6 +51,14 @@ export const Header: React.FC<HeaderProps> = ({
             }`}
           >
             Our story
+          </Link>
+          <Link
+            to="/contact"
+            className={`transition-colors hover:text-[#5C6548] pb-0.5 border-b-2 ${
+              location.pathname === '/contact' ? 'border-[#202020]' : 'border-transparent'
+            }`}
+          >
+            Contact
           </Link>
           <button
             type="button"
@@ -109,6 +119,13 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Our story
             </Link>
+            <Link
+              to="/contact"
+              onClick={closeMobileMenu}
+              className="py-1 border-b border-[#DAD7CE]/50"
+            >
+              Contact
+            </Link>
             <button
               type="button"
               onClick={() => {
@@ -121,6 +138,32 @@ export const Header: React.FC<HeaderProps> = ({
               <span>↗</span>
             </button>
           </nav>
+
+          {/* Mobile Drawer Connect Footer */}
+          <div className="pt-6 border-t border-[#DAD7CE] space-y-3">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5C6548] block">
+              Connect
+            </span>
+            <div className="flex flex-col space-y-2 text-xs tracking-wider">
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="VYOMIK on Instagram"
+                className="flex items-center space-x-2 text-[#202020] hover:text-[#5C6548] transition-colors"
+              >
+                <InstagramIcon className="w-4 h-4 text-current" />
+                <span>Instagram ({instagramHandle}) ↗</span>
+              </a>
+              <a
+                href={mailtoUrl}
+                aria-label="Email VYOMIK"
+                className="text-[#202020]/80 hover:text-[#5C6548] transition-colors lowercase"
+              >
+                {contactEmail}
+              </a>
+            </div>
+          </div>
         </div>
       )}
     </header>
