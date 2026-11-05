@@ -20,3 +20,4 @@ export const InstagramIcon: React.FC<InstagramIconProps> = ({ className = 'w-4 h
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
+

@@ -20,3 +20,4 @@ export const brandConfig = {
 } as const;
 
 export default brandConfig;
+

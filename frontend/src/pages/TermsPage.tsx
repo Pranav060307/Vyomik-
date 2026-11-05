@@ -96,3 +96,4 @@ export const TermsPage: React.FC = () => {
     </div>
   );
 };
+
