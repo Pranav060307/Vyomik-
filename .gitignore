@@ -66,3 +66,6 @@ postgres_data/
 redis_data/
 *.sqlite
 *.sqlite3
+
+# Netlify state
+.netlify/

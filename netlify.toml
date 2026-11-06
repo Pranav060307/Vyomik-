@@ -1,0 +1,26 @@
+# Netlify Configuration for VYOMIK Monorepo
+
+[build]
+  # Base directory for frontend build
+  base = "frontend"
+  # Directory to publish (relative to base)
+  publish = "dist"
+  # Build command
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Optional: If your FastAPI backend is deployed (e.g. on Render or Railway),
+# uncomment this redirect block to proxy all /api/* requests seamlessly without CORS:
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://your-vyomik-api.onrender.com/api/:splat"
+#   status = 200
+#   force = true
+
+# Single Page App (SPA) redirect for React Router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
