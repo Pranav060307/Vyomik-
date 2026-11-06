@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LandingPage } from '../pages/LandingPage';
+import { CartProvider } from '../context/CartContext';
+import { AuthProvider } from '../context/AuthContext';
+import { ToastProvider } from '../context/ToastContext';
 
 function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
@@ -14,7 +17,13 @@ function renderWithProviders(ui: React.ReactElement) {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{ui}</BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          <ToastProvider>
+            <BrowserRouter>{ui}</BrowserRouter>
+          </ToastProvider>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
@@ -24,119 +33,103 @@ describe('VYOMIK Landing Page', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders all 5 core sections: announcement bar, header, hero, everyday edit, and footer', () => {
+  it('renders all core sections: navbar, hero, chips, new arrivals, and footer', () => {
     renderWithProviders(<LandingPage />);
 
-    // 1. Announcement bar
-    expect(screen.getByText(/THE FIRST DROP · COMING SOON/i)).toBeInTheDocument();
+    // 1. Brand Logo / Header
+    expect(screen.getAllByLabelText(/^VYOMIK$/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Collections/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Our story/i).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Contact/i).length).toBeGreaterThanOrEqual(1);
 
-    // 2. Header & Navigation links
-    expect(screen.getByRole('link', { name: /^VYOMIK$/i })).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: /Collections/i }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByRole('link', { name: /Our story/i }).length).toBeGreaterThanOrEqual(1);
-
-    // 3. Hero
-    expect(screen.getByText('OVERSIZED ESSENTIALS')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Room to be you\./i })).toBeInTheDocument();
+    // 2. Hero
+    expect(screen.getByText('INTRODUCING')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /THE COMPLETE/i })).toBeInTheDocument();
     expect(
-      screen.getByText(/Easy silhouettes\. Quiet confidence\. Your next everyday favourite\./i)
+      screen.getByText(/Everyday oversized essentials engineered with boxy silhouettes and heavyweight fabrics\./i)
     ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Shop Collection/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Explore All/i })).toBeInTheDocument();
 
-    // 4. The Everyday Edit
-    expect(screen.getByRole('heading', { name: /The everyday edit/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Plain tees' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Wordmark tees' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Hoodies' })).toBeInTheDocument();
+    // 3. Filter chips
+    expect(screen.getByText('ALL COLLECTIONS')).toBeInTheDocument();
+    expect(screen.getByText('PLAIN TEES')).toBeInTheDocument();
+    expect(screen.getByText('WORDMARK TEES')).toBeInTheDocument();
+    expect(screen.getByText('OVERSIZED HOODIES')).toBeInTheDocument();
+
+    // 4. New Arrivals Grid
+    expect(screen.getByText('NEW ARRIVALS')).toBeInTheDocument();
+    expect(screen.getByText('Oversized Basic Tee')).toBeInTheDocument();
 
     // 5. Footer
     expect(screen.getByText('ROOM TO BE YOU')).toBeInTheDocument();
     expect(screen.getByText(/simplyvyomik@gmail\.com/i)).toBeInTheDocument();
   });
 
-  it('toggles hero model image when clicking colour chips (Ivory vs Black)', () => {
+  it('filters products when clicking category chips (Plain Tees vs Hoodies)', () => {
     renderWithProviders(<LandingPage />);
 
-    const heroImage = screen.getByAltText(/VYOMIK model silhouette in ivory/i);
-    expect(heroImage).toBeInTheDocument();
+    // Initially Oversized Basic Tee is visible
+    expect(screen.getByText('Oversized Basic Tee')).toBeInTheDocument();
 
-    // Click Black colour chip
-    const blackChip = screen.getByRole('button', { name: /View Pitch Black model photo/i });
-    fireEvent.click(blackChip);
+    // Click on OVERSIZED HOODIES chip
+    const hoodiesChip = screen.getByText('OVERSIZED HOODIES');
+    fireEvent.click(hoodiesChip);
 
-    // Image alt text changes to black silhouette
-    expect(screen.getByAltText(/VYOMIK model silhouette in black/i)).toBeInTheDocument();
+    // Essential Hoodie should be in document
+    expect(screen.getByText('Essential Hoodie')).toBeInTheDocument();
 
-    // Click Ivory chip again
-    const ivoryChip = screen.getByRole('button', { name: /View Ivory model photo/i });
-    fireEvent.click(ivoryChip);
+    // Click ALL COLLECTIONS chip
+    const allChip = screen.getByText('ALL COLLECTIONS');
+    fireEvent.click(allChip);
 
-    expect(screen.getByAltText(/VYOMIK model silhouette in ivory/i)).toBeInTheDocument();
+    expect(screen.getByText('Oversized Basic Tee')).toBeInTheDocument();
+    expect(screen.getByText('Essential Hoodie')).toBeInTheDocument();
   });
 
-  it('expands inline "Coming soon" panel when clicking a category card and collapses on close (×)', () => {
+  it('adds item to cart when clicking ADD TO CART on a product card and updates bag count', () => {
     renderWithProviders(<LandingPage />);
 
-    // Inline panel should not exist initially
-    expect(screen.queryByTestId('category-inline-panel')).not.toBeInTheDocument();
+    expect(screen.getByText('Bag (0)')).toBeInTheDocument();
 
-    // Click on Hoodies category card
-    const hoodiesCard = screen.getByText('Hoodies').closest('[role="button"]')!;
-    fireEvent.click(hoodiesCard);
+    const addButtons = screen.getAllByRole('button', { name: /ADD TO CART/i });
+    expect(addButtons.length).toBeGreaterThanOrEqual(1);
 
-    // Inline panel appears with required message
-    const panel = screen.getByTestId('category-inline-panel');
-    expect(panel).toBeInTheDocument();
-    expect(panel.textContent).toMatch(/Oversized hoodies\. Coming soon\. Follow @simplyvyomik for the first drop\./i);
+    fireEvent.click(addButtons[0]);
 
-    // Click close (×) button on panel
-    const closeBtn = screen.getByRole('button', { name: /Close coming soon panel/i });
-    fireEvent.click(closeBtn);
+    // Toast appears
+    expect(screen.getByText(/added to bag/i)).toBeInTheDocument();
 
-    // Panel is removed
-    expect(screen.queryByTestId('category-inline-panel')).not.toBeInTheDocument();
+    // Bag count incremented
+    expect(screen.getByText('Bag (1)')).toBeInTheDocument();
   });
 
-  it('opens waitlist modal on CTA click and displays success on email submit', async () => {
-    // Mock successful waitlist response
-    global.fetch = vi.fn().mockImplementation((url: string) => {
-      if (url.includes('/api/v1/waitlist')) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              success: true,
-              email: 'guest@vyomik.com',
-              message: "You're on the list.",
-              created_at: new Date().toISOString(),
-            }),
-        });
-      }
-      return Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({}),
-      });
-    });
-
+  it('renders FIRST DROP badges on cards and toggles wishlist heart', () => {
     renderWithProviders(<LandingPage />);
 
-    // Click Hero CTA "Notify me at launch ↗"
-    const heroCta = screen.getByRole('button', { name: /Notify me at launch/i });
-    fireEvent.click(heroCta);
+    const badges = screen.getAllByText('FIRST DROP');
+    expect(badges.length).toBeGreaterThanOrEqual(1);
 
-    // Modal is opened
-    expect(screen.getByRole('heading', { name: /Be first when doors open\./i })).toBeInTheDocument();
+    const hearts = screen.getAllByRole('button', { name: /wishlist/i });
+    expect(hearts.length).toBeGreaterThanOrEqual(1);
 
-    // Fill in email
-    const emailInput = screen.getByPlaceholderText(/Enter your email address/i);
-    fireEvent.change(emailInput, { target: { value: 'guest@vyomik.com' } });
+    fireEvent.click(hearts[0]);
+    expect(screen.getByText('Added to wishlist')).toBeInTheDocument();
 
-    // Submit form
-    const submitBtn = screen.getByRole('button', { name: /Notify me at launch ↗/i });
-    fireEvent.click(submitBtn);
+    fireEvent.click(hearts[0]);
+    expect(screen.getByText('Removed from wishlist')).toBeInTheDocument();
+  });
 
-    // Wait for success screen
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { name: /You're on the list\./i })).toBeInTheDocument();
-    });
+  it('opens collections dropdown and filters products', () => {
+    renderWithProviders(<LandingPage />);
+
+    const collectionsBtn = screen.getByRole('button', { name: /collections/i });
+    fireEvent.click(collectionsBtn);
+
+    const hoodiesOption = screen.getAllByText('Oversized Hoodies')[0];
+    expect(hoodiesOption).toBeInTheDocument();
+
+    fireEvent.click(hoodiesOption);
+    expect(screen.getByText('Essential Hoodie')).toBeInTheDocument();
   });
 });

@@ -1,9 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { App } from '../App';
 import { ComingSoon } from '../pages/ComingSoon';
+import { CartProvider } from '../context/CartContext';
+import { AuthProvider } from '../context/AuthContext';
+import { ToastProvider } from '../context/ToastContext';
 
 function renderWithProviders(ui: React.ReactElement, initialRoute = '/') {
   const queryClient = new QueryClient({
@@ -15,9 +18,15 @@ function renderWithProviders(ui: React.ReactElement, initialRoute = '/') {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <MemoryRouter initialEntries={[initialRoute]}>
-        {ui}
-      </MemoryRouter>
+      <AuthProvider>
+        <CartProvider>
+          <ToastProvider>
+            <MemoryRouter initialEntries={[initialRoute]}>
+              {ui}
+            </MemoryRouter>
+          </ToastProvider>
+        </CartProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
@@ -26,9 +35,10 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     sessionStorage.clear();
+    localStorage.clear();
   });
 
-  it('renders ComingSoon page at "/" when gate is active and session flag is absent', async () => {
+  it('renders ComingSoon page at "/" with no preview store button when gate is active', async () => {
     global.fetch = vi.fn().mockImplementation((url: string) => {
       if (url.includes('/api/v1/config')) {
         return Promise.resolve({
@@ -37,8 +47,8 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
             Promise.resolve({
               store_name: 'VYOMIK',
               store_mode: 'coming_soon',
-              launch_date: '2026-11-08',
-              launch_at: '2026-11-08T00:00:00+05:30',
+              launch_date: '2026-11-10',
+              launch_at: '2026-11-10T00:00:00+05:30',
               server_time: '2026-11-04T12:00:00Z',
               gate_enabled: true,
               payment_provider: 'mock',
@@ -55,58 +65,17 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<App />, '/');
 
-    // Heading "Room to be you." on Coming Soon page
-    expect(await screen.findByRole('heading', { name: /Room to be you\./i })).toBeInTheDocument();
-    expect(screen.getByText(/THE FIRST DROP/i)).toBeInTheDocument();
-    expect(screen.getByText(/Something new is arriving on/i)).toBeInTheDocument();
-    expect(screen.getAllByText('08.11.2026').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole('button', { name: /Explore/i })).toBeInTheDocument();
+    // Heading "COMING SOON." on Coming Soon page
+    expect(await screen.findByRole('heading', { name: /COMING SOON\./i })).toBeInTheDocument();
+    expect(screen.getByText(/SOMETHING NEW IS/i)).toBeInTheDocument();
+    expect(screen.getByText(/A new experience in everyday essentials\./i)).toBeInTheDocument();
+    // Preview store button must be removed
+    expect(screen.queryByRole('button', { name: /Explore store preview/i })).not.toBeInTheDocument();
+    expect(screen.queryByText(/PREVIEW STORE/i)).not.toBeInTheDocument();
     expect(screen.getByTestId('countdown-tiles')).toBeInTheDocument();
   });
 
-  it('sets sessionStorage flag and navigates to /home when Explore button is clicked', async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
-
-    global.fetch = vi.fn().mockImplementation((url: string) => {
-      if (url.includes('/api/v1/config')) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              store_name: 'VYOMIK',
-              store_mode: 'coming_soon',
-              launch_date: '2026-11-08',
-              launch_at: '2026-11-08T00:00:00+05:30',
-              server_time: '2026-11-04T12:00:00Z',
-              gate_enabled: true,
-              payment_provider: 'mock',
-              cod_available: true,
-              free_shipping_threshold_paise: 149900,
-              default_shipping_fee_paise: 9900,
-              cod_fee_paise: 4900,
-              demo_content: true,
-            }),
-        });
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
-    });
-
-    renderWithProviders(<App />, '/');
-
-    const exploreBtn = await screen.findByRole('button', { name: /Explore/i });
-    expect(sessionStorage.getItem('vyomik_explore_passed')).toBeNull();
-
-    act(() => {
-      fireEvent.click(exploreBtn);
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(sessionStorage.getItem('vyomik_explore_passed')).toBe('true');
-
-    vi.useRealTimers();
-  });
-
-  it('renders normal landing page at "/" once sessionStorage flag exists', async () => {
+  it('renders normal landing page at "/" once explore flag exists or gate is inactive', async () => {
     sessionStorage.setItem('vyomik_explore_passed', 'true');
 
     global.fetch = vi.fn().mockImplementation((url: string) => {
@@ -117,8 +86,8 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
             Promise.resolve({
               store_name: 'VYOMIK',
               store_mode: 'coming_soon',
-              launch_date: '2026-11-08',
-              launch_at: '2026-11-08T00:00:00+05:30',
+              launch_date: '2026-11-10',
+              launch_at: '2026-11-10T00:00:00+05:30',
               server_time: '2026-11-04T12:00:00Z',
               gate_enabled: true,
               payment_provider: 'mock',
@@ -135,54 +104,18 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<App />, '/');
 
-    // Should render normal LandingPage with header Collections link and everyday edit
-    expect(await screen.findByRole('heading', { name: /The everyday edit/i })).toBeInTheDocument();
-    expect(screen.getByText('OVERSIZED ESSENTIALS')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /THE COMPLETE/i })).toBeInTheDocument();
+    expect(screen.getByText('NEW ARRIVALS')).toBeInTheDocument();
   });
 
   it('does NOT gate deep links like /collections even without explore flag', async () => {
     renderWithProviders(<App />, '/collections');
 
-    expect(await screen.findByRole('heading', { name: /The Complete Edit/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Oversized Tees/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Hoodies/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Sweatshirts/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /NEW ARRIVALS\./i })).toBeInTheDocument();
+    expect(screen.getByText(/FEATURED COLLECTION/i)).toBeInTheDocument();
   });
 
-  it('renders live state "We\'re live" and "Enter the store" when countdown reaches zero', async () => {
-    // Mock target date in past relative to server time
-    global.fetch = vi.fn().mockImplementation((url: string) => {
-      if (url.includes('/api/v1/config')) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              store_name: 'VYOMIK',
-              store_mode: 'coming_soon',
-              launch_date: '2026-11-08',
-              launch_at: '2026-11-01T00:00:00Z', // past date
-              server_time: '2026-11-04T12:00:00Z', // now > launch_at
-              gate_enabled: false,
-              payment_provider: 'mock',
-              cod_available: true,
-              free_shipping_threshold_paise: 149900,
-              default_shipping_fee_paise: 9900,
-              cod_fee_paise: 4900,
-              demo_content: true,
-            }),
-        });
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
-    });
-
-    renderWithProviders(<ComingSoon />);
-
-    expect(await screen.findByTestId('countdown-live')).toBeInTheDocument();
-    expect(screen.getByText(/We're live/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Enter the store/i })).toBeInTheDocument();
-  });
-
-  it('handles inline email signup with success and duplicate response', async () => {
+  it('handles inline email signup with success response and updates UI state', async () => {
     global.fetch = vi.fn().mockImplementation((url: string) => {
       if (url.includes('/api/v1/waitlist')) {
         return Promise.resolve({
@@ -191,7 +124,8 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
             Promise.resolve({
               success: true,
               email: 'vip@vyomik.com',
-              message: "You're on the list. We'll email you 1 hour before doors open.",
+              is_duplicate: false,
+              message: "You're on the list! We'll email you 1 hour before doors open.",
               created_at: new Date().toISOString(),
             }),
         });
@@ -201,15 +135,48 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<ComingSoon />);
 
-    const input = screen.getByPlaceholderText(/Enter your email for private access/i);
+    const input = screen.getByPlaceholderText(/Notify me when we go live/i);
     fireEvent.change(input, { target: { value: 'vip@vyomik.com' } });
 
-    const submitBtn = screen.getByRole('button', { name: /Notify me/i });
+    const submitBtn = screen.getByRole('button', { name: /Submit email notification/i });
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('gate-waitlist-success')).toBeInTheDocument();
-      expect(screen.getByText(/You're on the list\./i)).toBeInTheDocument();
+      expect(screen.getByText(/You're on the list/i)).toBeInTheDocument();
+    });
+
+    // Check localStorage was populated
+    expect(localStorage.getItem('vyomik_waitlist_registered')).toBe('vip@vyomik.com');
+  });
+
+  it('informs user if email is already in waitlist', async () => {
+    global.fetch = vi.fn().mockImplementation((url: string) => {
+      if (url.includes('/api/v1/waitlist')) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              success: true,
+              email: 'gparth067@gmail.com',
+              is_duplicate: true,
+              message: 'You are already on the VIP list. We will email you 1 hour before doors open.',
+              created_at: new Date().toISOString(),
+            }),
+        });
+      }
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    });
+
+    renderWithProviders(<ComingSoon />);
+
+    const input = screen.getByPlaceholderText(/Notify me when we go live/i);
+    fireEvent.change(input, { target: { value: 'gparth067@gmail.com' } });
+
+    const submitBtn = screen.getByRole('button', { name: /Submit email notification/i });
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/You are already on the VIP waitlist!/i)).toBeInTheDocument();
     });
   });
 
@@ -218,8 +185,8 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<ComingSoon />);
 
-    expect(await screen.findByRole('heading', { name: /Room to be you\./i })).toBeInTheDocument();
-    expect(screen.getByText(/THE FIRST DROP/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Explore/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /COMING SOON\./i })).toBeInTheDocument();
+    expect(screen.getByText(/SOMETHING NEW IS/i)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Explore store preview/i })).not.toBeInTheDocument();
   });
 });

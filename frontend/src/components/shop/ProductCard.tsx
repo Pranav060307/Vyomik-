@@ -1,358 +1,222 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Palette, Check, ShoppingBag } from 'lucide-react';
-import { DemoProduct } from '../../config/demoContent';
-import { paise_to_inr_display } from '../../utils/format';
-import {
-  VYOMIK_COLOR_PALETTE,
-  SwatchColor,
-} from '../../config/colorPalette';
-import { ColorChartModal } from './ColorChartModal';
+import { ClothPreview } from '../common/ClothPreview';
 import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
+
+export interface ProductItem {
+  id: string;
+  name: string;
+  price: number;
+  oldPrice?: number;
+  category?: 'plain' | 'wordmark' | 'hoodies' | string;
+  type?: 'tee' | 'hoodie' | 'rack' | string;
+  color?: string;
+  logo?: number | string;
+  img?: string;
+  fabricFit?: string;
+  swatches?: string[];
+  hasMore?: boolean;
+}
 
 interface ProductCardProps {
-  product: DemoProduct;
-  onNotifyProduct: (product: DemoProduct, selectedColor: SwatchColor) => void;
+  product: ProductItem;
+  variant?: 'homeGrid' | 'newArrivals';
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  onNotifyProduct,
+  variant = 'homeGrid',
+  className = '',
+  style,
 }) => {
-  const navigate = useNavigate();
   const { addItem } = useCart();
+  const { toast } = useToast();
+  const [isLiked, setIsLiked] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(product.color || '#d9c3ad');
 
-  // Default to first available color or Pitch Black
-  const initialSwatch =
-    VYOMIK_COLOR_PALETTE.find((c) =>
-      product.availableColors?.some(
-        (ac) => ac.hex.toLowerCase() === c.hex.toLowerCase()
-      )
-    ) || VYOMIK_COLOR_PALETTE[1]; // Pitch Black
-
-  const [selectedColor, setSelectedColor] = useState<SwatchColor>(initialSwatch);
-  const [selectedSize, setSelectedSize] = useState<string>(
-    product.availableSizes && product.availableSizes.length > 0
-      ? product.availableSizes.includes('M')
-        ? 'M'
-        : product.availableSizes[0]
-      : 'M'
-  );
-  const [isChartModalOpen, setIsChartModalOpen] = useState(false);
-
-  // Check if product has a static pre-rendered image for this color
-  const matchedColorKey = product.availableColors?.find(
-    (c) => c.hex.toLowerCase() === selectedColor.hex.toLowerCase()
-  )?.key;
-
-  const staticImage =
-    matchedColorKey && product.images[matchedColorKey]
-      ? product.images[matchedColorKey]
-      : null;
-
-  // Determine silhouette type for dynamic SVG rendering
-  const isHoodie =
-    product.category === 'hoodies' || product.slug.includes('hoodie');
-  const isSweatshirt =
-    product.category === 'sweatshirts' || product.slug.includes('sweatshirt');
-
-  // Quick swatches displayed directly on card:
-  const quickSwatches = [
-    VYOMIK_COLOR_PALETTE[0], // Crisp White (#FFFFFF)
-    VYOMIK_COLOR_PALETTE[1], // Pitch Black (#151515)
-    VYOMIK_COLOR_PALETTE[4], // Bottle Green (#003813)
-    VYOMIK_COLOR_PALETTE[6], // Crimson Red (#9E0000)
-    VYOMIK_COLOR_PALETTE[9], // Marigold Amber (#FF9C00)
-    VYOMIK_COLOR_PALETTE[17], // Sky Blue (#97ECFF)
-  ];
-
-  const handleAddToCart = () => {
-    const matchedVariant = product.variants?.find(
-      (v) =>
-        v.size === selectedSize &&
-        (v.color.toLowerCase() === selectedColor.name.toLowerCase() ||
-          v.colorHex?.toLowerCase() === selectedColor.hex.toLowerCase())
-    );
-
-    addItem({
-      id: `${product.id}-${selectedColor.id}-${selectedSize}`,
-      productId: product.id,
-      variantId: matchedVariant?.id || `v-${product.id}-${selectedSize}`,
-      title: product.name,
-      color: selectedColor.name,
-      size: selectedSize,
-      pricePaise: product.basePricePaise,
-      quantity: 1,
-      image: staticImage || selectedColor.hex,
-    });
-
-    navigate('/bag');
+  const handleHeartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const nextState = !isLiked;
+    setIsLiked(nextState);
+    toast(nextState ? 'Added to wishlist' : 'Removed from wishlist');
   };
 
-  return (
-    <>
-      <div className="group border border-[#DAD7CE] bg-white flex flex-col justify-between hover:border-[#202020] transition-colors relative">
-        {/* Product Visual Container */}
-        <div className="relative aspect-[4/5] bg-[#EAE8E1]/50 border-b border-[#DAD7CE] overflow-hidden flex items-center justify-center">
-          {staticImage ? (
-            <img
-              src={staticImage}
-              alt={`${product.name} in ${selectedColor.name}`}
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
-            /* Dynamic Architectural Garment Vector matching exact chosen hex code */
-            <div className="w-full h-full relative flex items-center justify-center p-6 bg-[#F4F3EE] transition-colors duration-300">
-              <svg
-                viewBox="0 0 600 700"
-                className="w-full h-full max-h-[380px] drop-shadow-md transition-all duration-300 group-hover:scale-105"
-              >
-                {isHoodie ? (
-                  /* Hoodie Silhouette */
-                  <g transform="translate(100, 95)">
-                    {/* Double-layered hood */}
-                    <path
-                      d="M 140,120 C 130,50 270,50 260,120 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(0,0,0,0.3)'}
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M 160,115 C 160,75 240,75 240,115 Z"
-                      fill={selectedColor.isLight ? '#E5E2D8' : 'rgba(0,0,0,0.2)'}
-                    />
-                    {/* Body & Dropped Sleeves */}
-                    <path
-                      d="M 50,135 L 130,120 Q 200,135 270,120 L 350,135 L 375,320 L 315,335 L 305,240 L 310,430 L 90,430 L 95,240 L 85,335 L 25,320 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(0,0,0,0.25)'}
-                      strokeWidth="2"
-                    />
-                    {/* Kangaroo Pouch */}
-                    <path
-                      d="M 140,320 L 260,320 L 275,395 L 125,395 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(0,0,0,0.2)'}
-                      strokeWidth="2"
-                    />
-                    {/* Drawstrings */}
-                    <path
-                      d="M 185,120 L 185,190 M 215,120 L 215,185"
-                      stroke={selectedColor.isLight ? '#202020' : '#F4F3EE'}
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                    {/* Ribbed Hem & Cuffs */}
-                    <line x1="90" y1="420" x2="310" y2="420" stroke={selectedColor.isLight ? '#C5C1B6' : 'rgba(0,0,0,0.3)'} strokeWidth="1.5" />
-                  </g>
-                ) : isSweatshirt ? (
-                  /* Crewneck Sweatshirt Silhouette */
-                  <g transform="translate(100, 110)">
-                    {/* Crewneck Collar Band */}
-                    <path
-                      d="M 155,100 Q 200,128 245,100 Q 200,138 155,100 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#202020' : '#EAE8E1'}
-                      strokeWidth="3"
-                    />
-                    {/* Sweatshirt Triangle V-insert */}
-                    <polygon
-                      points="190,120 210,120 200,138"
-                      fill="none"
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(255,255,255,0.25)'}
-                      strokeWidth="1.5"
-                    />
-                    {/* Torso & Sleeves */}
-                    <path
-                      d="M 60,118 L 155,100 Q 200,130 245,100 L 340,118 L 365,300 L 305,312 L 295,225 L 300,410 L 100,410 L 105,225 L 95,312 L 35,300 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(0,0,0,0.25)'}
-                      strokeWidth="2"
-                    />
-                    {/* Ribbed Cuffs & Waistband */}
-                    <line x1="100" y1="400" x2="300" y2="400" stroke={selectedColor.isLight ? '#C5C1B6' : 'rgba(0,0,0,0.3)'} strokeWidth="1.5" />
-                  </g>
-                ) : (
-                  /* Oversized Boxy Tee Silhouette */
-                  <g transform="translate(100, 110)">
-                    {/* Dense Ribbed Neckband */}
-                    <path
-                      d="M 150,95 Q 200,130 250,95 Q 200,140 150,95 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#202020' : '#EAE8E1'}
-                      strokeWidth="2.5"
-                    />
-                    {/* Boxy Body with Dropped Shoulders */}
-                    <path
-                      d="M 50,115 L 150,95 Q 200,130 250,95 L 350,115 L 370,265 L 315,275 L 305,200 L 308,415 L 92,415 L 95,200 L 85,275 L 30,265 Z"
-                      fill={selectedColor.hex}
-                      stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(0,0,0,0.2)'}
-                      strokeWidth="2"
-                    />
-                    {/* Clean double-stitched hem */}
-                    <line x1="92" y1="405" x2="308" y2="405" stroke={selectedColor.isLight ? '#DAD7CE' : 'rgba(255,255,255,0.15)'} strokeWidth="1" strokeDasharray="4 2" />
-                  </g>
-                )}
-              </svg>
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      pricePaise: product.price * 100,
+      type: product.type || 'tee',
+      color: selectedColor,
+      logo: product.logo || '0',
+      img: product.img || '',
+      quantity: 1,
+    });
+    toast(`${product.name} added to bag`);
+  };
 
-              {/* Minimal Brand Tag */}
-              <div
-                className="absolute top-4 left-4 px-2 py-0.5 text-[9px] font-bold tracking-[0.2em] uppercase border transition-colors"
-                style={{
-                  backgroundColor: selectedColor.isLight ? '#202020' : '#F4F3EE',
-                  color: selectedColor.isLight ? '#F4F3EE' : '#202020',
-                  borderColor: selectedColor.isLight ? '#202020' : '#DAD7CE',
-                }}
-              >
-                VYOMIK
-              </div>
-            </div>
-          )}
+  // Heart SVG icon
+  const HeartIcon = () => (
+    <svg viewBox="0 0 24 24" fill={isLiked ? '#e10600' : 'none'} stroke={isLiked ? '#e10600' : 'currentColor'} strokeWidth="1.8" className="w-full h-full">
+      <path d="M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z" />
+    </svg>
+  );
 
-          {/* Color Chart Launcher Button overlaid on bottom-right of image */}
-          <button
-            type="button"
-            onClick={() => setIsChartModalOpen(true)}
-            aria-label={`Open color chart for ${product.name}`}
-            className="absolute bottom-2.5 right-2.5 bg-white/95 hover:bg-white text-[#202020] text-[10px] uppercase font-semibold tracking-wider px-2.5 py-1.5 border border-[#DAD7CE] shadow-sm flex items-center space-x-1.5 transition-all hover:border-[#202020] active:scale-95"
-          >
-            <Palette className="w-3.5 h-3.5 text-[#5C6548]" />
-            <span>Color Chart</span>
-          </button>
+  const fallbackImg = product.type === 'hoodie'
+    ? 'assets/essential-hoodie.png'
+    : (product.logo === 1 || product.logo === '1' || product.category === 'wordmark')
+    ? 'assets/vyomik-logo-tee.png'
+    : 'assets/oversized-basic-tee.png';
+
+  if (variant === 'newArrivals') {
+    const defaultSwatches = product.type === 'hoodie'
+      ? ['#a81818', '#111111', '#ffffff', '#3a2a1e']
+      : (product.logo === 1 || product.logo === '1' || product.category === 'wordmark')
+      ? ['#111111', '#ffffff', '#e10600', '#3a2a1e']
+      : ['#d9c3ad', '#111111', '#e10600', '#ffffff', '#3a2a1e'];
+
+    const swatches = product.swatches && product.swatches.length > 0 ? product.swatches : defaultSwatches;
+
+    return (
+      <div
+        style={style}
+        className={`card w-[590px] h-[820px] rounded-[26px] border-[1.5px] border-white/30 bg-[radial-gradient(400px_300px_at_50%_28%,#3a3026,#0a0807_70%)] absolute overflow-hidden px-[36px] select-none ${className}`}
+      >
+        {/* NEW Badge */}
+        <span
+          className="badge absolute left-[28px] top-[30px] bg-[#e10600] font-extrabold text-[25px] py-[12px] pr-[30px] pl-[20px] text-white z-10 leading-none select-none"
+          style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' }}
+        >
+          NEW
+        </span>
+
+        {/* Wishlist Heart */}
+        <span
+          onClick={handleHeartClick}
+          className={`heart ico absolute right-[34px] top-[34px] w-[44px] h-[44px] cursor-pointer text-white hover:text-[#e10600] transition-colors z-10 ${
+            isLiked ? 'liked' : ''
+          }`}
+          role="button"
+          aria-label="Wishlist"
+        >
+          <HeartIcon />
+        </span>
+
+        {/* Clothing Image / SVG with fallback */}
+        <ClothPreview
+          type={product.type || 'tee'}
+          color={selectedColor}
+          hasLogo={product.logo}
+          img={product.img || fallbackImg}
+          alt={product.name}
+          className="absolute left-[30px] right-[30px] top-[70px] h-[400px]"
+        />
+
+        {/* Title */}
+        <h3 className="absolute left-[36px] top-[470px] text-[32px] font-bold text-white tracking-tight truncate max-w-[518px]">
+          {product.name}
+        </h3>
+
+        {/* Meta / Fit */}
+        <div className="meta absolute left-[36px] top-[528px] text-[24px] text-[#aaa] font-medium truncate max-w-[518px]">
+          {product.fabricFit || 'Premium Cotton \u00a0|\u00a0 Relaxed Fit'}
         </div>
 
-        {/* Card Details Body */}
-        <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 min-h-[220px]">
-          <div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#5C6548]">
-                {product.categoryLabel}
-              </span>
-              {/* Active Color Indicator */}
-              <span className="text-[10px] font-medium uppercase tracking-wider text-[#202020]/70 flex items-center gap-1.5">
-                <span
-                  className="w-2.5 h-2.5 rounded-full border border-black/20"
-                  style={{ backgroundColor: selectedColor.hex }}
-                />
-                <span className="truncate max-w-[110px]">{selectedColor.name}</span>
-              </span>
-            </div>
+        {/* Price */}
+        <div className="price absolute left-[36px] top-[600px] text-[44px] font-extrabold text-[#e10600] flex items-baseline leading-none">
+          ₹{product.price.toLocaleString('en-IN')}
+          {product.oldPrice && (
+            <s className="text-[28px] font-medium text-[#999] ml-[22px]">
+              ₹{product.oldPrice.toLocaleString('en-IN')}
+            </s>
+          )}
+        </div>
 
-            <h3 className="text-base font-semibold text-[#202020] mt-1.5 leading-snug">
-              {product.name}
-            </h3>
+        {/* Swatches */}
+        <div className="sw absolute left-[36px] top-[660px] flex gap-[16px] items-center">
+          {swatches.map((swColor, idx) => (
+            <i
+              key={swColor + idx}
+              onClick={() => setSelectedColor(swColor)}
+              style={{ background: swColor }}
+              className={`w-[44px] h-[44px] rounded-full border-2 border-[#555] block transition-transform hover:scale-110 cursor-pointer ${
+                selectedColor === swColor ? 'on border-white shadow-[0_0_0_3px_#000_inset]' : ''
+              }`}
+            />
+          ))}
+          {product.hasMore && <em className="not-italic text-[#aaa] text-[24px] ml-1">+1</em>}
+        </div>
 
-            <p className="text-xs text-[#202020]/70 mt-1 line-clamp-2">
-              {product.headline}
-            </p>
-
-            {/* Quick Interactive Swatches Bar */}
-            <div className="mt-3.5 pt-3 border-t border-[#DAD7CE]/50 flex items-center justify-between">
-              <div className="flex items-center space-x-1.5">
-                {quickSwatches.map((swatch) => {
-                  const isSelected =
-                    swatch.hex.toLowerCase() === selectedColor.hex.toLowerCase();
-                  return (
-                    <button
-                      key={swatch.id}
-                      type="button"
-                      onClick={() => setSelectedColor(swatch)}
-                      title={`${swatch.name} (${swatch.hex})`}
-                      aria-label={`Change color to ${swatch.name}`}
-                      className={`w-5 h-5 rounded-md transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-[#202020] flex items-center justify-center ${
-                        swatch.isLight ? 'border border-[#DAD7CE]' : 'border-transparent'
-                      } ${
-                        isSelected
-                          ? 'ring-2 ring-[#202020] ring-offset-1 scale-110'
-                          : 'hover:scale-115'
-                      }`}
-                      style={{ backgroundColor: swatch.hex }}
-                    >
-                      {isSelected && (
-                        <Check
-                          className={`w-3 h-3 stroke-[3] ${
-                            swatch.isLight ? 'text-[#202020]' : 'text-white'
-                          }`}
-                        />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* View 19 Colors Link */}
-              <button
-                type="button"
-                onClick={() => setIsChartModalOpen(true)}
-                className="text-[10px] font-semibold uppercase tracking-wider text-[#5C6548] hover:text-[#202020] underline underline-offset-2 ml-2 shrink-0"
-              >
-                +13 Colors
-              </button>
-            </div>
-
-            {/* Size Selector Pills */}
-            <div className="mt-3 pt-2.5 border-t border-[#DAD7CE]/50 flex items-center justify-between">
-              <span className="text-[10px] uppercase font-semibold tracking-wider text-[#202020]/70">
-                Size:
-              </span>
-              <div className="flex items-center space-x-1">
-                {(product.availableSizes || ['S', 'M', 'L', 'XL', 'XXL']).map((size) => {
-                  const isSelected = selectedSize === size;
-                  return (
-                    <button
-                      key={size}
-                      type="button"
-                      onClick={() => setSelectedSize(size)}
-                      className={`text-[10px] px-2 py-0.5 font-semibold transition-all ${
-                        isSelected
-                          ? 'bg-[#202020] text-[#F4F3EE]'
-                          : 'bg-[#F4F3EE] text-[#202020] hover:bg-[#EAE8E1]'
-                      } border border-[#DAD7CE]`}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Pricing & Add to Cart Action */}
-          <div className="pt-3.5 mt-3.5 border-t border-[#DAD7CE]/60 flex flex-col gap-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-bold text-[#202020]">
-                {paise_to_inr_display(product.basePricePaise)}
-              </span>
-              <button
-                type="button"
-                onClick={() => onNotifyProduct(product, selectedColor)}
-                className="text-[10px] font-medium uppercase tracking-wider text-[#5C6548] hover:text-[#202020] underline underline-offset-2 focus-visible:outline-none"
-              >
-                Waitlist ↗
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              className="w-full bg-[#202020] text-[#F4F3EE] py-2.5 px-3 text-xs font-semibold uppercase tracking-[0.14em] hover:bg-[#333333] active:scale-[0.99] transition-all flex items-center justify-center space-x-2"
-            >
-              <ShoppingBag className="w-3.5 h-3.5 stroke-[2]" />
-              <span>Add to Bag</span>
-            </button>
-          </div>
+        {/* Add To Cart Button */}
+        <div
+          onClick={handleAddToCart}
+          className="btn absolute left-[30px] right-[30px] top-[728px] h-[70px] bg-gradient-to-b from-[#e10600] to-[#a30000] rounded-[10px] font-extrabold text-[30px] text-white flex justify-center items-center gap-[20px] cursor-pointer hover:brightness-125 active:scale-[0.98] transition-all select-none"
+          role="button"
+        >
+          <span className="ico w-[44px] h-[44px]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-full h-full">
+              <path d="M2 3h3l3 12h11l2-8H6" />
+              <circle cx="9" cy="20" r="1.5" />
+              <circle cx="18" cy="20" r="1.5" />
+            </svg>
+          </span>
+          ADD TO CART
         </div>
       </div>
+    );
+  }
 
-      {/* 19-Color Chart Modal */}
-      <ColorChartModal
-        isOpen={isChartModalOpen}
-        onClose={() => setIsChartModalOpen(false)}
-        productName={product.name}
-        selectedHex={selectedColor.hex}
-        onSelectColor={(color) => setSelectedColor(color)}
+  // Home Grid Compact Card (variant === 'homeGrid')
+  return (
+    <div
+      style={style}
+      className={`pc ${className}`}
+    >
+      {/* FIRST DROP Badge */}
+      <span className="fd">FIRST DROP</span>
+
+      {/* Wishlist Heart */}
+      <span
+        onClick={handleHeartClick}
+        className={`ico hrt ${isLiked ? 'liked' : ''}`}
+        role="button"
+        aria-label="Wishlist"
+      >
+        <svg viewBox="0 0 24 24" fill={isLiked ? '#e10600' : 'none'} stroke={isLiked ? '#e10600' : 'currentColor'} strokeWidth="1.8">
+          <path d="M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z" />
+        </svg>
+      </span>
+
+      {/* Garment Preview with fallback */}
+      <ClothPreview
+        type={product.type || 'tee'}
+        color={product.color || '#d9c3ad'}
+        hasLogo={product.logo}
+        img={product.img}
+        alt={product.name}
       />
-    </>
+
+      {/* Title */}
+      <h4>{product.name}</h4>
+
+      {/* Price */}
+      <div className="pp">
+        ₹{product.price.toLocaleString('en-IN')}
+        {product.oldPrice && <s>₹{product.oldPrice.toLocaleString('en-IN')}</s>}
+      </div>
+
+      {/* ADD TO CART button */}
+      <div
+        onClick={handleAddToCart}
+        className="add"
+        role="button"
+      >
+        ADD TO CART
+      </div>
+    </div>
   );
 };

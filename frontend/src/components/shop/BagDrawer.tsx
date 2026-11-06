@@ -1,198 +1,159 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
-import { useStoreConfig } from '../../hooks/useStoreConfig';
 import { useCart } from '../../context/CartContext';
-import { paise_to_inr_display } from '../../utils/format';
-import { instagramUrl, instagramHandle, contactEmail } from '../../config/brand';
-import { InstagramIcon } from '../common/InstagramIcon';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import { ClothPreview } from '../common/ClothPreview';
 
-interface BagDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onOpenWaitlist: () => void;
+export interface BagDrawerProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  onOpenWaitlist?: () => void;
 }
 
 export const BagDrawer: React.FC<BagDrawerProps> = ({
-  isOpen,
-  onClose,
-  onOpenWaitlist,
+  isOpen: propIsOpen,
+  onClose: propOnClose,
 }) => {
+  const { items, removeItem, updateQuantity, clearCart, isBagOpen: contextIsBagOpen, closeBag: contextCloseBag, subtotalRupees } = useCart();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
-  const { data: config } = useStoreConfig();
-  const { items, subtotalPaise, removeItem, itemCount } = useCart();
-  const isComingSoon = config?.store_mode === 'coming_soon';
 
-  // Keyboard navigation: Escape key closes the drawer
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const isBagOpen = propIsOpen !== undefined ? propIsOpen : contextIsBagOpen;
+  const closeBag = propOnClose || contextCloseBag;
 
-  if (!isOpen) return null;
+  const handleCheckout = () => {
+    if (!items.length) {
+      toast('Your bag is empty');
+      return;
+    }
+    if (!user) {
+      toast('Please sign in to checkout');
+      closeBag();
+      setTimeout(() => {
+        navigate('/sign-in');
+      }, 900);
+      return;
+    }
+    clearCart();
+    closeBag();
+    toast('Order placed (demo). Thank you!');
+  };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Shopping bag"
-      className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fadeIn"
-      onClick={onClose}
-    >
+    <>
+      {/* Backdrop Overlay */}
       <div
-        className="fixed inset-y-0 right-0 max-w-full flex pl-10"
-        onClick={(e) => e.stopPropagation()}
+        onClick={closeBag}
+        className={`fixed inset-0 bg-black/65 z-50 transition-opacity duration-300 ${
+          isBagOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      />
+
+      {/* Slide-out Drawer */}
+      <aside
+        className={`fixed top-0 bottom-0 right-0 w-[90vw] sm:w-[560px] bg-[#0b0b0b] border-l-[3px] border-[#e10600] z-50 transition-transform duration-350 flex flex-col pointer-events-auto ${
+          isBagOpen ? 'translate-x-0' : 'translate-x-[105%]'
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Your Bag"
       >
-        <div className="w-screen max-w-md bg-[#F4F3EE] border-l border-[#DAD7CE] flex flex-col justify-between shadow-2xl">
-          {/* Drawer Header */}
-          <div className="px-6 py-6 border-b border-[#DAD7CE] flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <ShoppingBag className="w-5 h-5 text-[#202020]" />
-              <h2 className="text-sm uppercase font-semibold tracking-[0.2em] text-[#202020]">
-                Your Bag ({itemCount})
-              </h2>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="p-1 text-[#202020] hover:opacity-60 transition-opacity focus:outline-none"
-              aria-label="Close bag drawer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Drawer Content */}
-          <div className="flex-1 overflow-y-auto px-6 py-6">
-            {items.length > 0 ? (
-              <div className="space-y-4">
-                <div className="divide-y divide-[#DAD7CE] border border-[#DAD7CE] bg-white">
-                  {items.map((item) => (
-                    <div key={item.id} className="p-4 flex items-center gap-3">
-                      <div className="w-14 h-16 bg-[#F4F3EE] border border-[#DAD7CE] flex items-center justify-center p-1 shrink-0">
-                        {item.image && item.image.startsWith('#') ? (
-                          <div
-                            className="w-8 h-10 rounded-xs border border-black/10"
-                            style={{ backgroundColor: item.image }}
-                          />
-                        ) : (
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-xs font-semibold text-[#202020] truncate">
-                          {item.title}
-                        </h4>
-                        <div className="text-[11px] text-[#202020]/70 flex items-center gap-2 mt-0.5">
-                          <span>{item.color}</span>
-                          <span>·</span>
-                          <span>Size {item.size}</span>
-                          <span>·</span>
-                          <span>Qty {item.quantity}</span>
-                        </div>
-                        <div className="text-xs font-bold text-[#202020] mt-1">
-                          {paise_to_inr_display(item.pricePaise * item.quantity)}
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item.id)}
-                        className="text-[#202020]/50 hover:text-red-700 p-1"
-                        aria-label="Remove item"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-2">
-                  <div className="flex justify-between text-xs font-bold text-[#202020] mb-3">
-                    <span>Subtotal:</span>
-                    <span>{paise_to_inr_display(subtotalPaise)}</span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose();
-                      navigate('/bag');
-                    }}
-                    className="w-full bg-[#202020] text-[#F4F3EE] py-3.5 text-xs font-semibold uppercase tracking-[0.16em] hover:bg-[#333333] transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <span>View Bag & Checkout</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ) : isComingSoon ? (
-              <div className="space-y-4 max-w-xs mx-auto text-center py-10">
-                <div className="w-12 h-12 border border-[#DAD7CE] flex items-center justify-center mx-auto text-[#5C6548]">
-                  <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
-                </div>
-                <span className="text-[10px] uppercase font-bold tracking-[0.24em] text-[#5C6548] block">
-                  COMING SOON · STORE LAUNCH
-                </span>
-                <h3 className="text-xl font-semibold text-[#202020]">
-                  Cart opens 8 November 2026.
-                </h3>
-                <p className="text-xs text-[#202020]/70 leading-relaxed">
-                  Our first drop is being crafted. Get notified first and enjoy reserved launch pricing.
-                </p>
-                <div className="pt-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose();
-                      onOpenWaitlist();
-                    }}
-                    className="w-full bg-[#202020] text-[#F4F3EE] py-3.5 text-xs font-semibold uppercase tracking-[0.16em] hover:bg-[#333333] transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <span>Join Launch Waitlist</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="py-12 text-center space-y-3">
-                <ShoppingBag className="w-8 h-8 stroke-[1.5] text-[#5C6548] mx-auto" />
-                <p className="text-sm text-[#202020]/70">Your shopping bag is currently empty.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Drawer Footer */}
-          <div className="p-6 border-t border-[#DAD7CE] bg-[#FAF9F6] text-center space-y-2.5">
-            <p className="text-[11px] uppercase tracking-wider text-[#5C6548] font-medium">
-              Free shipping across India on orders over ₹1,499
-            </p>
-            <div className="flex items-center justify-center space-x-4 text-[11px] text-[#202020]/70 pt-1">
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-1 hover:text-[#202020]"
-              >
-                <InstagramIcon className="w-3.5 h-3.5" />
-                <span>{instagramHandle}</span>
-              </a>
-              <span>·</span>
-              <span className="text-[#202020]/60">{contactEmail}</span>
-            </div>
-          </div>
+        {/* Drawer Header */}
+        <div className="flex justify-between items-center px-8 md:px-10 py-7 md:py-[34px] border-b border-[#333] text-[24px] md:text-[28px] tracking-[0.3em] font-bold">
+          <b>YOUR BAG</b>
+          <span
+            onClick={closeBag}
+            className="cursor-pointer text-[28px] md:text-[30px] hover:text-[#e10600] transition-colors leading-none"
+            role="button"
+            aria-label="Close bag drawer"
+          >
+            ✕
+          </span>
         </div>
-      </div>
-    </div>
+
+        {/* Item List */}
+        <div className="flex-1 overflow-y-auto px-8 md:px-10 py-4">
+          {!items.length ? (
+            <p className="text-center text-[#999] text-[20px] md:text-[24px] mt-20">
+              Your bag is empty.
+            </p>
+          ) : (
+            items.map((item, idx) => (
+              <div
+                key={item.id + idx}
+                className="flex gap-[22px] items-center py-[22px] border-b border-[#222] relative"
+              >
+                {/* Garment Thumbnail */}
+                <div className="w-[110px] md:w-[130px] h-[110px] md:h-[130px] shrink-0 bg-[#151210] rounded-[10px] p-2 flex items-center justify-center">
+                  <ClothPreview
+                    type={item.type || 'tee'}
+                    color={item.color || '#d9c3ad'}
+                    hasLogo={item.logo}
+                    img={item.img || item.image}
+                    className="w-full h-full"
+                  />
+                </div>
+
+                {/* Details */}
+                <div className="flex-1 min-w-0 pr-16">
+                  <b className="text-[19px] md:text-[22px] block font-bold text-white truncate">
+                    {item.name || item.title}
+                  </b>
+                  <span className="text-[#e10600] font-bold text-[19px] md:text-[22px] block my-1 md:my-2">
+                    ₹{(item.price || 899).toLocaleString('en-IN')}
+                  </span>
+                  {/* Quantity controls */}
+                  <div className="flex items-center gap-3 md:gap-4 text-[20px] md:text-[22px] text-white">
+                    <button
+                      type="button"
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                      className="w-8 md:w-9 h-8 md:h-9 border-[1.5px] border-[#666] rounded-[6px] flex items-center justify-center hover:border-[#e10600] hover:text-[#e10600] transition-colors cursor-pointer select-none"
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
+                    <span className="min-w-[22px] text-center">{item.quantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className="w-8 md:w-9 h-8 md:h-9 border-[1.5px] border-[#666] rounded-[6px] flex items-center justify-center hover:border-[#e10600] hover:text-[#e10600] transition-colors cursor-pointer select-none"
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remove item */}
+                <button
+                  type="button"
+                  onClick={() => removeItem(item.id)}
+                  className="absolute right-0 top-[24px] text-[15px] text-[#999] hover:text-[#e10600] underline cursor-pointer"
+                >
+                  Remove
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Drawer Footer */}
+        <div className="p-8 md:p-10 border-t border-[#333] shrink-0">
+          <div className="flex justify-between items-center text-[24px] md:text-[28px] mb-6">
+            <span>Total</span>
+            <b className="text-[#e10600]">₹{subtotalRupees.toLocaleString('en-IN')}</b>
+          </div>
+          <button
+            type="button"
+            onClick={handleCheckout}
+            className="w-full bg-gradient-to-b from-[#e10600] to-[#a30000] text-white text-center py-5 md:py-[22px] text-[22px] md:text-[26px] font-extrabold tracking-[0.2em] rounded-[8px] cursor-pointer hover:brightness-125 active:scale-[0.98] transition-all"
+          >
+            CHECKOUT
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };

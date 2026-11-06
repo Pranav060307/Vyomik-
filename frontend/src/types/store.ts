@@ -31,16 +31,22 @@ export interface WaitlistResponse {
   email: string;
   message: string;
   created_at: string;
+  is_duplicate?: boolean;
 }
 
 export interface CartItem {
   id: string;
-  productId: string;
-  variantId: string;
-  title: string;
-  color: string;
-  size: string;
-  pricePaise: number;
+  productId?: string;
+  variantId?: string;
+  title?: string;
+  name?: string;
+  color?: string;
+  size?: string;
+  pricePaise?: number;
+  price?: number;
   quantity: number;
-  image: string;
+  image?: string;
+  img?: string;
+  type?: string;
+  logo?: string | number;
 }

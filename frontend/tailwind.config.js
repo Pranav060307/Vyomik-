@@ -7,6 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          red: '#e10600',
+          redDark: '#a30000',
+          redDeep: '#8e0f14',
+          black: '#050505',
+          dark: '#0b0b0b',
+          panel: '#14100d',
+          gray: '#d8d2cc',
+        },
         ivory: {
           DEFAULT: '#F4F3EE',
           50: '#FFFFFF',
@@ -32,17 +41,16 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Montserrat', 'Inter', 'system-ui', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        anton: ['Anton', 'Impact', 'Barlow Condensed', 'sans-serif'],
+        condensed: ['Barlow Condensed', 'Anton', 'sans-serif'],
       },
       letterSpacing: {
-        wordmark: '0.28em',
-        eyebrow: '0.18em',
-      },
-      borderRadius: {
-        none: '0px',
+        wordmark: '0.5em',
+        eyebrow: '0.42em',
       },
     },
   },
   plugins: [],
 }
-

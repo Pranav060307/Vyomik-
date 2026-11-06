@@ -107,7 +107,7 @@ export const BagPage: React.FC = () => {
         size: item.size,
         qty: item.quantity,
         price_paise: item.pricePaise,
-        sku: `VY-${item.title.includes('Hoodie') ? 'HD' : item.title.includes('Sweatshirt') ? 'SW' : 'TS'}-${item.color.slice(0, 3).toUpperCase()}-${item.size}`,
+        sku: `VY-${(item.title || item.name || "").includes("Hoodie") ? "HD" : (item.title || item.name || "").includes("Sweatshirt") ? "SW" : "TS"}-${(item.color || "BLK").slice(0, 3).toUpperCase()}-${item.size || "M"}`,
       })),
       total_paise: totalPaise,
       subtotal_paise: subtotalPaise,
@@ -299,7 +299,7 @@ export const BagPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-sm font-bold text-[#202020] mt-2">
-                        {paise_to_inr_display(item.pricePaise * item.quantity)}
+                        {paise_to_inr_display((item.pricePaise || (item.price ? item.price * 100 : 0)) * item.quantity)}
                       </div>
                     </div>
 

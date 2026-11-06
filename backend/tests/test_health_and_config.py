@@ -21,7 +21,7 @@ async def test_store_config_endpoint(client: AsyncClient):
     data = response.json()
     assert data["store_name"] == "VYOMIK"
     assert data["store_mode"] in ["coming_soon", "live"]
-    assert data["launch_date"] == "2026-11-08"
+    assert data["launch_date"] == "2026-11-10"
     assert "launch_at" in data
     assert "server_time" in data
     assert isinstance(data["gate_enabled"], bool)

@@ -3,39 +3,909 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --color-ivory: #F4F3EE;
-    --color-charcoal: #202020;
-    --color-olive: #5C6548;
-    --color-stone: #DAD7CE;
+  * {
+    box-sizing: border-box;
   }
 
-  body {
-    background-color: var(--color-ivory);
-    color: var(--color-charcoal);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Sharp rectangular buttons as per brand guideline: no rounded corners */
-  button, input, select, textarea {
-    border-radius: 0 !important;
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    background: #000;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
   }
 }
 
-/* Subtle custom scrollbar */
+/* Brand Exact Utilities from HTML Source of Truth */
+.red {
+  color: #e10600;
+}
+
+svg {
+  display: block;
+}
+
+.ico {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+}
+
+.ico svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cloth {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cloth img, .cloth svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cloth img {
+  -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 72%, transparent 100%);
+}
+
+.rack img {
+  -webkit-mask-image: linear-gradient(to right, #000 80%, transparent), linear-gradient(to bottom, transparent, #000 8%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, #000 80%, transparent), linear-gradient(to bottom, transparent, #000 8%);
+  mask-composite: intersect;
+  object-position: left bottom !important;
+}
+
+.rackw img {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%), linear-gradient(to bottom, #000 88%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent, #000 14%), linear-gradient(to bottom, #000 88%, transparent);
+  mask-composite: intersect;
+}
+
+/* Hover and Interactions */
+.cta, .btn, .b1, .pc .add {
+  transition: filter .15s, transform .15s;
+  cursor: pointer;
+}
+
+.cta:hover, .btn:hover, .b1:hover, .pc .add:hover {
+  filter: brightness(1.18);
+}
+
+.btn:active, .cta:active, .b1:active {
+  transform: scale(.98);
+}
+
+.b2:hover, .g:hover, .chips span:hover {
+  background: #1a1a1a;
+}
+
+.follow .ico:hover, .rt .ico:hover {
+  color: #e10600;
+}
+
+.heart.liked svg, .hrt.liked svg {
+  fill: #e10600;
+  stroke: #e10600;
+}
+
+.sw i {
+  transition: transform .15s;
+  cursor: pointer;
+}
+
+.sw i:hover {
+  transform: scale(1.12);
+}
+
+.sw i.on {
+  border-color: #fff;
+  box-shadow: 0 0 0 3px #000 inset;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.logo-mark {
+  width: 60px;
+  height: auto;
+}
+
+.logo-text {
+  font-weight: 600;
+  letter-spacing: 0.5em;
+  font-size: 34px;
+}
+
+.nav {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 0;
+  height: 86px;
+  border-bottom: 3px solid #fff;
+}
+
+.nav .logo {
+  position: absolute;
+  left: 30px;
+  top: 10px;
+}
+
+.nav .logo-mark {
+  width: 88px;
+}
+
+.nav .logo-text {
+  font-size: 36px;
+  letter-spacing: 0.55em;
+  font-weight: 600;
+}
+
+.links {
+  position: absolute;
+  right: 20px;
+  top: 30px;
+  display: flex;
+  gap: 56px;
+  font-size: 20px;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+}
+
+.links span:hover {
+  color: #e10600;
+  cursor: pointer;
+}
+
+.hero {
+  position: absolute;
+  left: 182px;
+  top: 165px;
+  font-family: 'Anton', 'Impact', 'Barlow Condensed', sans-serif;
+  font-size: 118px;
+  line-height: 0.98;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.hero i {
+  display: block;
+  width: 120px;
+  height: 9px;
+  background: #fff;
+  margin-top: 34px;
+}
+
+.f {
+  position: absolute;
+  left: 58px;
+  width: 620px;
+  height: 50px;
+  border: 1.5px solid #fff;
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+}
+
+.f .ico {
+  width: 34px;
+  height: 34px;
+  margin: 0 38px 0 26px;
+  flex: none;
+}
+
+.f .eye {
+  margin: 0 22px 0 auto;
+  width: 34px;
+  cursor: pointer;
+  flex: none;
+}
+
+.f input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+  color: #fff;
+  font: 400 22px Montserrat, sans-serif;
+  height: 100%;
+}
+
+.f input::placeholder {
+  color: #fff;
+  opacity: 1;
+}
+
+.f:focus-within {
+  border-color: #e10600 !important;
+  box-shadow: 0 0 0 2px rgba(225, 6, 0, 0.35);
+}
+
+.f .msg {
+  position: absolute;
+  left: 2px;
+  top: 53px;
+  font-style: normal;
+  font-size: 15px;
+  color: #ff5a52;
+  white-space: nowrap;
+}
+
+.f.bad {
+  border-color: #ff5a52 !important;
+}
+
+.chk {
+  position: absolute;
+  left: 58px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 21px;
+}
+
+.chk i {
+  width: 30px;
+  height: 30px;
+  border: 2px solid #fff;
+  display: block;
+  position: relative;
+  flex: none;
+  cursor: pointer;
+}
+
+.chk u {
+  text-decoration: none;
+  border-bottom: 3px solid #e10600;
+  cursor: pointer;
+}
+
+.chk i.on:after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 1px;
+  width: 9px;
+  height: 17px;
+  border: solid #e10600;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+}
+
+.redbox {
+  position: absolute;
+  left: 282px;
+  top: 565px;
+  width: 408px;
+  height: 305px;
+  background: #e10600;
+}
+
+.tag {
+  position: absolute;
+  left: 230px;
+  top: 535px;
+  width: 290px;
+  height: 410px;
+  background: #111;
+  transform: rotate(-14deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  padding-top: 130px;
+  text-align: center;
+  border-radius: 6px;
+  transform-origin: center;
+}
+
+#stage {
+  line-height: normal;
+}
+
+.tag:before {
+  content: '';
+  box-sizing: content-box;
+  position: absolute;
+  left: 112px;
+  top: 36px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 8px solid #bbb;
+  background: #000;
+}
+
+.tag .logo-mark {
+  width: 80px;
+  margin: 0 auto 10px;
+}
+
+.tag b {
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  font-size: 30px;
+  display: block;
+  padding-left: 0.5em;
+}
+
+.tag p {
+  position: absolute;
+  left: 46px;
+  bottom: 70px;
+  text-align: left;
+  font-size: 18px;
+  letter-spacing: 0.4em;
+  line-height: 1.5;
+  color: #eee;
+  transform: rotate(14deg) translateY(10px);
+}
+
+.tag p:after {
+  content: '';
+  display: block;
+  width: 42px;
+  height: 4px;
+  background: #e10600;
+  margin-top: 14px;
+}
+
+.diag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 340px;
+  height: 260px;
+  background: linear-gradient(#fff, #fff);
+  clip-path: polygon(0 100%, 0 62%, 22% 100%, 34% 100%, 0 40%, 0 18%, 52% 100%, 64% 100%, 0 0, 0 0);
+}
+
+.panel {
+  position: absolute;
+  left: 840px;
+  top: 121px;
+  width: 844px;
+  height: 918px;
+  border: 6px solid #fff;
+  background: #000;
+  overflow: hidden;
+}
+
+.corner {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 240px;
+  height: 150px;
+  background: #e10600;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 0 40%);
+}
+
+.corner svg {
+  position: absolute;
+  right: 30px;
+  top: 25px;
+  width: 130px;
+}
+
+.tri {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 70px;
+  background: #e10600;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+.panel .brand {
+  position: absolute;
+  left: 60px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 22px;
+  letter-spacing: 0.7em;
+}
+
+.panel .brand i {
+  width: 62px;
+  height: 3px;
+  background: #e10600;
+}
+
+.panel h2 {
+  position: absolute;
+  left: 58px;
+  top: 66px;
+  font-family: 'Anton', 'Impact', sans-serif;
+  font-weight: 400;
+  font-size: 84px;
+  line-height: 0.98;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.panel .cap {
+  position: absolute;
+  left: 62px;
+  font-size: 22px;
+  letter-spacing: 0.45em;
+  font-weight: 500;
+}
+
+.cta {
+  position: absolute;
+  left: 58px;
+  width: 620px;
+  height: 62px;
+  background: #e10600;
+  font-family: 'Anton', 'Impact', sans-serif;
+  letter-spacing: 0.14em;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.or {
+  position: absolute;
+  left: 58px;
+  width: 620px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 21px;
+  justify-content: center;
+}
+
+.or i {
+  flex: 1;
+  height: 2px;
+  background: #fff;
+}
+
+.or span {
+  flex: 0;
+}
+
+.g {
+  position: absolute;
+  left: 58px;
+  width: 620px;
+  height: 58px;
+  border: 1.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.g .ico {
+  width: 38px;
+  height: 38px;
+}
+
+.sw2 {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 23px;
+  display: flex;
+  justify-content: center;
+  gap: 34px;
+  align-items: center;
+}
+
+.sw2 b {
+  color: #e10600;
+  font-family: 'Anton', 'Impact', sans-serif;
+  letter-spacing: 0.12em;
+  font-weight: 400;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.sw2 b .ico {
+  width: 30px;
+  height: 30px;
+}
+
+.notify input {
+  caret-color: #e10600;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #F4F3EE;
+  background: #0b0b0b;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DAD7CE;
+  background: #2a2a2a;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #B8B4A8;
+  background: #e10600;
 }
 
+/* ==========================================================================
+   5-HOME.HTML EXACT SPECIFICATION SCOPED TO .home-page
+   ========================================================================== */
+.home-page .nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 96px;
+  border-bottom: 1px solid #222;
+  background: #000;
+}
+.home-page .nav .logo {
+  position: absolute;
+  left: 98px;
+  top: 20px;
+  cursor: pointer;
+}
+.home-page .nav .logo-mark {
+  width: 60px;
+  height: auto;
+}
+.home-page .nav .logo-text {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: .5em;
+}
+.home-page .nav .mid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 34px;
+  text-align: center;
+  font-size: 21px;
+  display: flex;
+  justify-content: center;
+  gap: 68px;
+  padding-left: 20px;
+}
+.home-page .nav .mid span {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+.home-page .nav .mid span:hover {
+  color: #e10600;
+}
+.home-page .nav .mid .ico {
+  width: 22px;
+  height: 22px;
+}
+.home-page .nav .rt {
+  position: absolute;
+  right: 68px;
+  top: 30px;
+  display: flex;
+  gap: 44px;
+  align-items: center;
+  font-size: 19px;
+}
+.home-page .nav .rt .ico {
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+.home-page .nav .rt .ico:hover {
+  color: #e10600;
+}
+.home-page .nav .rt span.bg {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+.home-page .nav .rt span.bg:hover {
+  color: #e10600;
+}
+
+.home-page .hero {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 96px;
+  height: 700px;
+  background: radial-gradient(700px 500px at 100% 60%, #4a0a0a 0%, transparent 70%), #030303;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  font-size: initial;
+  line-height: normal;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.home-page .rackw {
+  position: absolute;
+  left: 820px;
+  top: 20px;
+  width: 1050px;
+  height: 690px;
+}
+.home-page .hero .eb {
+  position: absolute;
+  left: 112px;
+  top: 82px;
+  font-size: 22px;
+  letter-spacing: .6em;
+  border-bottom: 2px solid #e10600;
+  padding-bottom: 12px;
+}
+.home-page .hero h1 {
+  position: absolute;
+  left: 110px;
+  top: 130px;
+  font-size: 84px;
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: .02em;
+  font-family: 'Montserrat', sans-serif;
+}
+.home-page .hero h1 b {
+  display: block;
+  color: #c8141b;
+  font-weight: 800;
+}
+.home-page .hero p {
+  position: absolute;
+  left: 112px;
+  top: 380px;
+  font-size: 25px;
+  line-height: 1.5;
+  color: #ddd;
+  width: 560px;
+}
+.home-page .b1,
+.home-page .b2 {
+  position: absolute;
+  top: 490px;
+  height: 64px;
+  border-radius: 6px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter .15s, transform .15s;
+}
+.home-page .b1 {
+  left: 112px;
+  width: 250px;
+  background: linear-gradient(#d01020, #9c0e14);
+}
+.home-page .b1:hover {
+  filter: brightness(1.18);
+}
+.home-page .b1:active {
+  transform: scale(.98);
+}
+.home-page .b1 .ico {
+  width: 30px;
+  height: 30px;
+}
+.home-page .b2 {
+  left: 396px;
+  width: 204px;
+  border: 1.5px solid #bbb;
+}
+.home-page .b2:hover {
+  background: #1a1a1a;
+}
+.home-page .b2:active {
+  transform: scale(.98);
+}
+.home-page .chips {
+  position: absolute;
+  left: 112px;
+  top: 595px;
+  display: flex;
+  gap: 12px;
+}
+.home-page .chips span {
+  padding: 0 22px;
+  height: 56px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  font-size: 15.5px;
+  letter-spacing: .07em;
+  font-weight: 700;
+  background: #0a0a0a;
+  cursor: pointer;
+  transition: background .15s;
+}
+.home-page .chips span:hover {
+  background: #1a1a1a;
+}
+.home-page .chips span.on {
+  background: #b81018;
+  border-color: #b81018;
+}
+.home-page .na {
+  position: absolute;
+  left: 112px;
+  top: 820px;
+  font-size: 25px;
+  letter-spacing: .55em;
+  font-weight: 700;
+}
+.home-page .va {
+  position: absolute;
+  right: 112px;
+  top: 822px;
+  font-size: 19px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+}
+.home-page .va:hover {
+  color: #e10600;
+}
+.home-page .va .ico {
+  color: #e10600;
+  width: 28px;
+  height: 28px;
+}
+.home-page .row {
+  position: absolute;
+  left: 112px;
+  top: 882px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  width: 1700px;
+}
+.home-page .pc {
+  width: 410px;
+  height: 560px;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  background: #0b0b0b;
+  position: relative;
+  overflow: hidden;
+}
+.home-page .pc .fd {
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  background: #8e0f14;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  padding: 8px 18px 8px 14px;
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  z-index: 2;
+}
+.home-page .pc .cloth {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 60px;
+  height: 340px;
+}
+.home-page .pc h4 {
+  position: absolute;
+  left: 28px;
+  top: 420px;
+  font-size: 26px;
+  font-weight: 700;
+}
+.home-page .pc .pp {
+  position: absolute;
+  left: 28px;
+  top: 466px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #e10600;
+}
+.home-page .pc .pp s {
+  font-size: 19px;
+  font-weight: 500;
+  color: #999;
+  margin-left: 14px;
+}
+.home-page .pc .add {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 506px;
+  height: 34px;
+  background: linear-gradient(#e10600, #a30000);
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter .15s, transform .15s;
+}
+.home-page .pc .add:hover {
+  filter: brightness(1.18);
+}
+.home-page .pc .hrt {
+  position: absolute;
+  right: 22px;
+  top: 20px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+.home-page .pc .hrt.liked svg {
+  fill: #e10600;
+  stroke: #e10600;
+}
+.home-page #foot {
+  position: absolute;
+  left: 0;
+  width: 1920px;
+  height: 330px;
+  border-top: 1px solid #222;
+  background: #000;
+  display: flex;
+  gap: 150px;
+  padding: 70px 112px;
+}
+.home-page #foot .fl {
+  width: 520px;
+}
+.home-page #foot .fl p {
+  margin-top: 26px;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #aaa;
+}
+.home-page #foot .fc b {
+  display: block;
+  font-size: 17px;
+  letter-spacing: .35em;
+  margin-bottom: 22px;
+}
+.home-page #foot .fc span {
+  display: block;
+  font-size: 20px;
+  color: #ccc;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+.home-page #foot .fc span:hover {
+  color: #e10600;
+}
+.home-page #foot .copy {
+  position: absolute;
+  left: 112px;
+  bottom: 30px;
+  font-size: 16px;
+  color: #777;
+}

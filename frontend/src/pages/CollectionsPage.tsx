@@ -1,304 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { Palette } from 'lucide-react';
-import { AnnouncementBar } from '../components/layout/AnnouncementBar';
-import { Header } from '../components/layout/Header';
-import { Footer } from '../components/layout/Footer';
-import { WaitlistModal } from '../components/landing/WaitlistModal';
+import React, { useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ResponsiveStage } from '../components/common/ResponsiveStage';
+import { ProductCard, ProductItem } from '../components/shop/ProductCard';
 import { BagDrawer } from '../components/shop/BagDrawer';
-import { ProductCard } from '../components/shop/ProductCard';
-import { ColorChartModal } from '../components/shop/ColorChartModal';
-import { DEMO_PRODUCTS, DemoProduct } from '../config/demoContent';
-import { SwatchColor } from '../config/colorPalette';
-
-interface CategoryTab {
-  id: 'oversized-tees' | 'hoodies' | 'sweatshirts';
-  label: string;
-}
-
-const CATEGORY_TABS: CategoryTab[] = [
-  { id: 'oversized-tees', label: 'Oversized Tees' },
-  { id: 'hoodies', label: 'Hoodies' },
-  { id: 'sweatshirts', label: 'Sweatshirts' },
-];
+import { SearchBar } from '../components/shop/SearchBar';
+import { useCart } from '../context/CartContext';
+import { useProducts } from '../hooks/useProducts';
 
 export const CollectionsPage: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<string>('oversized-tees');
-  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
-  const [waitlistSource, setWaitlistSource] = useState('collections');
-  const [isBagOpen, setIsBagOpen] = useState(false);
-  const [isGlobalChartOpen, setIsGlobalChartOpen] = useState(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const queryParam = searchParams.get('q') || '';
+  const catParam = searchParams.get('cat') || '';
+  const { itemCount, openBag, openSearch } = useCart();
 
-  // Filter products by each section
-  const oversizedTees = DEMO_PRODUCTS.filter(
-    (p) =>
-      p.category === 'plain-tees' ||
-      p.category === 'wordmark-tees' ||
-      p.category === 'oversized-tees'
-  );
+  const { data: allProducts = [] } = useProducts(catParam);
 
-  const hoodies = DEMO_PRODUCTS.filter((p) => p.category === 'hoodies');
+  // Filter products by search query and category
+  const filteredProducts: ProductItem[] = useMemo(() => {
+    let result = allProducts;
 
-  const sweatshirts = DEMO_PRODUCTS.filter((p) => p.category === 'sweatshirts');
+    if (catParam && catParam !== 'all') {
+      const normalizedCat = catParam.toLowerCase().replace('-tees', '');
+      result = result.filter((p) => p.category?.toLowerCase().includes(normalizedCat));
+    }
 
-  const handleNotifyProduct = (
-    product: DemoProduct,
-    selectedColor?: SwatchColor
-  ) => {
-    const colorTag = selectedColor ? `_color_${selectedColor.id}` : '';
-    setWaitlistSource(`product_${product.slug}${colorTag}`);
-    setIsWaitlistOpen(true);
-  };
+    if (queryParam.trim()) {
+      const q = queryParam.trim().toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          (p.fabricFit && p.fabricFit.toLowerCase().includes(q)) ||
+          (p.category && p.category.toLowerCase().includes(q))
+      );
+    }
 
-  // Smooth navigation to the requested section
-  const handleNavigateToSection = (sectionId: string) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const yOffset = -95; // Account for sticky header offset
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-      try {
-        window.history.replaceState(null, '', `#${sectionId}`);
-      } catch {
-        // Fallback for sandboxed or strict iframes
+    // Default featured set: 1 Plain Tee, 1 Wordmark Tee, 1 Hoodie
+    if (!catParam && !queryParam.trim() && result.length >= 3) {
+      const plain = result.find((p) => p.category === 'plain' || (p.type === 'tee' && p.logo !== 1));
+      const wordmark = result.find((p) => p.category === 'wordmark' || p.logo === 1);
+      const hoodie = result.find((p) => p.category === 'hoodies' || p.type === 'hoodie');
+
+      if (plain && wordmark && hoodie) {
+        return [plain, wordmark, hoodie];
       }
     }
-  };
 
-  // Scroll to section if hash is present in URL on mount
-  useEffect(() => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash && ['oversized-tees', 'hoodies', 'sweatshirts'].includes(hash)) {
-      setActiveSection(hash);
-      const element = document.getElementById(hash);
-      if (element) {
-        setTimeout(() => {
-          const yOffset = -95;
-          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        }, 150);
-      }
-    }
-  }, []);
+    return result;
+  }, [allProducts, catParam, queryParam]);
 
-  // Update active button indicator based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['oversized-tees', 'hoodies', 'sweatshirts'];
-      const scrollPosition = window.scrollY + 120;
-
-      for (const sectionId of sections) {
-        const el = document.getElementById(sectionId);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Display top 3 matching products (as specified in 1920x1080 design stage)
+  const displayedProducts = filteredProducts.slice(0, 3);
+  const n = displayedProducts.length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F4F3EE] text-[#202020]">
-      <AnnouncementBar />
-      <Header
-        bagCount={0}
-        onOpenBag={() => setIsBagOpen(true)}
-        onOpenNotifyModal={() => {
-          setWaitlistSource('header_nav');
-          setIsWaitlistOpen(true);
-        }}
-      />
+    <ResponsiveStage className="bg-[#050505] relative overflow-hidden font-montserrat">
+      {/* Top Floating Nav */}
+      <div className="fnav absolute right-[95px] top-[44px] flex items-center gap-[38px] text-[22px] tracking-[0.18em] font-semibold text-white z-20 select-none">
+        <span
+          onClick={() => navigate('/home')}
+          className="hover:text-[#e10600] cursor-pointer transition-colors"
+        >
+          HOME
+        </span>
+        <span
+          onClick={openSearch}
+          className="hover:text-[#e10600] cursor-pointer transition-colors"
+        >
+          SEARCH
+        </span>
+        <span
+          onClick={openBag}
+          className="hover:text-[#e10600] cursor-pointer transition-colors"
+        >
+          Bag ({itemCount})
+        </span>
+      </div>
 
-      <main className="flex-1 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 py-12 md:py-16 w-full">
-        {/* Page Header */}
-        <div className="border-b border-[#DAD7CE] pb-8 mb-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#5C6548]">
-                CATALOGUE · FIRST DROP
-              </span>
-              <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#202020] mt-2 text-balance">
-                The Complete Edit
-              </h1>
-              <p className="text-xs sm:text-sm text-[#202020]/70 mt-2 max-w-[65ch] leading-relaxed">
-                Everyday oversized essentials engineered with boxy silhouettes and heavyweight fabrics. Click any color swatch or view the chart on each card to customize shades.
-              </p>
-            </div>
+      {/* Eyebrow */}
+      <div className="eyebrow absolute left-[75px] top-[50px] text-[25px] tracking-[0.5em] font-medium text-white flex items-center gap-[30px] select-none">
+        FEATURED COLLECTION
+        <i className="block w-[110px] h-[3px] bg-[#e10600]" />
+      </div>
 
-            {/* Quick 19-Color Palette Overview Banner */}
-            <button
-              type="button"
-              onClick={() => setIsGlobalChartOpen(true)}
-              className="inline-flex items-center space-x-2.5 bg-white border border-[#DAD7CE] hover:border-[#202020] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#202020] transition-colors shadow-xs shrink-0 self-start md:self-end"
-            >
-              <Palette className="w-4 h-4 text-[#5C6548]" />
-              <span>Full 19-Shade Palette ↗</span>
-            </button>
-          </div>
+      {/* Main Heading */}
+      <h2
+        className="absolute left-[72px] top-[82px] font-black text-[84px] tracking-[-2px] text-white leading-none font-montserrat select-none"
+        role="heading"
+      >
+        NEW <span className="red text-[#e10600]">ARRIVALS.</span>
+      </h2>
 
-          {/* Category Navigation Buttons */}
-          <div className="flex flex-wrap gap-2.5 sm:gap-3 mt-8">
-            {CATEGORY_TABS.map((tab) => {
-              const isActive = activeSection === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleNavigateToSection(tab.id)}
-                  aria-label={`Navigate to ${tab.label} section`}
-                  className={`px-5 py-2.5 text-xs uppercase tracking-[0.16em] font-medium border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#202020] active:scale-[0.98] ${
-                    isActive
-                      ? 'bg-[#202020] text-[#F4F3EE] border-[#202020] shadow-sm'
-                      : 'bg-white text-[#202020] border-[#DAD7CE] hover:border-[#202020] hover:bg-[#F4F3EE]'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+      {/* View All button */}
+      <div
+        onClick={() => navigate('/collections')}
+        className="viewall absolute right-[95px] top-[122px] text-[26px] text-white flex items-center gap-[16px] cursor-pointer hover:text-[#e10600] transition-colors select-none"
+      >
+        View All
+        <span className="ico text-[#e10600] w-[36px] h-[36px] flex items-center justify-center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-full h-full">
+            <path d="M4 12h16M14 6l6 6-6 6" />
+          </svg>
+        </span>
+      </div>
+
+      {/* Cards Area */}
+      {displayedProducts.length > 0 ? (
+        <div className="cards absolute left-0 top-0 w-[1920px] h-[1080px]">
+          {displayedProducts.map((p, i) => {
+            // Position identically to HTML:
+            // When 3 cards: left is 70px, 665px, 1260px; top is 235px
+            const leftPos = n === 3
+              ? (i === 0 ? 70 : i === 1 ? 665 : 1260)
+              : Math.round((1920 - (n * 590 + (n - 1) * 5)) / 2 + i * 595);
+
+            return (
+              <ProductCard
+                key={p.id + i}
+                product={p}
+                variant="newArrivals"
+                className="absolute"
+                style={{
+                  left: `${leftPos}px`,
+                  top: '235px',
+                }}
+              />
+            );
+          })}
         </div>
+      ) : (
+        <div className="noresult absolute left-0 right-0 top-[480px] text-center text-[34px] text-[#ccc]">
+          No products match “{queryParam}”
+          <u
+            onClick={() => navigate('/collections')}
+            className="text-[#e10600] cursor-pointer ml-[14px]"
+          >
+            Clear search
+          </u>
+        </div>
+      )}
 
-        {/* SECTION 1: OVERSIZED TEES */}
-        <section
-          id="oversized-tees"
-          data-testid="section-oversized-tees"
-          className="scroll-mt-28 mb-20 pt-4"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#DAD7CE] pb-4 mb-8">
-            <div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5C6548]">
-                SECTION 01 · 240 GSM COMBED COTTON
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#202020] mt-1">
-                Oversized Tees
-              </h2>
-              <p className="text-xs text-[#202020]/70 mt-1 max-w-xl">
-                Dense ribbed neckbands, dropped shoulder cuts, and boxy proportions. Switch colors or open the color chart on any card.
-              </p>
-            </div>
-            <span className="text-[11px] uppercase tracking-wider text-[#202020]/60 font-medium mt-3 sm:mt-0">
-              {oversizedTees.length} Silhouettes
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {oversizedTees.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onNotifyProduct={handleNotifyProduct}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 2: HOODIES */}
-        <section
-          id="hoodies"
-          data-testid="section-hoodies"
-          className="scroll-mt-28 mb-20 pt-4"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#DAD7CE] pb-4 mb-8">
-            <div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5C6548]">
-                SECTION 02 · 450 GSM FRENCH TERRY
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#202020] mt-1">
-                Hoodies
-              </h2>
-              <p className="text-xs text-[#202020]/70 mt-1 max-w-xl">
-                Double-layered distraction-free hoods without cords, heavyweight loopback drape, and reinforced bartack pockets.
-              </p>
-            </div>
-            <span className="text-[11px] uppercase tracking-wider text-[#202020]/60 font-medium mt-3 sm:mt-0">
-              {hoodies.length} Silhouettes
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {hoodies.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onNotifyProduct={handleNotifyProduct}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 3: SWEATSHIRTS */}
-        <section
-          id="sweatshirts"
-          data-testid="section-sweatshirts"
-          className="scroll-mt-28 mb-20 pt-4"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#DAD7CE] pb-4 mb-8">
-            <div>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5C6548]">
-                SECTION 03 · 400 GSM HEAVYWEIGHT FLEECE
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#202020] mt-1">
-                Sweatshirts
-              </h2>
-              <p className="text-xs text-[#202020]/70 mt-1 max-w-xl">
-                Architectural crewneck silhouettes and raglan cuts designed for clean minimal layering.
-              </p>
-            </div>
-            <span className="text-[11px] uppercase tracking-wider text-[#202020]/60 font-medium mt-3 sm:mt-0">
-              {sweatshirts.length} Silhouettes
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {sweatshirts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onNotifyProduct={handleNotifyProduct}
-              />
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <Footer
-        onOpenNotifyModal={() => {
-          setWaitlistSource('footer');
-          setIsWaitlistOpen(true);
-        }}
-      />
-
-      <WaitlistModal
-        isOpen={isWaitlistOpen}
-        onClose={() => setIsWaitlistOpen(false)}
-        initialSource={waitlistSource}
-      />
-
-      <BagDrawer
-        isOpen={isBagOpen}
-        onClose={() => setIsBagOpen(false)}
-        onOpenWaitlist={() => {
-          setWaitlistSource('bag_drawer');
-          setIsWaitlistOpen(true);
-        }}
-      />
-
-      {/* Global 19-Color Chart Modal */}
-      <ColorChartModal
-        isOpen={isGlobalChartOpen}
-        onClose={() => setIsGlobalChartOpen(false)}
-        productName="First Drop Collection"
-        selectedHex="#151515"
-        onSelectColor={() => {}}
-      />
-    </div>
+      {/* Overlays */}
+      <SearchBar />
+      <BagDrawer />
+    </ResponsiveStage>
   );
 };

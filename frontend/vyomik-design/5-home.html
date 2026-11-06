@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VYOMIK - Home</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Anton&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Montserrat',sans-serif;color:#fff}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center center;overflow:hidden;background:#050505}
+svg{display:block}
+.red{color:#e10600}
+.logo{display:flex;align-items:center;gap:22px}
+.logo-mark{width:60px;height:auto}
+.logo-text{font-weight:600;letter-spacing:.5em;font-size:34px}
+.cloth{position:relative;display:flex;align-items:center;justify-content:center}
+.cloth img,.cloth svg{width:100%;height:100%;object-fit:contain}
+.cloth img{-webkit-mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);mask-image:radial-gradient(closest-side,#000 72%,transparent 100%)}
+.rack img{-webkit-mask-image:linear-gradient(to right,#000 80%,transparent),linear-gradient(to bottom,transparent,#000 8%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,#000 80%,transparent),linear-gradient(to bottom,transparent,#000 8%);mask-composite:intersect}
+.rackw img{-webkit-mask-image:linear-gradient(to right,transparent,#000 14%),linear-gradient(to bottom,#000 88%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 14%),linear-gradient(to bottom,#000 88%,transparent);mask-composite:intersect}
+.ico{display:inline-flex;width:28px;height:28px}
+.ico svg{width:100%;height:100%}
+
+#stage{background:#050505}
+.nav{position:absolute;left:0;right:0;top:0;height:96px;border-bottom:1px solid #222;background:#000}
+.nav .logo{position:absolute;left:98px;top:20px}.nav .logo-mark{width:60px}.nav .logo-text{font-size:30px}
+.nav .mid{position:absolute;left:0;right:0;top:34px;text-align:center;font-size:21px;display:flex;justify-content:center;gap:68px;padding-left:20px}.nav .mid span{display:flex;gap:10px;align-items:center}.nav .mid .ico{width:22px;height:22px}
+.nav .rt{position:absolute;right:68px;top:30px;display:flex;gap:44px;align-items:center;font-size:19px}.nav .rt .ico{width:34px;height:34px}.nav .rt span.bg{display:flex;gap:10px;align-items:center}
+.hero{position:absolute;left:0;right:0;top:96px;height:700px;background:radial-gradient(700px 500px at 100% 60%,#4a0a0a 0%,transparent 70%),#030303}
+.rackw{position:absolute;left:820px;top:20px;width:1050px;height:690px}
+.hero .eb{position:absolute;left:112px;top:82px;font-size:22px;letter-spacing:.6em;border-bottom:2px solid #e10600;padding-bottom:12px}
+.hero h1{position:absolute;left:110px;top:130px;font-size:84px;line-height:1.02;font-weight:500;letter-spacing:.02em;font-family:'Montserrat',sans-serif}.hero h1 b{display:block;color:#c8141b;font-weight:800}
+.hero p{position:absolute;left:112px;top:380px;font-size:25px;line-height:1.5;color:#ddd;width:560px}
+.b1,.b2{position:absolute;top:490px;height:64px;border-radius:6px;font-size:22px;display:flex;align-items:center;gap:16px;justify-content:center}
+.b1{left:112px;width:250px;background:linear-gradient(#d01020,#9c0e14)}.b1 .ico{width:30px;height:30px}.b2{left:396px;width:204px;border:1.500px solid #bbb}
+.chips{position:absolute;left:112px;top:595px;display:flex;gap:12px}.chips span{padding:0 22px;height:56px;border:1px solid #444;border-radius:6px;display:flex;align-items:center;font-size:15.500px;letter-spacing:.07em;font-weight:700;background:#0a0a0a}.chips span.on{background:#b81018;border-color:#b81018}
+.hero{overflow:hidden}
+.na{position:absolute;left:112px;top:820px;font-size:25px;letter-spacing:.55em;font-weight:700}
+.va{position:absolute;right:112px;top:822px;font-size:19px;display:flex;gap:12px;align-items:center}.va .ico{color:#e10600;width:28px;height:28px}
+.row{position:absolute;left:112px;top:882px;display:flex;gap:24px}
+.pc{width:410px;height:240px;border:1px solid #2a2a2a;border-radius:10px;background:#0b0b0b;position:relative;overflow:hidden}
+.pc .fd{position:absolute;left:20px;top:18px;background:#8e0f14;font-size:13px;font-weight:800;letter-spacing:.14em;padding:8px 18px 8px 14px;clip-path:polygon(0 0,100% 0,88% 100%,0 100%)}
+.pc .cloth{position:absolute;left:60px;right:60px;top:60px;height:260px}
+.row{gap:20px;flex-wrap:wrap;width:1700px}.pc{width:410px;height:560px}.pc .cloth{left:30px;right:30px;top:60px;height:340px}.pc h4{position:absolute;left:28px;top:420px;font-size:26px;font-weight:700}.pc .pp{position:absolute;left:28px;top:466px;font-size:28px;font-weight:800;color:#e10600}.pc .pp s{font-size:19px;font-weight:500;color:#999;margin-left:14px}.pc .add{position:absolute;left:28px;right:28px;top:506px;height:34px;background:linear-gradient(#e10600,#a30000);border-radius:6px;font-size:16px;font-weight:800;letter-spacing:.12em;display:flex;align-items:center;justify-content:center}.pc .hrt{position:absolute;right:22px;top:20px;width:32px;height:32px}.pc .fd{z-index:2}#foot{position:absolute;left:0;width:1920px;height:330px;border-top:1px solid #222;background:#000;display:flex;gap:150px;padding:70px 112px}#foot .fl{width:520px}#foot .fl p{margin-top:26px;font-size:20px;line-height:1.6;color:#aaa}#foot .fc b{display:block;font-size:17px;letter-spacing:.35em;margin-bottom:22px}#foot .fc span{display:block;font-size:20px;color:#ccc;margin-bottom:14px}#foot .fc span:hover{color:#e10600}#foot .copy{position:absolute;left:112px;bottom:30px;font-size:16px;color:#777}
+.links span,.mid>span,.rt .ico,.rt .bg,.va,.b1,.b2,.chips span,.btn,.heart,.hrt,.sw i,.cta,.g,.sw2 b,.viewall,.follow .ico,.logo,.chk i,.eye,[data-go],[data-cat],.fnav span,.skip,.chk u,.pc .add{cursor:pointer}
+.cta,.btn,.b1,.pc .add{transition:filter .15s,transform .15s}.cta:hover,.btn:hover,.b1:hover,.pc .add:hover{filter:brightness(1.18)}.btn:active,.cta:active,.b1:active{transform:scale(.98)}
+.b2:hover,.g:hover,.chips span:hover{background:#1a1a1a}.follow .ico:hover,.rt .ico:hover{color:#e10600}
+.heart.liked svg,.hrt.liked svg{fill:#e10600;stroke:#e10600}
+.sw i{transition:transform .15s}.sw i:hover{transform:scale(1.12)}
+.f input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:400 22px Montserrat,sans-serif;height:100%}
+.f input::placeholder{color:#fff;opacity:1}.f .eye{margin:0 22px 0 auto}.f:focus-within{border-color:#e10600;box-shadow:0 0 0 2px rgba(225,6,0,.35)}
+.f .msg{position:absolute;left:2px;top:53px;font-style:normal;font-size:15px;color:#ff5a52;white-space:nowrap}.f.bad{border-color:#ff5a52}
+.chk i{position:relative;flex:none}.chk i.on:after{content:'';position:absolute;left:8px;top:1px;width:9px;height:17px;border:solid #e10600;border-width:0 4px 4px 0;transform:rotate(45deg)}
+.notify input{caret-color:#e10600}
+.skip{position:absolute;right:60px;bottom:40px;font-size:20px;letter-spacing:.2em;color:#aaa;text-decoration:none;border-bottom:2px solid #e10600;padding-bottom:6px}.skip:hover{color:#fff}
+.fnav{position:absolute;right:95px;top:44px;display:flex;gap:38px;font-size:22px;letter-spacing:.18em;font-weight:600}.fnav span:hover{color:#e10600}
+.noresult{position:absolute;left:0;right:0;top:480px;text-align:center;font-size:34px;color:#ccc}.noresult u{color:#e10600;cursor:pointer;margin-left:14px}
+#ui{font-family:'Montserrat',sans-serif;color:#fff;overflow:hidden}
+.toast{position:absolute;left:50%;bottom:60px;transform:translate(-50%,20px);background:#e10600;color:#fff;padding:18px 38px;font-size:24px;font-weight:600;border-radius:8px;opacity:0;pointer-events:none;transition:.3s;box-shadow:0 10px 40px #000;max-width:1300px;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.ov{position:absolute;inset:0;background:rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:.3s}.ov.open{opacity:1;pointer-events:auto}
+.drawer{position:absolute;top:0;bottom:0;right:0;width:560px;background:#0b0b0b;border-left:3px solid #e10600;transform:translateX(105%);transition:transform .35s;display:flex;flex-direction:column;pointer-events:auto}.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:34px 40px;border-bottom:1px solid #333;font-size:28px;letter-spacing:.3em}.dh .x{cursor:pointer;font-size:30px}.dh .x:hover{color:#e10600}
+.dl{flex:1;overflow:auto;padding:10px 40px}.empty{text-align:center;color:#999;font-size:24px;margin-top:80px}
+.it{display:flex;gap:22px;align-items:center;padding:22px 0;border-bottom:1px solid #222;position:relative}.it .th{width:130px;height:130px;flex:none;background:#151210;border-radius:10px}
+.im b{font-size:22px;display:block}.im span{color:#e10600;font-weight:700;font-size:22px;display:block;margin:6px 0 10px}
+.q{display:flex;align-items:center;gap:16px;font-size:22px}.q i{font-style:normal;width:36px;height:36px;border:1.5px solid #666;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer}.q i:hover{border-color:#e10600;color:#e10600}.q u{text-decoration:none;min-width:22px;text-align:center}
+.rm{position:absolute;right:0;top:24px;font-size:15px;color:#999;cursor:pointer;text-decoration:underline}.rm:hover{color:#e10600}
+.df{padding:30px 40px 40px;border-top:1px solid #333}.tot{display:flex;justify-content:space-between;font-size:28px;margin-bottom:24px}.tot b{color:#e10600}
+.co{background:linear-gradient(#e10600,#a30000);text-align:center;padding:22px;font-size:26px;font-weight:800;letter-spacing:.2em;border-radius:8px;cursor:pointer}.co:hover{filter:brightness(1.18)}
+.sbar{position:absolute;left:0;right:0;top:0;height:130px;background:#0b0b0b;border-bottom:3px solid #e10600;display:flex;align-items:center;gap:30px;padding:0 112px;transform:translateY(-110%);transition:.3s;pointer-events:auto}.sbar.open{transform:none}
+.sbar input{flex:1;background:none;border:0;border-bottom:2px solid #666;outline:0;color:#fff;font:400 34px Montserrat,sans-serif;padding:10px 0}.sbar input:focus{border-color:#e10600}.sbar span{font-size:34px;cursor:pointer}
+.umenu,.dd{position:absolute;background:#0b0b0b;border:1.5px solid #444;border-radius:8px;padding:12px 0;min-width:260px;display:none;pointer-events:auto;font-size:22px}.umenu.open,.dd.open{display:block}
+.umenu p{padding:12px 28px;color:#aaa}.umenu span,.dd span{display:block;padding:14px 28px;cursor:pointer}.umenu span:hover,.dd span:hover{background:#e10600}
+
+html,body{height:auto;overflow-y:auto;overflow-x:hidden}body{position:relative}
+#stage{left:0;top:0;transform-origin:top left;height:2000px}
+</style></head>
+<body><div id="stage"><div class="nav"><div class="logo"><svg class="logo-mark" viewBox="0 0 80 66" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 80,0 40,66" fill="#e10600"/><polygon points="14,8 38,8 40,22 52,8 66,8 40,52" fill="#0b0b0b"/><polygon points="28,16 40,34 52,16 44,16 40,22 36,16" fill="#e10600"/></svg><span class="logo-text">VYOMIK</span></div><div class="mid"><span>Collections <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></span><span>Our Story</span><span>Contact</span></div>
+<div class="rt"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.5 3.5-7 8-7s8 2.5 8 7"/></svg></span><span class="bg"><span class="ico" style="width:26px;height:26px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M8 7a4 4 0 018 0"/></svg></span><b data-bag style="font-weight:400">Bag (0)</b></span></div></div>
+<div class="hero"><div class="cloth rackw" data-type="rack" data-img="assets/hero-rack.png"></div>
+<div class="eb">INTRODUCING</div><h1>THE COMPLETE<b>EDIT</b></h1>
+<p>Everyday oversized essentials engineered with boxy silhouettes and heavyweight fabrics.</p>
+<div class="b1">Shop Collection <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span></div><div class="b2">Explore All</div>
+<div class="chips"><span class="on">ALL COLLECTIONS</span><span>PLAIN TEES</span><span>WORDMARK TEES</span><span>OVERSIZED HOODIES</span></div></div>
+<div class="na">NEW ARRIVALS</div><div class="va">View All <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M14 6l6 6-6 6"/></svg></span></div>
+<div class="row" id="grid"></div>
+<footer id="foot"><div class="fl"><div class="logo"><svg class="logo-mark" viewBox="0 0 80 66" xmlns="http://www.w3.org/2000/svg"><polygon points="0,0 80,0 40,66" fill="#e10600"/><polygon points="14,8 38,8 40,22 52,8 66,8 40,52" fill="#0b0b0b"/><polygon points="28,16 40,34 52,16 44,16 40,22 36,16" fill="#e10600"/></svg><span class="logo-text">VYOMIK</span></div><p>Everyday oversized essentials, engineered with boxy silhouettes and heavyweight fabrics.</p></div>
+<div class="fc"><b>SHOP</b><span data-go="2-new-arrivals.html">New Arrivals</span><span data-cat="plain">Plain Tees</span><span data-cat="wordmark">Wordmark Tees</span><span data-cat="hoodies">Oversized Hoodies</span></div>
+<div class="fc"><b>ACCOUNT</b><span data-go="4-sign-in.html">Sign In</span><span data-go="3-sign-up.html">Create Account</span></div>
+<div class="copy">&copy; 2026 VYOMIK. All rights reserved.</div></footer></div>
+<script>window.SCROLL=true;
+(function(){
+ var st=document.getElementById('stage');
+ function fit(){if(window.SCROLL){var s=innerWidth/1920;window.__scale=s;st.style.transform='scale('+s+')';document.body.style.height=(st.offsetHeight*s)+'px';return;}var s=Math.min(innerWidth/1920,innerHeight/1080);window.__scale=s;st.style.transform='translate(-50%,-50%) scale('+s+')';}
+ addEventListener('resize',fit);window.fit=fit;fit();
+ function tee(c,logo){return '<svg viewBox="0 0 400 400"><defs><linearGradient id="g'+c.slice(1)+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs><path d="M135 36 L172 28 Q200 58 228 28 L265 36 L365 92 L335 168 L292 146 L292 366 L108 366 L108 146 L65 168 L35 92 Z" fill="'+c+'"/><path d="M135 36 L172 28 Q200 58 228 28 L265 36 L365 92 L335 168 L292 146 L292 366 L108 366 L108 146 L65 168 L35 92 Z" fill="url(#g'+c.slice(1)+')"/><path d="M172 28 Q200 58 228 28 Q200 78 172 28Z" fill="#000" fill-opacity=".35"/>'+(logo||'')+'</svg>';}
+ function hoodie(c){return '<svg viewBox="0 0 400 420"><path d="M130 50 Q200 -10 270 50 L350 100 L385 330 L330 340 L318 190 L318 395 L82 395 L82 190 L70 340 L15 330 L50 100 Z" fill="'+c+'"/><path d="M130 50 Q200 -10 270 50 Q200 110 130 50Z" fill="#000" fill-opacity=".3"/><path d="M118 285 L282 285 L300 360 L100 360 Z" fill="#000" fill-opacity=".18"/><path d="M180 90 L178 170 M220 90 L222 170" stroke="#fff" stroke-opacity=".6" stroke-width="3"/></svg>';}
+ var LOGOS={mark:'<polygon points="150,150 250,150 200,230" fill="#e10600"/><text x="200" y="262" text-anchor="middle" font-size="22" letter-spacing="9" fill="#fff" font-family="Montserrat">VYOMIK</text>',small:'<polygon points="82,96 112,96 97,120" fill="#111"/>'};
+ function rack(){var cs=['#d9c3ad','#1a1a1a','#a81818'],o='<svg viewBox="0 0 700 760"><path d="M-20 90 Q300 130 520 220" stroke="#111" stroke-width="22" fill="none"/>';
+  [[10,60,'#d9c3ad'],[170,120,'#1a1a1a'],[310,190,'#a81818']].forEach(function(p,i){o+='<g transform="translate('+p[0]+','+p[1]+') scale(1.3)">'+tee(p[2],i==0?LOGOS.small:'').replace(/<svg[^>]*>|<\/svg>/g,'')+'</g>';});
+  return o+'</svg>';}
+ window.renderCloth=function(el){
+  var t=el.dataset.type,c=el.dataset.color||'#d9c3ad',src=el.dataset.img;
+  function fb(){el.innerHTML=t=='hoodie'?hoodie(c):t=='rack'?rack():tee(c,el.dataset.logo=='1'?LOGOS.mark:'');}
+  if(!src){fb();return;}
+  var im=new Image();im.onload=function(){el.innerHTML='';el.appendChild(im);};im.onerror=fb;im.alt='';im.src=src;fb();
+ };document.querySelectorAll('.cloth').forEach(window.renderCloth);
+})();
+
+(function(){
+var $=function(q,r){return (r||document).querySelector(q)},$$=function(q,r){return Array.prototype.slice.call((r||document).querySelectorAll(q))};
+var st=document.getElementById('stage'),T=document.title;
+var PAGE=/Coming/.test(T)?'soon':/Arrivals/.test(T)?'arrivals':/Sign Up/.test(T)?'signup':/Sign In/.test(T)?'signin':'home';
+var H='5-home.html',A='2-new-arrivals.html',SU='3-sign-up.html',SI='4-sign-in.html';
+function go(u){location.href=u}
+function jget(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function jset(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fmt(n){return '₹'+n.toLocaleString('en-IN')}
+var EMAIL=/^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+/* overlay layer */
+var ui=document.createElement('div');ui.id='ui';document.body.appendChild(ui);
+function fitUi(){var s=window.__scale||1;ui.style.cssText=window.SCROLL?'position:fixed;left:0;top:0;width:1920px;height:'+(innerHeight/s)+'px;transform-origin:top left;transform:scale('+s+');pointer-events:none;z-index:50;overflow:hidden':'position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;transform:translate(-50%,-50%) scale('+s+');pointer-events:none;z-index:50;overflow:hidden'}
+addEventListener('resize',fitUi);fitUi();
+var toastEl=document.createElement('div');toastEl.className='toast';ui.appendChild(toastEl);var tt;
+function toast(m){toastEl.textContent=m;toastEl.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toastEl.classList.remove('show')},2800)}
+function pos(el,box){var s=window.__scale||1,r=el.getBoundingClientRect(),u=ui.getBoundingClientRect();box.style.left=Math.max(10,(r.left-u.left)/s-20)+'px';box.style.top=((r.bottom-u.top)/s+8)+'px'}
+/* session */
+function getSession(){try{return JSON.parse(sessionStorage.getItem('vyomik_session')||localStorage.getItem('vyomik_session')||'null')}catch(e){return null}}
+function setSession(u,rem){var v=JSON.stringify({name:u.name,email:u.email});try{(rem?localStorage:sessionStorage).setItem('vyomik_session',v)}catch(e){}}
+function clearSession(){try{sessionStorage.removeItem('vyomik_session');localStorage.removeItem('vyomik_session')}catch(e){}}
+function sha(x){if(window.crypto&&crypto.subtle&&window.TextEncoder){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(x)).then(function(b){return Array.prototype.map.call(new Uint8Array(b),function(n){return ('0'+n.toString(16)).slice(-2)}).join('')})}var h=0;for(var i=0;i<x.length;i++){h=(h*31+x.charCodeAt(i))|0}return Promise.resolve('x'+h)}
+/* cart */
+var CK='vyomik_cart';
+function cart(){return jget(CK,[])}
+function updBag(){var n=cart().reduce(function(a,i){return a+i.qty},0);$$('[data-bag]').forEach(function(e){e.textContent='Bag ('+n+')'})}
+function saveCart(c){jset(CK,c);updBag();renderDrawer()}
+function addItem(p){var c=cart(),f=c.filter(function(i){return i.id===p.id})[0];if(f)f.qty++;else{p.qty=1;c.push(p)}saveCart(c);toast(p.name+' added to bag')}
+var ov=document.createElement('div');ov.className='ov';var dr=document.createElement('aside');dr.className='drawer';
+dr.innerHTML='<div class="dh"><b>YOUR BAG</b><span class="x" id="dx">✕</span></div><div class="dl" id="dl"></div><div class="df"><div class="tot"><span>Total</span><b id="dt">₹0</b></div><div class="co" id="co">CHECKOUT</div></div>';
+ui.appendChild(ov);ui.appendChild(dr);
+function openCart(){renderDrawer();dr.classList.add('open');ov.classList.add('open')}
+function closeCart(){dr.classList.remove('open');ov.classList.remove('open')}
+ov.onclick=closeCart;$('#dx',dr).onclick=closeCart;
+function renderDrawer(){var c=cart(),l=$('#dl',dr);
+ if(!c.length){l.innerHTML='<p class="empty">Your bag is empty.</p>'}
+ else{l.innerHTML=c.map(function(i,k){return '<div class="it"><div class="cloth th" data-type="'+i.type+'" data-color="'+i.color+'" data-logo="'+i.logo+'" data-img="'+(i.img||'')+'"></div><div class="im"><b>'+esc(i.name)+'</b><span>'+fmt(i.price)+'</span><div class="q"><i data-d="'+k+'">−</i><u>'+i.qty+'</u><i data-u="'+k+'">+</i></div></div><span class="rm" data-r="'+k+'">Remove</span></div>'}).join('');$$('.th',l).forEach(window.renderCloth)}
+ $('#dt',dr).textContent=fmt(c.reduce(function(a,i){return a+i.price*i.qty},0))}
+dr.addEventListener('click',function(e){var t=e.target,c=cart(),k;
+ if(t.dataset.u!==undefined){c[+t.dataset.u].qty++;saveCart(c)}
+ else if(t.dataset.d!==undefined){k=+t.dataset.d;c[k].qty--;if(c[k].qty<1)c.splice(k,1);saveCart(c)}
+ else if(t.dataset.r!==undefined){c.splice(+t.dataset.r,1);saveCart(c)}});
+$('#co',dr).onclick=function(){if(!cart().length){toast('Your bag is empty');return}
+ if(!getSession()){toast('Please sign in to checkout');setTimeout(function(){go(SI)},1000);return}
+ jset(CK,[]);updBag();renderDrawer();closeCart();toast('Order placed (demo). Thank you!')};
+/* search + user menu */
+function openSearch(){var s=$('.sbar',ui);
+ if(!s){s=document.createElement('div');s.className='sbar';s.innerHTML='<input placeholder="Search tees, hoodies…"><span>✕</span>';ui.appendChild(s);
+  var inp=$('input',s);inp.onkeydown=function(e){if(e.key==='Enter'&&inp.value.trim())go(A+'?q='+encodeURIComponent(inp.value.trim()));if(e.key==='Escape')s.classList.remove('open')};
+  $('span',s).onclick=function(){s.classList.remove('open')}}
+ s.classList.add('open');setTimeout(function(){$('input',s).focus()},50)}
+function userMenu(anchor){var s=getSession();if(!s){go(SI);return}
+ var m=$('.umenu',ui);if(!m){m=document.createElement('div');m.className='umenu';ui.appendChild(m)}
+ m.innerHTML='<p>Hi, '+esc(s.name)+'</p><span id="so">Sign out</span>';pos(anchor,m);m.classList.toggle('open');
+ $('#so',m).onclick=function(){clearSession();m.classList.remove('open');toast('Signed out')}}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeCart();var s=$('.sbar',ui);if(s)s.classList.remove('open')}});
+/* generic links */
+$$('[data-go]').forEach(function(e){e.onclick=function(){go(e.dataset.go)}});
+if(PAGE!=='soon')$$('.logo').forEach(function(e){e.onclick=function(){go(H)}});
+$$('.links span, .mid > span').forEach(function(e){var t=e.textContent.trim().toLowerCase();
+ if(t.indexOf('collections')===0&&PAGE!=='home')e.onclick=function(){go(A)};
+ else if(t.indexOf('our story')===0)e.onclick=function(){toast('Our Story page is not built yet')};
+ else if(t==='contact')e.onclick=function(){toast('Contact page is not built yet')}});
+$$('.sw2 b').forEach(function(e){e.onclick=function(){go(/SIGN IN/.test(e.textContent)?SI:SU)}});
+var SOC=['https://instagram.com','https://youtube.com','https://discord.com','https://x.com'];
+$$('.follow .ico').forEach(function(e,i){e.onclick=function(){window.open(SOC[i],'_blank')}});
+/* ---------- PAGES ---------- */
+if(PAGE==='soon'){
+ var nf=$('.notify');nf.onsubmit=function(e){e.preventDefault();var i=$('input',nf),v=i.value.trim();
+  if(!EMAIL.test(v)){toast('Enter a valid email address');return false}
+  var l=jget('vyomik_waitlist',[]);if(l.indexOf(v)<0){l.push(v);jset('vyomik_waitlist',l)}
+  i.value='';toast("You're on the list! We'll email you at launch.");return false}}
+if(PAGE==='signup'||PAGE==='signin'){
+ var inp=function(n){return $('input[name='+n+']')};
+ function setErr(i,m){var d=i.parentNode;d.classList.toggle('bad',!!m);$('.msg',d).textContent=m||''}
+ $$('.f input').forEach(function(i){i.addEventListener('input',function(){setErr(i,'')});i.addEventListener('keydown',function(e){if(e.key==='Enter')submit()})});
+ $$('.eye').forEach(function(e){e.onclick=function(){var i=$('input',e.parentNode);i.type=i.type==='password'?'text':'password'}});
+ var box=$('[data-box]');box.onclick=function(){box.classList.toggle('on')};
+ $$('.chk u').forEach(function(u){if(!u.hasAttribute('data-forgot'))u.onclick=function(){toast(u.textContent+' page is not built yet')}});
+ $$('.g').forEach(function(g){g.onclick=function(){toast('Google sign-in needs a backend (OAuth). Use email for this demo.')}});
+ $('.cta').onclick=submit;
+ function submit(){PAGE==='signup'?doSignup():doSignin()}
+ function doSignup(){var name=inp('name').value.trim(),email=inp('email').value.trim().toLowerCase(),pw=inp('password').value,cf=inp('confirm').value,ok=true;
+  function chk(n,bad,m){setErr(inp(n),bad?m:'');if(bad)ok=false}
+  chk('name',name.length<2,'Enter your full name');chk('email',!EMAIL.test(email),'Enter a valid email');
+  chk('password',pw.length<6,'Use at least 6 characters');chk('confirm',!cf||pw!==cf,'Passwords do not match');
+  if(!ok)return;
+  if(!box.classList.contains('on')){toast('Please accept the Terms of Service and Privacy Policy');return}
+  var users=jget('vyomik_users',[]);
+  if(users.some(function(u){return u.email===email})){setErr(inp('email'),'An account with this email already exists');return}
+  sha(pw).then(function(h){users.push({name:name,email:email,hash:h});jset('vyomik_users',users);setSession({name:name,email:email},true);
+   toast('Account created. Welcome, '+name.split(' ')[0]+'!');setTimeout(function(){go(H)},1000)})}
+ function doSignin(){var email=inp('email').value.trim().toLowerCase(),pw=inp('password').value,ok=true;
+  setErr(inp('email'),EMAIL.test(email)?'':'Enter a valid email');setErr(inp('password'),pw?'':'Enter your password');
+  if(!EMAIL.test(email)||!pw)return;
+  var u=jget('vyomik_users',[]).filter(function(x){return x.email===email})[0];
+  if(!u){setErr(inp('email'),'No account found. Create one first');return}
+  sha(pw).then(function(h){if(h!==u.hash){setErr(inp('password'),'Wrong password');return}
+   setSession(u,box.classList.contains('on'));toast('Welcome back, '+u.name.split(' ')[0]+'!');setTimeout(function(){go(H)},900)})}
+ var fg=$('[data-forgot]');if(fg)fg.onclick=function(){var e=inp('email').value.trim().toLowerCase();
+  if(!EMAIL.test(e)){setErr(inp('email'),'Enter your email first');return}
+  toast(jget('vyomik_users',[]).some(function(u){return u.email===e})?'Reset link sent to '+e+' (demo)':'No account found for that email')}}
+if(PAGE==='arrivals'){
+ var nav=document.createElement('div');nav.className='fnav';nav.innerHTML='<span data-go="'+H+'">HOME</span><span id="fs">SEARCH</span><span data-bag>Bag (0)</span>';st.appendChild(nav);
+ $('[data-go]',nav).onclick=function(){go(H)};$('#fs',nav).onclick=openSearch;$('[data-bag]',nav).onclick=openCart;
+ $$('.viewall').forEach(function(e){e.onclick=function(){go(A)}});
+ var cards=$$('.card');
+ cards.forEach(function(c){var name=$('h3',c).textContent.trim(),pr=parseInt($('.price',c).childNodes[0].textContent.replace(/[^0-9]/g,''),10),cl=$('.cloth',c);
+  $('.btn',c).onclick=function(){addItem({id:name,name:name,price:pr,type:cl.dataset.type,color:cl.dataset.color,logo:cl.dataset.logo||'0',img:cl.dataset.img||''})};
+  $('.heart',c).onclick=function(){this.classList.toggle('liked');toast(this.classList.contains('liked')?'Added to wishlist':'Removed from wishlist')};
+  $$('.sw i',c).forEach(function(i){i.onclick=function(){$$('.sw i',c).forEach(function(x){x.classList.remove('on')});i.classList.add('on')}})});
+ var q=(new URLSearchParams(location.search).get('q')||'').trim().toLowerCase();
+ if(q){var vis=cards.filter(function(c){var m=$('h3',c).textContent.toLowerCase().indexOf(q)>-1;c.style.display=m?'':'none';return m});
+  var n=vis.length;vis.forEach(function(c,i){c.style.left=((1920-(n*590+(n-1)*5))/2+i*595)+'px'});
+  if(!n){var nr=document.createElement('div');nr.className='noresult';nr.innerHTML='No products match “'+esc(q)+'”<u>Clear search</u>';st.appendChild(nr);$('u',nr).onclick=function(){go(A)}}}}
+if(PAGE==='home'){
+ var PROD=[
+ {id:'Oversized Basic Tee',price:899,old:1199,cat:'plain',type:'tee',color:'#d9c3ad',logo:0,img:'assets/oversized-basic-tee.png'},
+ {id:'Classic Black Tee',price:899,old:1199,cat:'plain',type:'tee',color:'#1a1a1a',logo:0},
+ {id:'Crimson Tee',price:899,old:1199,cat:'plain',type:'tee',color:'#a81818',logo:0},
+ {id:'VYOMIK Logo Tee',price:999,old:1399,cat:'wordmark',type:'tee',color:'#141414',logo:1,img:'assets/vyomik-logo-tee.png'},
+ {id:'Crimson Wordmark Tee',price:999,old:1399,cat:'wordmark',type:'tee',color:'#a81818',logo:1},
+ {id:'Essential Hoodie',price:1799,old:2299,cat:'hoodies',type:'hoodie',color:'#8e0f14',logo:0,img:'assets/essential-hoodie.png'},
+ {id:'Midnight Hoodie',price:1799,old:2299,cat:'hoodies',type:'hoodie',color:'#1a1a1a',logo:0},
+ {id:'Stone Hoodie',price:1799,old:2299,cat:'hoodies',type:'hoodie',color:'#d9c3ad',logo:0}];
+ var HEART='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z"/></svg>';
+ var grid=$('#grid'),foot=$('#foot'),CATS=['all','plain','wordmark','hoodies'];
+ function cardHtml(p,i){return '<div class="pc"><span class="fd">FIRST DROP</span><span class="ico hrt">'+HEART+'</span><div class="cloth" data-type="'+p.type+'" data-color="'+p.color+'" data-logo="'+p.logo+'" data-img="'+(p.img||'')+'"></div><h4>'+p.id+'</h4><div class="pp">'+fmt(p.price)+'<s>'+fmt(p.old)+'</s></div><div class="add" data-i="'+i+'">ADD TO CART</div></div>'}
+ var cur=[];
+ function layoutHome(){var top=882+grid.offsetHeight+70;foot.style.top=top+'px';st.style.height=(top+foot.offsetHeight)+'px';window.fit();fitUi()}
+ function renderGrid(cat){cur=PROD.filter(function(p){return cat==='all'||p.cat===cat});grid.innerHTML=cur.map(cardHtml).join('');$$('.cloth',grid).forEach(window.renderCloth);layoutHome()}
+ function setFilter(cat,scroll){$$('.chips span').forEach(function(c,i){c.classList.toggle('on',CATS[i]===cat)});renderGrid(cat);if(scroll)window.scrollTo({top:790*(window.__scale||1),behavior:'smooth'})}
+ $$('.chips span').forEach(function(c,i){c.onclick=function(){setFilter(CATS[i])}});
+ $$('[data-cat]').forEach(function(e){e.onclick=function(){setFilter(e.dataset.cat,true)}});
+ grid.addEventListener('click',function(e){var t=e.target,card=t.closest('.pc');if(!card)return;
+  if(t.closest('.hrt')){var h=t.closest('.hrt');h.classList.toggle('liked');toast(h.classList.contains('liked')?'Added to wishlist':'Removed from wishlist')}
+  else if(t.classList.contains('add')){var p=cur[+t.dataset.i];addItem({id:p.id,name:p.id,price:p.price,type:p.type,color:p.color,logo:String(p.logo),img:p.img||''})}});
+ $('.b1').onclick=function(){window.scrollTo({top:790*(window.__scale||1),behavior:'smooth'})};
+ $('.b2').onclick=function(){go(A)};$('.va').onclick=function(){go(A)};
+ var rt=$$('.rt > .ico');rt[0].onclick=openSearch;rt[1].onclick=function(){userMenu(rt[1])};$('.rt .bg').onclick=openCart;
+ var cm=$('.mid > span'),dd=document.createElement('div');dd.className='dd';
+ dd.innerHTML='<span data-c="all">All Collections</span><span data-c="plain">Plain Tees</span><span data-c="wordmark">Wordmark Tees</span><span data-c="hoodies">Oversized Hoodies</span>';ui.appendChild(dd);
+ cm.onclick=function(e){e.stopPropagation();pos(cm,dd);dd.classList.toggle('open')};
+ $$('span',dd).forEach(function(s){s.onclick=function(){dd.classList.remove('open');setFilter(s.dataset.c,true)}});
+ document.addEventListener('click',function(e){dd.classList.remove('open');var m=$('.umenu',ui);if(m&&!e.target.closest('.rt'))m.classList.remove('open')});
+ var sess=getSession();if(sess)rt[1].title='Signed in as '+sess.name;
+ renderGrid('all');}
+updBag();renderDrawer();
+})();
+</script></body></html>

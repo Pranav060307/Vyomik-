@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { CollectionsPage } from './pages/CollectionsPage';
+import { SignUpPage } from './pages/SignUpPage';
+import { SignInPage } from './pages/SignInPage';
 import { OurStoryPage } from './pages/OurStoryPage';
 import { ContactPage } from './pages/ContactPage';
 import { ShippingReturnsPage } from './pages/ShippingReturnsPage';
@@ -33,8 +35,18 @@ export const App: React.FC = () => {
       {/* Main landing page: always reachable directly or from Explore */}
       <Route path="/home" element={<LandingPage />} />
 
-      {/* Direct deep links: never blocked by the gate */}
+      {/* Collections & New Arrivals */}
       <Route path="/collections" element={<CollectionsPage />} />
+      <Route path="/new-arrivals" element={<CollectionsPage />} />
+
+      {/* Authentication routes */}
+      <Route path="/sign-up" element={<SignUpPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/sign-in" element={<SignInPage />} />
+      <Route path="/signin" element={<SignInPage />} />
+      <Route path="/login" element={<SignInPage />} />
+
+      {/* Direct deep links */}
       <Route path="/bag" element={<BagPage />} />
       <Route path="/cart" element={<BagPage />} />
       <Route path="/our-story" element={<OurStoryPage />} />

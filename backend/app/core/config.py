@@ -25,12 +25,12 @@ class Settings(BaseSettings):
     # "coming_soon": shop pages show "Coming soon", notify modal active, checkout disabled.
     # "live": full catalogue, bag, and checkout enabled.
     STORE_MODE: Literal["coming_soon", "live"] = "coming_soon"
-    LAUNCH_DATE: str = "2026-11-08"
+    LAUNCH_DATE: str = "2026-11-10"
 
     # Pre-Launch Coming Soon Gate & Live Countdown
-    # Value to confirm with CEO: default 2026-11-08T00:00:00+05:30 (IST)
+    # Value to confirm with CEO: default 2026-11-10T00:00:00+05:30 (IST)
     LAUNCH_AT: str = Field(
-        default="2026-11-08T00:00:00+05:30",
+        default="2026-11-10T00:00:00+05:30",
         description="Exact launch timestamp in ISO 8601 with timezone offset (confirm with CEO)",
     )
     LAUNCH_GATE_ENABLED: bool = Field(
