@@ -11,3 +11,6 @@ export function paise_to_inr_display(paise: number): string {
   }).format(rupees);
 }
 
+export const formatPaiseToRupees = paise_to_inr_display;
+
+

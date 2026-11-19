@@ -53,8 +53,10 @@ export const BagDrawer: React.FC<BagDrawerProps> = ({
 
       {/* Slide-out Drawer */}
       <aside
-        className={`fixed top-0 bottom-0 right-0 w-[90vw] sm:w-[560px] bg-[#0b0b0b] border-l-[3px] border-[#e10600] z-50 transition-transform duration-350 flex flex-col pointer-events-auto ${
-          isBagOpen ? 'translate-x-0' : 'translate-x-[105%]'
+        className={`fixed top-0 bottom-0 right-0 w-[90vw] sm:w-[560px] max-w-full bg-[#0b0b0b] border-l-[3px] border-[#e10600] z-50 transition-all duration-350 flex flex-col ${
+          isBagOpen
+            ? 'translate-x-0 opacity-100 visible pointer-events-auto'
+            : 'translate-x-full opacity-0 invisible pointer-events-none'
         }`}
         role="dialog"
         aria-modal="true"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
+import { ShopAllPage } from './pages/ShopAllPage';
 import { CollectionsPage } from './pages/CollectionsPage';
 import { SignUpPage } from './pages/SignUpPage';
 import { SignInPage } from './pages/SignInPage';
@@ -32,11 +33,19 @@ export const App: React.FC = () => {
       {/* Root route: gated before launch / explore click */}
       <Route path="/" element={<RootGateRoute />} />
 
+      {/* Direct Coming Soon view */}
+      <Route path="/coming-soon" element={<ComingSoon />} />
+
       {/* Main landing page: always reachable directly or from Explore */}
       <Route path="/home" element={<LandingPage />} />
 
+      {/* Shop All Catalog Route */}
+      <Route path="/shop" element={<ShopAllPage />} />
+      <Route path="/shop-all" element={<ShopAllPage />} />
+
       {/* Collections & New Arrivals */}
       <Route path="/collections" element={<CollectionsPage />} />
+      <Route path="/drops" element={<CollectionsPage />} />
       <Route path="/new-arrivals" element={<CollectionsPage />} />
 
       {/* Authentication routes */}

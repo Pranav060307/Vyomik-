@@ -7,8 +7,8 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000
 export const DEFAULT_FALLBACK_CONFIG: StoreConfig = {
   store_name: 'VYOMIK',
   store_mode: 'coming_soon',
-  launch_date: '2026-11-10',
-  launch_at: '2026-11-10T00:00:00+05:30',
+  launch_date: '',
+  launch_at: '',
   server_time: new Date().toISOString(),
   gate_enabled: true,
   payment_provider: 'mock',

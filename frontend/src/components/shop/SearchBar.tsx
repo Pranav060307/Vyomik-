@@ -27,8 +27,8 @@ export const SearchBar: React.FC = () => {
 
   return (
     <div
-      className={`fixed left-0 right-0 top-0 h-[100px] md:h-[130px] bg-[#0b0b0b] border-b-[3px] border-[#e10600] z-50 flex items-center gap-6 md:gap-[30px] px-6 md:px-[112px] transition-transform duration-300 ${
-        isSearchOpen ? 'translate-y-0' : '-translate-y-[110%]'
+      className={`fixed left-0 right-0 top-0 h-[100px] md:h-[130px] bg-[#0b0b0b] border-b-[3px] border-[#e10600] z-50 flex items-center gap-6 md:gap-[30px] px-6 md:px-[112px] transition-all duration-300 ${
+        isSearchOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-full opacity-0 invisible pointer-events-none'
       }`}
       role="search"
     >

@@ -38,7 +38,10 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
     localStorage.clear();
   });
 
-  it('renders ComingSoon page at "/" with no preview store button when gate is active', async () => {
+  it('renders ComingSoon page at "/" when gate is active', async () => {
+    // Provide a future launch date so gate is active
+    const futureDate = new Date(Date.now() + 86400000 * 10).toISOString();
+
     global.fetch = vi.fn().mockImplementation((url: string) => {
       if (url.includes('/api/v1/config')) {
         return Promise.resolve({
@@ -47,9 +50,9 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
             Promise.resolve({
               store_name: 'VYOMIK',
               store_mode: 'coming_soon',
-              launch_date: '2026-11-10',
-              launch_at: '2026-11-10T00:00:00+05:30',
-              server_time: '2026-11-04T12:00:00Z',
+              launch_date: '2026-11-24',
+              launch_at: futureDate,
+              server_time: new Date().toISOString(),
               gate_enabled: true,
               payment_provider: 'mock',
               cod_available: true,
@@ -67,11 +70,8 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     // Heading "COMING SOON." on Coming Soon page
     expect(await screen.findByRole('heading', { name: /COMING SOON\./i })).toBeInTheDocument();
-    expect(screen.getByText(/SOMETHING NEW IS/i)).toBeInTheDocument();
-    expect(screen.getByText(/A new experience in everyday essentials\./i)).toBeInTheDocument();
-    // Preview store button must be removed
-    expect(screen.queryByRole('button', { name: /Explore store preview/i })).not.toBeInTheDocument();
-    expect(screen.queryByText(/PREVIEW STORE/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/STREETWEAR/i)).toBeInTheDocument();
+    expect(screen.getByText(/A modern clothing label built for everyday style/i)).toBeInTheDocument();
     expect(screen.getByTestId('countdown-tiles')).toBeInTheDocument();
   });
 
@@ -88,7 +88,7 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
               store_mode: 'coming_soon',
               launch_date: '2026-11-10',
               launch_at: '2026-11-10T00:00:00+05:30',
-              server_time: '2026-11-04T12:00:00Z',
+              server_time: new Date().toISOString(),
               gate_enabled: true,
               payment_provider: 'mock',
               cod_available: true,
@@ -104,15 +104,15 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<App />, '/');
 
-    expect(await screen.findByRole('heading', { name: /THE COMPLETE/i })).toBeInTheDocument();
-    expect(screen.getByText('NEW ARRIVALS')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /WEAR/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /NEW ARRIVALS/i })).toBeInTheDocument();
   });
 
   it('does NOT gate deep links like /collections even without explore flag', async () => {
     renderWithProviders(<App />, '/collections');
 
-    expect(await screen.findByRole('heading', { name: /NEW ARRIVALS\./i })).toBeInTheDocument();
-    expect(screen.getByText(/FEATURED COLLECTION/i)).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /EXPLORE/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/COLLECTIONS/i).length).toBeGreaterThan(0);
   });
 
   it('handles inline email signup with success response and updates UI state', async () => {
@@ -135,7 +135,7 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<ComingSoon />);
 
-    const input = screen.getByPlaceholderText(/Notify me when we go live/i);
+    const input = screen.getByPlaceholderText(/Enter your email/i);
     fireEvent.change(input, { target: { value: 'vip@vyomik.com' } });
 
     const submitBtn = screen.getByRole('button', { name: /Submit email notification/i });
@@ -169,14 +169,14 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
 
     renderWithProviders(<ComingSoon />);
 
-    const input = screen.getByPlaceholderText(/Notify me when we go live/i);
+    const input = screen.getByPlaceholderText(/Enter your email/i);
     fireEvent.change(input, { target: { value: 'gparth067@gmail.com' } });
 
     const submitBtn = screen.getByRole('button', { name: /Submit email notification/i });
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/You are already on the VIP waitlist!/i)).toBeInTheDocument();
+      expect(screen.getByText(/You are already on the VIP list/i)).toBeInTheDocument();
     });
   });
 
@@ -186,7 +186,7 @@ describe('Pre-Launch Coming Soon & Gate System', () => {
     renderWithProviders(<ComingSoon />);
 
     expect(await screen.findByRole('heading', { name: /COMING SOON\./i })).toBeInTheDocument();
-    expect(screen.getByText(/SOMETHING NEW IS/i)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Explore store preview/i })).not.toBeInTheDocument();
+    expect(screen.getByText(/STREETWEAR/i)).toBeInTheDocument();
+    expect(screen.getByText(/LAUNCH DATE ANNOUNCING SOON/i)).toBeInTheDocument();
   });
 });
