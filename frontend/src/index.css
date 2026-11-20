@@ -19,7 +19,7 @@
 
 /* Brand Exact Utilities from HTML Source of Truth */
 .red {
-  color: #e10600;
+  color: #C85A2E;
 }
 
 svg {
@@ -89,12 +89,12 @@ svg {
 }
 
 .follow .ico:hover, .rt .ico:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 
 .heart.liked svg, .hrt.liked svg {
-  fill: #e10600;
-  stroke: #e10600;
+  fill: #C85A2E;
+  stroke: #C85A2E;
 }
 
 .sw i {
@@ -165,7 +165,7 @@ svg {
 }
 
 .links span:hover {
-  color: #e10600;
+  color: #C85A2E;
   cursor: pointer;
 }
 
@@ -231,7 +231,7 @@ svg {
 }
 
 .f:focus-within {
-  border-color: #e10600 !important;
+  border-color: #C85A2E !important;
   box-shadow: 0 0 0 2px rgba(225, 6, 0, 0.35);
 }
 
@@ -270,7 +270,7 @@ svg {
 
 .chk u {
   text-decoration: none;
-  border-bottom: 3px solid #e10600;
+  border-bottom: 3px solid #C85A2E;
   cursor: pointer;
 }
 
@@ -281,7 +281,7 @@ svg {
   top: 1px;
   width: 9px;
   height: 17px;
-  border: solid #e10600;
+  border: solid #C85A2E;
   border-width: 0 4px 4px 0;
   transform: rotate(45deg);
 }
@@ -292,7 +292,7 @@ svg {
   top: 565px;
   width: 408px;
   height: 305px;
-  background: #e10600;
+  background: #C85A2E;
 }
 
 .tag {
@@ -357,7 +357,7 @@ svg {
   display: block;
   width: 42px;
   height: 4px;
-  background: #e10600;
+  background: #C85A2E;
   margin-top: 14px;
 }
 
@@ -388,7 +388,7 @@ svg {
   top: 0;
   width: 240px;
   height: 150px;
-  background: #e10600;
+  background: #C85A2E;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 60% 100%, 0 40%);
 }
 
@@ -405,7 +405,7 @@ svg {
   bottom: 0;
   width: 70px;
   height: 70px;
-  background: #e10600;
+  background: #C85A2E;
   clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
@@ -423,7 +423,7 @@ svg {
 .panel .brand i {
   width: 62px;
   height: 3px;
-  background: #e10600;
+  background: #C85A2E;
 }
 
 .panel h2 {
@@ -451,7 +451,7 @@ svg {
   left: 58px;
   width: 620px;
   height: 62px;
-  background: #e10600;
+  background: #C85A2E;
   font-family: 'Anton', 'Impact', sans-serif;
   letter-spacing: 0.14em;
   font-size: 32px;
@@ -514,7 +514,7 @@ svg {
 }
 
 .sw2 b {
-  color: #e10600;
+  color: #C85A2E;
   font-family: 'Anton', 'Impact', sans-serif;
   letter-spacing: 0.12em;
   font-weight: 400;
@@ -531,7 +531,7 @@ svg {
 }
 
 .notify input {
-  caret-color: #e10600;
+  caret-color: #C85A2E;
 }
 
 /* Custom Scrollbar */
@@ -547,7 +547,7 @@ svg {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #e10600;
+  background: #C85A2E;
 }
 
 /* ==========================================================================
@@ -596,7 +596,7 @@ svg {
   cursor: pointer;
 }
 .home-page .nav .mid span:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 .home-page .nav .mid .ico {
   width: 22px;
@@ -617,7 +617,7 @@ svg {
   cursor: pointer;
 }
 .home-page .nav .rt .ico:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 .home-page .nav .rt span.bg {
   display: flex;
@@ -626,7 +626,7 @@ svg {
   cursor: pointer;
 }
 .home-page .nav .rt span.bg:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 
 .home-page .hero {
@@ -656,7 +656,7 @@ svg {
   top: 82px;
   font-size: 22px;
   letter-spacing: .6em;
-  border-bottom: 2px solid #e10600;
+  border-bottom: 2px solid #C85A2E;
   padding-bottom: 12px;
 }
 .home-page .hero h1 {
@@ -770,10 +770,10 @@ svg {
   cursor: pointer;
 }
 .home-page .va:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 .home-page .va .ico {
-  color: #e10600;
+  color: #C85A2E;
   width: 28px;
   height: 28px;
 }
@@ -827,7 +827,7 @@ svg {
   top: 466px;
   font-size: 28px;
   font-weight: 800;
-  color: #e10600;
+  color: #C85A2E;
 }
 .home-page .pc .pp s {
   font-size: 19px;
@@ -841,7 +841,7 @@ svg {
   right: 28px;
   top: 506px;
   height: 34px;
-  background: linear-gradient(#e10600, #a30000);
+  background: linear-gradient(#C85A2E, #A64B2A);
   border-radius: 6px;
   font-size: 16px;
   font-weight: 800;
@@ -864,8 +864,8 @@ svg {
   cursor: pointer;
 }
 .home-page .pc .hrt.liked svg {
-  fill: #e10600;
-  stroke: #e10600;
+  fill: #C85A2E;
+  stroke: #C85A2E;
 }
 .home-page #foot {
   position: absolute;
@@ -901,7 +901,7 @@ svg {
   cursor: pointer;
 }
 .home-page #foot .fc span:hover {
-  color: #e10600;
+  color: #C85A2E;
 }
 .home-page #foot .copy {
   position: absolute;

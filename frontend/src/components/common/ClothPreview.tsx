@@ -122,7 +122,7 @@ export const ClothPreview: React.FC<ClothPreviewProps> = ({
         />
         {isLogo && (
           <>
-            <polygon points="150,150 250,150 200,230" fill="#e10600" />
+            <polygon points="150,150 250,150 200,230" fill="#C85A2E" />
             <text
               x="200"
               y="262"

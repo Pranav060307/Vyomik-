@@ -72,19 +72,19 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'home', onSelectCatego
         <div className="flex items-center gap-6 md:gap-[56px] text-[15px] md:text-[20px] tracking-[0.14em] font-semibold text-white">
           <span
             onClick={() => navigate('/collections')}
-            className="hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             COLLECTIONS
           </span>
           <span
             onClick={() => navigate('/our-story')}
-            className="hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             OUR STORY
           </span>
           <span
             onClick={() => navigate('/contact')}
-            className="hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             CONTACT
           </span>
@@ -104,9 +104,9 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'home', onSelectCatego
         aria-label="VYOMIK"
       >
         <svg className="logo-mark" viewBox="0 0 80 66" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="0,0 80,0 40,66" fill="#e10600" />
+          <polygon points="0,0 80,0 40,66" fill="#C85A2E" />
           <polygon points="14,8 38,8 40,22 52,8 66,8 40,52" fill="#0b0b0b" />
-          <polygon points="28,16 40,34 52,16 44,16 40,22 36,16" fill="#e10600" />
+          <polygon points="28,16 40,34 52,16 44,16 40,22 36,16" fill="#C85A2E" />
         </svg>
         <span className="logo-text">VYOMIK</span>
       </div>

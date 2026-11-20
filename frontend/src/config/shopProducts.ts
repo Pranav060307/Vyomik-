@@ -18,6 +18,8 @@ export interface ShopProduct {
   availableSizes: Array<'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL'>;
   primaryImage: string;
   hoverImage?: string;
+  gallery?: string[];
+  features?: string[];
   description: string;
   fabricSpecs: string;
 }
@@ -30,23 +32,39 @@ export const SHOP_PRODUCTS: ShopProduct[] = [
     category: 'hoodies',
     categoryLabel: 'Hoodies',
     price: 2499,
+    oldPrice: 2999,
     pricePaise: 249900,
     isNew: true,
-    badge: 'NEW',
-    rating: 4.9,
-    reviewCount: 38,
+    badge: 'New Launch',
+    rating: 4.8,
+    reviewCount: 124,
     color: '#F4F0E8',
-    colorName: 'Warm Ivory',
+    colorName: 'Ivory',
     swatches: [
-      { name: 'Warm Ivory', hex: '#F4F0E8' },
+      { name: 'Ivory', hex: '#F4F0E8' },
       { name: 'Charcoal', hex: '#242321' },
       { name: 'Burnt Rust', hex: '#A64B2A' },
+      { name: 'Washed Olive', hex: '#4E5340' },
     ],
-    availableSizes: ['S', 'M', 'L', 'XL'],
-    primaryImage: '/images/vyomik/products/core-hoodie-ivory.jpg',
-    hoverImage: '/images/vyomik/new-arrivals/hoodies.webp',
-    description: 'Constructed from loopback French terry with heavy ribbed hem and cuff bindings. Double-layered hood without drawstrings.',
-    fabricSpecs: '450 GSM 100% Cotton French Terry · Double-Layered Hood',
+    availableSizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    primaryImage: '/images/vyomik/products/pdp/core-hoodie-ivory-front.jpg',
+    hoverImage: '/images/vyomik/products/pdp/core-hoodie-ivory-back.jpg',
+    gallery: [
+      '/images/vyomik/products/pdp/core-hoodie-ivory-front.jpg',
+      '/images/vyomik/products/pdp/core-hoodie-ivory-back.jpg',
+      '/images/vyomik/products/pdp/core-hoodie-ivory-detail.jpg',
+      '/images/vyomik/products/pdp/core-hoodie-ivory-fabric.jpg',
+      '/images/vyomik/products/pdp/core-hoodie-ivory-video.jpg',
+    ],
+    features: [
+      'Premium cotton blend (320 GSM)',
+      'Relaxed unisex fit',
+      'Ribbed cuffs and hem',
+      'VYOMIK signature logo detail',
+      'Everyday wear – all seasons',
+    ],
+    description: 'The signature VYOMIK hoodie. Minimal, bold, and built for everyday movement.',
+    fabricSpecs: '320 GSM Premium Cotton Blend · Double-Layered Hood · Unisex Fit',
   },
   {
     id: 'vy-prod-02',

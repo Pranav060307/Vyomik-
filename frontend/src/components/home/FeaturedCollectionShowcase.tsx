@@ -205,9 +205,6 @@ export const FeaturedCollectionShowcase: React.FC = () => {
               );
             })}
           </div>
-
-          {/* Glowing Elliptical Pedestal Light Ring */}
-          <div className="absolute bottom-10 sm:bottom-12 left-1/2 -translate-x-1/2 w-[280px] sm:w-[460px] md:w-[540px] h-[45px] sm:h-[75px] rounded-[100%] border-[2px] border-[#F5B964]/80 shadow-[0_0_40px_rgba(245,185,100,0.65),inset_0_0_20px_rgba(245,185,100,0.4)] pointer-events-none transform -rotate-x-60" />
         </div>
 
         {/* Carousel Indicators */}

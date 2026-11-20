@@ -32,8 +32,8 @@ export function mapDemoProductToItem(dp: DemoProduct): ProductItem {
   const swatches = isHoodie
     ? ['#a81818', '#111111', '#ffffff', '#3a2a1e']
     : isWordmark
-    ? ['#111111', '#ffffff', '#e10600', '#3a2a1e']
-    : ['#d9c3ad', '#111111', '#e10600', '#ffffff', '#3a2a1e'];
+    ? ['#111111', '#ffffff', '#C85A2E', '#3a2a1e']
+    : ['#d9c3ad', '#111111', '#C85A2E', '#ffffff', '#3a2a1e'];
 
   let fabricFit = '';
   if (isHoodie) {
@@ -87,8 +87,8 @@ export function useProducts(category?: string) {
               const swatches = isHoodie
                 ? ['#a81818', '#111111', '#ffffff', '#3a2a1e']
                 : isWordmark
-                ? ['#111111', '#ffffff', '#e10600', '#3a2a1e']
-                : ['#d9c3ad', '#111111', '#e10600', '#ffffff', '#3a2a1e'];
+                ? ['#111111', '#ffffff', '#C85A2E', '#3a2a1e']
+                : ['#d9c3ad', '#111111', '#C85A2E', '#ffffff', '#3a2a1e'];
 
               return {
                 id: p.slug || String(p.id),

@@ -14,38 +14,37 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'full', onSelectCatego
 
   if (variant === 'home') {
     return (
-      <footer id="foot" role="contentinfo">
-        <div className="fl">
-          <div
-            className="logo"
-            onClick={() => navigate('/home')}
-            role="button"
-            tabIndex={0}
-            aria-label="VYOMIK"
-          >
-            <svg className="logo-mark" viewBox="0 0 80 66" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="0,0 80,0 40,66" fill="#e10600" />
-              <polygon points="14,8 38,8 40,22 52,8 66,8 40,52" fill="#0b0b0b" />
-              <polygon points="28,16 40,34 52,16 44,16 40,22 36,16" fill="#e10600" />
-            </svg>
-            <span className="logo-text">VYOMIK</span>
+      <footer id="foot" role="contentinfo" className="bg-[#0B0B0B] border-t border-[#242321] text-[#F4F0E8] py-12 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-8">
+          <div className="flex flex-col items-start">
+            <div
+              onClick={() => navigate('/home')}
+              role="button"
+              tabIndex={0}
+              aria-label="VYOMIK"
+              className="cursor-pointer mb-4"
+            >
+              <img src="/assets/logo.png" alt="VYOMIK" className="h-8 w-auto object-contain" />
+            </div>
+            <p className="text-xs text-[#716B63] max-w-xs leading-relaxed">
+              Everyday oversized essentials, engineered with boxy silhouettes and heavyweight fabrics.
+            </p>
           </div>
-          <p>Everyday oversized essentials, engineered with boxy silhouettes and heavyweight fabrics.</p>
+          <div className="flex flex-col gap-2 text-xs text-[#D9D1C3]">
+            <b className="text-white uppercase tracking-wider mb-1">SHOP</b>
+            <span onClick={() => navigate('/collections')} className="hover:text-[#C85A2E] cursor-pointer">New Arrivals</span>
+            <span onClick={() => onSelectCategory ? onSelectCategory('plain') : navigate('/collections?cat=plain')} className="hover:text-[#C85A2E] cursor-pointer">Plain Tees</span>
+            <span onClick={() => onSelectCategory ? onSelectCategory('wordmark') : navigate('/collections?cat=wordmark')} className="hover:text-[#C85A2E] cursor-pointer">Wordmark Tees</span>
+            <span onClick={() => onSelectCategory ? onSelectCategory('hoodies') : navigate('/collections?cat=hoodies')} className="hover:text-[#C85A2E] cursor-pointer">Oversized Hoodies</span>
+          </div>
+          <div className="flex flex-col gap-2 text-xs text-[#D9D1C3]">
+            <b className="text-white uppercase tracking-wider mb-1">ACCOUNT</b>
+            <span onClick={() => navigate('/sign-in')} className="hover:text-[#C85A2E] cursor-pointer">Sign In</span>
+            <span onClick={() => navigate('/sign-up')} className="hover:text-[#C85A2E] cursor-pointer">Create Account</span>
+          </div>
         </div>
-        <div className="fc">
-          <b>SHOP</b>
-          <span onClick={() => navigate('/collections')}>New Arrivals</span>
-          <span onClick={() => onSelectCategory ? onSelectCategory('plain') : navigate('/collections?cat=plain')}>Plain Tees</span>
-          <span onClick={() => onSelectCategory ? onSelectCategory('wordmark') : navigate('/collections?cat=wordmark')}>Wordmark Tees</span>
-          <span onClick={() => onSelectCategory ? onSelectCategory('hoodies') : navigate('/collections?cat=hoodies')}>Oversized Hoodies</span>
-        </div>
-        <div className="fc">
-          <b>ACCOUNT</b>
-          <span onClick={() => navigate('/sign-in')}>Sign In</span>
-          <span onClick={() => navigate('/sign-up')}>Create Account</span>
-        </div>
-        <div className="copy">
-          &copy; 2026 VYOMIK. All rights reserved.
+        <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-[#242321] text-xs text-[#716B63] flex flex-col sm:flex-row justify-between items-center gap-2">
+          <span>&copy; 2026 VYOMIK. All rights reserved.</span>
           <span className="sr-only">
             <span>ROOM TO BE YOU</span>
             <a href={mailtoUrl}>{contactEmail}</a>
@@ -59,44 +58,44 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'full', onSelectCatego
   return (
     <footer
       id="foot"
-      className="w-full border-t border-[#222] bg-black text-white px-6 md:px-[112px] py-12 md:py-[70px] select-none relative"
+      className="w-full border-t border-[#242321] bg-[#0B0B0B] text-[#F4F0E8] px-6 md:px-16 lg:px-24 py-14 select-none relative"
       role="contentinfo"
     >
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-[150px] mb-12">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-20 mb-12">
         {/* Brand Column */}
-        <div className="w-full lg:w-[520px]">
+        <div className="w-full lg:w-[480px]">
           <VyomikLogo
-            markClassName="w-[50px] md:w-[60px]"
-            textClassName="text-[26px] md:text-[30px] font-semibold tracking-[0.5em]"
+            markClassName="w-[45px] md:w-[52px]"
+            textClassName="text-[22px] md:text-[26px] font-bold tracking-[0.35em] text-[#F4F0E8]"
           />
-          <p className="mt-[26px] text-[18px] md:text-[20px] leading-[1.6] text-[#aaa]">
+          <p className="mt-5 text-sm leading-relaxed text-[#716B63] max-w-sm">
             Everyday oversized essentials, engineered with boxy silhouettes and heavyweight fabrics.
           </p>
 
           {/* Social and Contact compliant links */}
-          <div className="mt-6 flex flex-wrap items-center gap-6 text-[15px] md:text-[16px] text-[#888]">
+          <div className="mt-6 flex flex-wrap items-center gap-5 text-xs text-[#716B63]">
             <a
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="VYOMIK on Instagram"
-              className="hover:text-[#e10600] transition-colors"
+              className="hover:text-[#C85A2E] transition-colors"
             >
               Instagram
             </a>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#444]" />
+            <span className="w-1 h-1 rounded-full bg-[#333]" />
             <a
               href={mailtoUrl}
               aria-label="Email VYOMIK"
-              className="hover:text-[#e10600] transition-colors"
+              className="hover:text-[#C85A2E] transition-colors"
             >
               {contactEmail}
             </a>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#444]" />
+            <span className="w-1 h-1 rounded-full bg-[#333]" />
             <Link
               to="/contact"
               aria-label="Contact"
-              className="hover:text-[#e10600] transition-colors"
+              className="hover:text-[#C85A2E] transition-colors"
             >
               Contact
             </Link>
@@ -104,68 +103,68 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'full', onSelectCatego
         </div>
 
         {/* Shop Column */}
-        <div className="fc">
-          <b className="block text-[15px] md:text-[17px] tracking-[0.35em] mb-[22px] font-bold text-white">
+        <div className="flex flex-col gap-2.5 text-xs text-[#D9D1C3]">
+          <b className="block text-xs uppercase tracking-[0.2em] font-bold text-[#F4F0E8] mb-2">
             SHOP
           </b>
           <span
             onClick={() => navigate('/collections')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             New Arrivals
           </span>
           <span
             onClick={() => navigate('/collections?cat=plain')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Plain Tees
           </span>
           <span
             onClick={() => navigate('/collections?cat=wordmark')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Wordmark Tees
           </span>
           <span
             onClick={() => navigate('/collections?cat=hoodies')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Oversized Hoodies
           </span>
         </div>
 
         {/* Account & Policies Column */}
-        <div className="fc">
-          <b className="block text-[15px] md:text-[17px] tracking-[0.35em] mb-[22px] font-bold text-white">
+        <div className="flex flex-col gap-2.5 text-xs text-[#D9D1C3]">
+          <b className="block text-xs uppercase tracking-[0.2em] font-bold text-[#F4F0E8] mb-2">
             ACCOUNT
           </b>
           <span
             onClick={() => navigate('/sign-in')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Sign In
           </span>
           <span
             onClick={() => navigate('/sign-up')}
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Create Account
           </span>
           <Link
             to="/shipping-returns"
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Shipping & Returns
           </Link>
           <Link
             to="/privacy-policy"
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Privacy Policy
           </Link>
           <Link
             to="/terms-of-service"
-            className="block text-[18px] md:text-[20px] text-[#ccc] mb-[14px] hover:text-[#e10600] cursor-pointer transition-colors"
+            className="hover:text-[#C85A2E] cursor-pointer transition-colors"
           >
             Terms of Service
           </Link>
@@ -173,9 +172,9 @@ export const Footer: React.FC<FooterProps> = ({ variant = 'full', onSelectCatego
       </div>
 
       {/* Copyright */}
-      <div className="copy text-[15px] md:text-[16px] text-[#777] border-t border-[#1a1a1a] pt-6 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div className="max-w-7xl mx-auto text-xs text-[#716B63] border-t border-[#242321] pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
         <span>&copy; 2026 VYOMIK. All rights reserved.</span>
-        <span className="text-[13px] tracking-widest uppercase text-[#555]">
+        <span className="text-[11px] tracking-widest uppercase text-[#555]">
           ROOM TO BE YOU
         </span>
       </div>

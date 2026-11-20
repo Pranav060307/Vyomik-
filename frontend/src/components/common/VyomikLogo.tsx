@@ -42,15 +42,15 @@ export const VyomikLogo: React.FC<VyomikLogoProps> = ({
       >
         <polygon
           points="0,0 80,0 40,66"
-          fill={inverted ? '#0b0b0b' : '#e10600'}
+          fill={inverted ? '#0b0b0b' : '#C85A2E'}
         />
         <polygon
           points="14,8 38,8 40,22 52,8 66,8 40,52"
-          fill={inverted ? '#e10600' : '#0b0b0b'}
+          fill={inverted ? '#C85A2E' : '#0b0b0b'}
         />
         <polygon
           points="28,16 40,34 52,16 44,16 40,22 36,16"
-          fill={inverted ? '#0b0b0b' : '#e10600'}
+          fill={inverted ? '#0b0b0b' : '#C85A2E'}
         />
       </svg>
       {showText && <span className={`logo-text ${textClassName}`}>VYOMIK</span>}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShopProduct } from '../../config/shopProducts';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
@@ -45,6 +46,7 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
   product,
   viewMode = 'grid',
 }) => {
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const { toast } = useToast();
   const [isWishlisted, setIsWishlisted] = useState<boolean>(() =>
@@ -84,7 +86,10 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
   // List View Variant
   if (viewMode === 'list') {
     return (
-      <div className="w-full bg-[#141414] border border-[#242321] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-white/20 transition-all duration-300 group">
+      <div
+        onClick={() => navigate(`/product/${product.slug}`)}
+        className="w-full bg-[#141414] border border-[#242321] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-white/20 transition-all duration-300 group cursor-pointer"
+      >
         <div className="w-full sm:w-44 h-48 sm:h-44 rounded-xl overflow-hidden bg-[#0B0B0B] relative flex-none">
           <img
             src={product.primaryImage}
@@ -151,9 +156,10 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
   // Grid View Variant (Matching Reference Screenshot Exactly)
   return (
     <div
+      onClick={() => navigate(`/product/${product.slug}`)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative flex flex-col bg-[#141414] border border-[#242321] rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300"
+      className="group relative flex flex-col bg-[#141414] border border-[#242321] rounded-2xl overflow-hidden hover:border-white/20 transition-all duration-300 cursor-pointer"
     >
       {/* Product Image Area */}
       <div className="relative aspect-[4/5] w-full bg-[#0B0B0B] overflow-hidden">

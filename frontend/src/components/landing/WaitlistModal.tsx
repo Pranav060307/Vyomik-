@@ -69,46 +69,46 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="waitlist-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#202020]/75 backdrop-blur-sm animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn font-montserrat"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg bg-[#F4F3EE] border border-[#202020] p-8 sm:p-10 shadow-2xl"
+        className="relative w-full max-w-lg bg-[#141414] border border-[#242321] rounded-2xl p-6 sm:p-10 shadow-2xl text-left"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 text-[#202020] hover:opacity-60 transition-opacity focus:outline-none"
+          className="absolute top-5 right-5 w-8 h-8 rounded-lg bg-[#0B0B0B] border border-[#242321] text-[#716B63] hover:text-[#F4F0E8] hover:border-white/20 flex items-center justify-center transition-colors cursor-pointer"
           aria-label="Close modal"
         >
-          <X className="w-5 h-5 stroke-[1.5]" />
+          <X className="w-4 h-4" />
         </button>
 
         {!isSuccess ? (
           <div>
             {/* Modal Header */}
-            <div className="space-y-3">
-              <span className="text-[10px] uppercase font-bold tracking-[0.24em] text-[#5C6548]">
+            <div className="space-y-2">
+              <span className="text-[10px] uppercase font-bold tracking-[0.24em] text-[#C85A2E]">
                 FIRST DROP · VIP ACCESS
               </span>
-              <h3 id="waitlist-title" className="text-2xl sm:text-3xl font-semibold text-[#202020] tracking-tight">
+              <h3 id="waitlist-title" className="text-2xl sm:text-3xl font-bold text-[#F4F0E8] tracking-tight">
                 Be first when doors open.
               </h3>
-              <p className="text-xs sm:text-sm text-[#202020]/70 leading-relaxed">
-                Join the launch waitlist for VYOMIK. You will receive private access 1 hour before our public drop on 8 November 2026.
+              <p className="text-xs sm:text-sm text-[#A8A29E] leading-relaxed">
+                Join the launch waitlist for VYOMIK. You will receive private access 1 hour before our public drop.
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
               <div>
                 <label htmlFor="waitlist-email" className="sr-only">
                   Email Address
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#202020]/40">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#716B63]">
                     <Mail className="w-4 h-4" />
                   </div>
                   <input
@@ -118,14 +118,13 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
                     required
-                    className="w-full pl-10 pr-4 py-3.5 bg-white border border-[#DAD7CE] text-[#202020] text-sm placeholder:text-[#202020]/40 focus:border-[#202020] focus:ring-1 focus:ring-[#202020] transition-colors outline-none"
-                    disabled={waitlistMutation.isPending}
+                    className="w-full pl-10 pr-4 py-3 bg-[#0B0B0B] border border-[#242321] focus:border-[#C85A2E] text-[#F4F0E8] placeholder:text-[#716B63] text-xs sm:text-sm rounded-xl outline-none transition-colors"
                   />
                 </div>
               </div>
 
               {errorMsg && (
-                <div className="text-xs text-red-700 font-medium">
+                <div className="text-red-400 text-xs font-medium">
                   {errorMsg}
                 </div>
               )}
@@ -133,43 +132,33 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
               <button
                 type="submit"
                 disabled={waitlistMutation.isPending}
-                className="w-full bg-[#202020] text-[#F4F3EE] py-3.5 text-xs font-semibold uppercase tracking-[0.18em] hover:bg-[#333333] transition-colors flex items-center justify-center space-x-2 disabled:opacity-50"
+                className="w-full h-11 sm:h-12 bg-[#C85A2E] hover:bg-[#a64720] text-white text-xs sm:text-sm font-bold uppercase tracking-wider rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center cursor-pointer disabled:opacity-50"
               >
                 {waitlistMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Reserving your place...</span>
-                  </>
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <span>Notify me at launch ↗</span>
+                  'Request VIP Invitation'
                 )}
               </button>
-
-              <p className="text-[10px] text-center text-[#202020]/50 tracking-wider">
-                NO SPAM. JUST ONE NOTIFICATION WHEN THE STORE GOES LIVE.
-              </p>
             </form>
           </div>
         ) : (
-          /* Success Confirmation View */
-          <div className="text-center py-6 space-y-5 animate-fadeIn">
-            <div className="w-12 h-12 bg-[#5C6548] text-[#F4F3EE] flex items-center justify-center mx-auto">
-              <Check className="w-6 h-6 stroke-[2]" />
+          <div className="text-center py-6 space-y-4">
+            <div className="w-12 h-12 bg-[#2A1810] border border-[#C85A2E]/40 text-[#C85A2E] rounded-full flex items-center justify-center mx-auto">
+              <Check className="w-6 h-6 stroke-[2.5]" />
             </div>
-            <div className="space-y-2">
-              <h4 className="text-2xl font-semibold text-[#202020]">
-                You're on the list.
-              </h4>
-              <p className="text-xs sm:text-sm text-[#202020]/80 max-w-sm mx-auto leading-relaxed">
-                We've reserved your early access spot for <span className="font-semibold">{email}</span>. Check your inbox 1 hour before the public drop.
-              </p>
-            </div>
+            <h3 className="text-xl font-bold text-[#F4F0E8]">
+              You are on the list.
+            </h3>
+            <p className="text-xs sm:text-sm text-[#A8A29E] max-w-xs mx-auto">
+              We have reserved your invitation. Keep an eye on your inbox for launch announcements.
+            </p>
             <button
               type="button"
               onClick={onClose}
-              className="mt-6 border border-[#202020] bg-transparent text-[#202020] px-6 py-2.5 text-xs font-medium uppercase tracking-[0.16em] hover:bg-[#202020] hover:text-[#F4F3EE] transition-colors"
+              className="mt-4 px-6 py-2.5 bg-[#141414] border border-[#242321] hover:border-white/30 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
             >
-              Back to experience
+              Done
             </button>
           </div>
         )}
@@ -177,4 +166,3 @@ export const WaitlistModal: React.FC<WaitlistModalProps> = ({
     </div>
   );
 };
-

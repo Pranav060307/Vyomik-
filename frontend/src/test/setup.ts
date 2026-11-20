@@ -12,6 +12,11 @@ window.ResizeObserver = window.ResizeObserver || ResizeObserverMock;
 // Polyfill window.scrollTo for JSDOM
 window.scrollTo = vi.fn() as any;
 
+// Polyfill HTMLCanvasElement.prototype.getContext for JSDOM without canvas npm pkg
+if (typeof HTMLCanvasElement !== 'undefined') {
+  HTMLCanvasElement.prototype.getContext = vi.fn(() => null) as any;
+}
+
 // Polyfill matchMedia for JSDOM
 window.matchMedia =
   window.matchMedia ||

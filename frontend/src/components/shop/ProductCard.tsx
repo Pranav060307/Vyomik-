@@ -61,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   // Heart SVG icon
   const HeartIcon = () => (
-    <svg viewBox="0 0 24 24" fill={isLiked ? '#e10600' : 'none'} stroke={isLiked ? '#e10600' : 'currentColor'} strokeWidth="1.8" className="w-full h-full">
+    <svg viewBox="0 0 24 24" fill={isLiked ? '#C85A2E' : 'none'} stroke={isLiked ? '#C85A2E' : 'currentColor'} strokeWidth="1.8" className="w-full h-full">
       <path d="M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z" />
     </svg>
   );
@@ -76,8 +76,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     const defaultSwatches = product.type === 'hoodie'
       ? ['#a81818', '#111111', '#ffffff', '#3a2a1e']
       : (product.logo === 1 || product.logo === '1' || product.category === 'wordmark')
-      ? ['#111111', '#ffffff', '#e10600', '#3a2a1e']
-      : ['#d9c3ad', '#111111', '#e10600', '#ffffff', '#3a2a1e'];
+      ? ['#111111', '#ffffff', '#C85A2E', '#3a2a1e']
+      : ['#d9c3ad', '#111111', '#C85A2E', '#ffffff', '#3a2a1e'];
 
     const swatches = product.swatches && product.swatches.length > 0 ? product.swatches : defaultSwatches;
 
@@ -88,7 +88,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       >
         {/* NEW Badge */}
         <span
-          className="badge absolute left-[28px] top-[30px] bg-[#e10600] font-extrabold text-[25px] py-[12px] pr-[30px] pl-[20px] text-white z-10 leading-none select-none"
+          className="badge absolute left-[28px] top-[30px] bg-[#C85A2E] font-extrabold text-[25px] py-[12px] pr-[30px] pl-[20px] text-white z-10 leading-none select-none"
           style={{ clipPath: 'polygon(0 0, 100% 0, 85% 100%, 0 100%)' }}
         >
           NEW
@@ -97,7 +97,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Wishlist Heart */}
         <span
           onClick={handleHeartClick}
-          className={`heart ico absolute right-[34px] top-[34px] w-[44px] h-[44px] cursor-pointer text-white hover:text-[#e10600] transition-colors z-10 ${
+          className={`heart ico absolute right-[34px] top-[34px] w-[44px] h-[44px] cursor-pointer text-white hover:text-[#C85A2E] transition-colors z-10 ${
             isLiked ? 'liked' : ''
           }`}
           role="button"
@@ -127,7 +127,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Price */}
-        <div className="price absolute left-[36px] top-[600px] text-[44px] font-extrabold text-[#e10600] flex items-baseline leading-none">
+        <div className="price absolute left-[36px] top-[600px] text-[44px] font-extrabold text-[#C85A2E] flex items-baseline leading-none">
           ₹{product.price.toLocaleString('en-IN')}
           {product.oldPrice && (
             <s className="text-[28px] font-medium text-[#999] ml-[22px]">
@@ -154,7 +154,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Add To Cart Button */}
         <div
           onClick={handleAddToCart}
-          className="btn absolute left-[30px] right-[30px] top-[728px] h-[70px] bg-gradient-to-b from-[#e10600] to-[#a30000] rounded-[10px] font-extrabold text-[30px] text-white flex justify-center items-center gap-[20px] cursor-pointer hover:brightness-125 active:scale-[0.98] transition-all select-none"
+          className="btn absolute left-[30px] right-[30px] top-[728px] h-[70px] bg-gradient-to-b from-[#C85A2E] to-[#A64B2A] rounded-[10px] font-extrabold text-[30px] text-white flex justify-center items-center gap-[20px] cursor-pointer hover:brightness-125 active:scale-[0.98] transition-all select-none"
           role="button"
         >
           <span className="ico w-[44px] h-[44px]">
@@ -186,7 +186,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         role="button"
         aria-label="Wishlist"
       >
-        <svg viewBox="0 0 24 24" fill={isLiked ? '#e10600' : 'none'} stroke={isLiked ? '#e10600' : 'currentColor'} strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" fill={isLiked ? '#C85A2E' : 'none'} stroke={isLiked ? '#C85A2E' : 'currentColor'} strokeWidth="1.8">
           <path d="M12 21s-8-5-8-11a4.5 4.5 0 018-3 4.5 4.5 0 018 3c0 6-8 11-8 11z" />
         </svg>
       </span>

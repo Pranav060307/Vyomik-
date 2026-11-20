@@ -23,7 +23,11 @@ export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onSelectCategory }) => {
     location.pathname.startsWith('/drops');
   const isShopActive =
     (location.pathname.startsWith('/shop') ||
+    location.pathname.startsWith('/product') ||
     location.pathname.startsWith('/new-arrivals')) && !isCollectionsActive;
+  const isAboutActive =
+    location.pathname.startsWith('/about') ||
+    location.pathname.startsWith('/our-story');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -193,10 +197,15 @@ export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onSelectCategory }) => {
           {/* About */}
           <button
             type="button"
-            onClick={() => navigate('/our-story')}
-            className="hover:text-[#F4F0E8] transition-colors py-1 cursor-pointer"
+            onClick={() => navigate('/about')}
+            className={`transition-colors relative py-1 cursor-pointer ${
+              isAboutActive ? 'text-[#F4F0E8]' : 'text-[#D9D1C3] hover:text-[#F4F0E8]'
+            }`}
           >
-            About
+            <span>About</span>
+            {isAboutActive && (
+              <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#A64B2A]" />
+            )}
           </button>
         </div>
 
@@ -301,7 +310,7 @@ export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onSelectCategory }) => {
           <button
             type="button"
             onClick={() => {
-              navigate('/our-story');
+              navigate('/about');
               setMobileMenuOpen(false);
             }}
             className="text-left text-[#D9D1C3] text-sm py-1"

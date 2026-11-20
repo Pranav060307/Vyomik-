@@ -12,6 +12,7 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsPage } from './pages/TermsPage';
 import { ComingSoon } from './pages/ComingSoon';
 import { BagPage } from './pages/BagPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
 import { useLaunchGate } from './hooks/useLaunchGate';
 
 /**
@@ -43,6 +44,12 @@ export const App: React.FC = () => {
       <Route path="/shop" element={<ShopAllPage />} />
       <Route path="/shop-all" element={<ShopAllPage />} />
 
+      {/* Product Detail Page (PDP) */}
+      <Route path="/product/:slug" element={<ProductDetailPage />} />
+      <Route path="/products/:slug" element={<ProductDetailPage />} />
+      <Route path="/shop/products/:slug" element={<ProductDetailPage />} />
+      <Route path="/shop/:category/:slug" element={<ProductDetailPage />} />
+
       {/* Collections & New Arrivals */}
       <Route path="/collections" element={<CollectionsPage />} />
       <Route path="/drops" element={<CollectionsPage />} />
@@ -58,6 +65,7 @@ export const App: React.FC = () => {
       {/* Direct deep links */}
       <Route path="/bag" element={<BagPage />} />
       <Route path="/cart" element={<BagPage />} />
+      <Route path="/about" element={<OurStoryPage />} />
       <Route path="/our-story" element={<OurStoryPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/shipping-returns" element={<ShippingReturnsPage />} />

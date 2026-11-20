@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import React from 'react';
+import { useQuery, QueryClient, QueryClientContext } from '@tanstack/react-query';
 import { StoreConfig } from '../types/store';
 import { contactEmail, instagramUrl } from '../config/brand';
 
@@ -21,21 +22,35 @@ export const DEFAULT_FALLBACK_CONFIG: StoreConfig = {
   instagram_url: instagramUrl,
 };
 
-export function useStoreConfig() {
-  return useQuery<StoreConfig>({
-    queryKey: ['storeConfig'],
-    queryFn: async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/config`);
-        if (!res.ok) {
-          throw new Error(`Failed to load store configuration (${res.status})`);
-        }
-        return await res.json();
-      } catch (err) {
-        console.warn('Backend config unavailable, falling back to client defaults:', err);
-        return DEFAULT_FALLBACK_CONFIG;
-      }
+const fallbackQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
     },
-    placeholderData: DEFAULT_FALLBACK_CONFIG,
-  });
+  },
+});
+
+export function useStoreConfig() {
+  const contextClient = React.useContext(QueryClientContext);
+  const client = contextClient || fallbackQueryClient;
+
+  return useQuery<StoreConfig>(
+    {
+      queryKey: ['storeConfig'],
+      queryFn: async () => {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/v1/config`);
+          if (!res.ok) {
+            throw new Error(`Failed to load store configuration (${res.status})`);
+          }
+          return await res.json();
+        } catch (err) {
+          console.warn('Backend config unavailable, falling back to client defaults:', err);
+          return DEFAULT_FALLBACK_CONFIG;
+        }
+      },
+      placeholderData: DEFAULT_FALLBACK_CONFIG,
+    },
+    client
+  );
 }
