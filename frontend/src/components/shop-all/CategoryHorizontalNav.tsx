@@ -19,29 +19,19 @@ export const CATEGORIES: CategoryOption[] = [
     isGridIcon: true,
   },
   {
+    id: 'oversized',
+    name: 'Oversized',
+    image: '/assets/oversized-basic-tee.png',
+  },
+  {
+    id: 'sweatshirt',
+    name: 'Sweatshirts',
+    image: '/assets/home/hoodie-charcoal-art.png',
+  },
+  {
     id: 'hoodies',
     name: 'Hoodies',
     image: '/images/vyomik/new-arrivals/hoodies.webp',
-  },
-  {
-    id: 't-shirts',
-    name: 'T-Shirts',
-    image: '/images/vyomik/new-arrivals/tshirts.webp',
-  },
-  {
-    id: 'cargos',
-    name: 'Cargos',
-    image: '/images/vyomik/new-arrivals/cargos.webp',
-  },
-  {
-    id: 'jackets',
-    name: 'Jackets',
-    image: '/images/vyomik/products/apex-jacket-black.png',
-  },
-  {
-    id: 'accessories',
-    name: 'Accessories',
-    image: '/images/vyomik/new-arrivals/accessories.webp',
   },
 ];
 

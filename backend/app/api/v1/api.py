@@ -10,6 +10,7 @@ from app.api.v1.endpoints import (
     products,
     preview,
     orders,
+    admin,
 )
 
 api_router = APIRouter()
@@ -20,3 +21,4 @@ api_router.include_router(waitlist.router, tags=["Waitlist"])
 api_router.include_router(products.router, tags=["Products"])
 api_router.include_router(preview.router, tags=["Preview"])
 api_router.include_router(orders.router, tags=["Orders"])
+api_router.include_router(admin.router, tags=["Admin"])

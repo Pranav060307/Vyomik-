@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Code2 } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
 import { StatusBadge } from '../components/StatusBadge';
 import { CouponCode } from '../types';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const INITIAL_COUPONS: CouponCode[] = [
   {
@@ -52,13 +54,44 @@ export const AdminDiscountsPage: React.FC = () => {
   const [newValue, setNewValue] = useState('15');
   const [newMinSubtotal, setNewMinSubtotal] = useState('1499');
 
+  const fetchDiscounts = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/discounts`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setCoupons(
+            data.map((d: any) => ({
+              id: d.id,
+              code: d.code,
+              discountType: d.discount_type,
+              discountValue: d.discount_value,
+              minSubtotalPaise: d.min_subtotal_paise,
+              usageLimit: d.usage_limit,
+              usageCount: d.usage_count,
+              isActive: d.is_active,
+              startsAt: d.starts_at || '2026-11-01',
+              expiresAt: d.expires_at || '2026-12-31',
+            }))
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch discounts from backend:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchDiscounts();
+  }, []);
+
   const toggleCoupon = (id: string) => {
     setCoupons((prev) =>
       prev.map((c) => (c.id === id ? { ...c, isActive: !c.isActive } : c))
     );
   };
 
-  const handleCreateCoupon = (e: React.FormEvent) => {
+  const handleCreateCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCode.trim()) return;
 
@@ -78,6 +111,23 @@ export const AdminDiscountsPage: React.FC = () => {
     setCoupons((prev) => [newCoupon, ...prev]);
     setIsModalOpen(false);
     setNewCode('');
+
+    try {
+      await fetch(`${API_BASE_URL}/api/v1/admin/discounts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: newCoupon.code,
+          discount_type: newCoupon.discountType,
+          discount_value: newCoupon.discountValue,
+          min_subtotal_paise: newCoupon.minSubtotalPaise,
+          usage_limit: newCoupon.usageLimit,
+          is_active: true,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to save discount to backend:', err);
+    }
   };
 
   const columns: Column<CouponCode>[] = [

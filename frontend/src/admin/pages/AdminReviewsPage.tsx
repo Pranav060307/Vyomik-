@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, ShieldCheck } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
 import { StatusBadge } from '../components/StatusBadge';
 import { AdminReview } from '../types';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const INITIAL_REVIEWS: AdminReview[] = [
   {
@@ -59,10 +61,51 @@ export const AdminReviewsPage: React.FC = () => {
   const [reviews, setReviews] = useState<AdminReview[]>(INITIAL_REVIEWS);
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  const updateStatus = (id: string, newStatus: 'approved' | 'flagged') => {
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/reviews`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setReviews(
+            data.map((d: any) => ({
+              id: d.id,
+              productSlug: d.product_slug,
+              productTitle: d.product_title,
+              customerName: d.customer_name,
+              rating: d.rating,
+              title: d.title,
+              comment: d.comment,
+              verifiedPurchase: d.verified_purchase,
+              status: d.status,
+              createdAt: d.created_at,
+            }))
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch reviews from backend:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const updateStatus = async (id: string, newStatus: 'approved' | 'flagged') => {
     setReviews((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: newStatus } : r))
     );
+
+    try {
+      await fetch(`${API_BASE_URL}/api/v1/admin/reviews/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+    } catch (err) {
+      console.error('Failed to update review status in backend:', err);
+    }
   };
 
   const filteredReviews = reviews.filter((r) => {

@@ -13,6 +13,8 @@ from app.mongodb.models import (
     OrderDoc,
     CustomerDoc,
     WaitlistDoc,
+    DiscountDoc,
+    ReviewDoc,
 )
 
 logger = logging.getLogger("vyomik.mongodb")
@@ -42,6 +44,8 @@ async def init_mongodb() -> bool:
                 OrderDoc,
                 CustomerDoc,
                 WaitlistDoc,
+                DiscountDoc,
+                ReviewDoc,
             ],
         )
         logger.info("Beanie ODM successfully initialized with all collections & indexes.")

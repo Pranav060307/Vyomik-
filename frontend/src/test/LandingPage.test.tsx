@@ -95,18 +95,17 @@ describe('VYOMIK Main Ecommerce Homepage', () => {
     expect(screen.getByText('Ethically crafted & responsible')).toBeInTheDocument();
   });
 
-  it('5. renders New Arrivals 4 category image cards', () => {
+  it('5. renders New Arrivals 3 category image cards', () => {
     renderWithProviders(<LandingPage />);
 
     expect(screen.getByRole('region', { name: /new arrivals by category/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /new arrivals/i })).toBeInTheDocument();
     expect(screen.getByText('The latest drops, crafted for everyday impact.')).toBeInTheDocument();
 
-    // 4 Category Cards
+    // 3 Category Cards
+    expect(screen.getByRole('button', { name: /shop oversized/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /shop sweatshirts/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /shop hoodies/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /shop t-shirts/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /shop cargos/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /shop accessories/i })).toBeInTheDocument();
   });
 
   it('6. renders Core Elements interactive 3D perspective showcase', () => {

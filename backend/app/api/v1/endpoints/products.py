@@ -95,6 +95,44 @@ async def get_product_by_slug(
     product = result.scalar_one_or_none()
     
     if not product:
+        # Fallback to MongoDB ProductDoc
+        try:
+            from app.mongodb.models.product import ProductDoc
+            doc = await ProductDoc.find_one(ProductDoc.slug == slug)
+            if doc:
+                current_mode = settings.QIKINK_MODE.lower()
+                mapped_variants = []
+                for idx, v in enumerate(doc.variants):
+                    active_sku = v.store_sku if current_mode == "live" else v.product_sku or v.store_sku or v.sku
+                    mapped_variants.append({
+                        "id": idx + 1,
+                        "product_id": 999,
+                        "size": v.size,
+                        "color": v.color,
+                        "color_hex": v.color_hex,
+                        "price": v.price_paise,
+                        "is_active": v.in_stock,
+                        "sku": active_sku,
+                        "store_sku": v.store_sku,
+                        "product_sku": v.product_sku,
+                    })
+                return ProductRead(
+                    id=999,
+                    slug=doc.slug,
+                    name=doc.name,
+                    description=doc.description,
+                    category=doc.category,
+                    base_price=doc.base_price_paise,
+                    is_active=doc.is_active,
+                    is_demo=doc.is_demo,
+                    created_at=doc.created_at,
+                    updated_at=doc.updated_at,
+                    variants=mapped_variants,
+                    images=[],
+                )
+        except Exception as e:
+            logger.warning(f"Error checking MongoDB fallback for slug '{slug}': {e}")
+
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Product with slug '{slug}' not found.",

@@ -227,7 +227,7 @@ export const BagPage: React.FC = () => {
             </div>
             <h2 className="text-xl font-bold text-[#F4F0E8]">Your bag is currently empty</h2>
             <p className="text-xs text-[#A8A29E] mt-2 max-w-sm mx-auto leading-relaxed">
-              Explore our architectural hoodies, boxy graphic tees, and tactical cargos.
+              Explore our architectural hoodies, heavyweight sweatshirts, and oversized graphic tees.
             </p>
             <Link
               to="/shop"

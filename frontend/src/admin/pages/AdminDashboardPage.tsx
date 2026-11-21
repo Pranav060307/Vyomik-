@@ -23,9 +23,21 @@ export const AdminDashboardPage: React.FC = () => {
   const [apiLatency, setApiLatency] = useState<number | null>(null);
   const [storeMode, setStoreMode] = useState<string>('live');
   const [loading, setLoading] = useState<boolean>(true);
+  const [totalNetSalesPaise, setTotalNetSalesPaise] = useState<number>(348200);
+  const [totalOrdersCount, setTotalOrdersCount] = useState<number>(14);
+  const [aovPaise, setAovPaise] = useState<number>(24871);
+  const [salesTrend, setSalesTrend] = useState<{ day: string; amount_paise: number; orders_count: number }[]>([
+    { day: 'Mon', amount_paise: 3200000, orders_count: 13 },
+    { day: 'Tue', amount_paise: 4800000, orders_count: 19 },
+    { day: 'Wed', amount_paise: 4100000, orders_count: 16 },
+    { day: 'Thu', amount_paise: 5600000, orders_count: 22 },
+    { day: 'Fri', amount_paise: 7200000, orders_count: 29 },
+    { day: 'Sat', amount_paise: 6500000, orders_count: 26 },
+    { day: 'Sun', amount_paise: 3420000, orders_count: 14 },
+  ]);
 
-  // Recent orders mock/local state
-  const [recentOrders] = useState<Partial<AdminOrder>[]>([
+  // Recent orders state
+  const [recentOrders, setRecentOrders] = useState<Partial<AdminOrder>[]>([
     {
       orderNumber: 'VYO-784912',
       customerName: 'Aarav Sharma',
@@ -68,10 +80,28 @@ export const AdminDashboardPage: React.FC = () => {
     setLoading(true);
     const start = performance.now();
     try {
-      const waitlistRes = await fetch(`${API_BASE_URL}/api/v1/waitlist/emails`).catch(() => null);
-      if (waitlistRes && waitlistRes.ok) {
-        const waitlistData = await waitlistRes.json().catch(() => ({}));
-        setWaitlistCount(waitlistData.count || (waitlistData.emails?.length ?? 0));
+      // Primary: fetch aggregated admin dashboard analytics
+      const dashRes = await fetch(`${API_BASE_URL}/api/v1/admin/dashboard`).catch(() => null);
+      if (dashRes && dashRes.ok) {
+        const data = await dashRes.json();
+        if (data.total_net_sales_paise !== undefined) setTotalNetSalesPaise(data.total_net_sales_paise);
+        if (data.total_orders_count !== undefined) setTotalOrdersCount(data.total_orders_count);
+        if (data.aov_paise !== undefined) setAovPaise(data.aov_paise);
+        if (data.waitlist_subscribers_count !== undefined) setWaitlistCount(data.waitlist_subscribers_count);
+        if (Array.isArray(data.sales_7d) && data.sales_7d.length > 0) setSalesTrend(data.sales_7d);
+        if (Array.isArray(data.recent_orders) && data.recent_orders.length > 0) {
+          setRecentOrders(
+            data.recent_orders.map((r: any) => ({
+              orderNumber: r.order_number,
+              customerName: r.customer_name,
+              totalPaise: r.total_paise,
+              status: r.status,
+              paymentStatus: r.payment_status,
+              paymentMethod: r.payment_method,
+              createdAt: r.created_at,
+            }))
+          );
+        }
       }
 
       const prodRes = await fetch(`${API_BASE_URL}/api/v1/products`).catch(() => null);
@@ -140,7 +170,7 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Total Net Sales"
-          value="₹3,48,200"
+          value={`₹${(totalNetSalesPaise / 100).toLocaleString('en-IN')}`}
           delta={{ value: '+18.4% vs last week', isPositive: true }}
           subtitle="Gross sales less returns & discounts"
           icon={TrendingUp}
@@ -148,14 +178,14 @@ export const AdminDashboardPage: React.FC = () => {
         />
         <MetricCard
           title="Total Orders"
-          value="142"
+          value={String(totalOrdersCount)}
           delta={{ value: '+12 today', isPositive: true }}
           subtitle="Prepaid: 78% | COD: 22%"
           icon={ShoppingBag}
         />
         <MetricCard
           title="Average Order Value"
-          value="₹2,452"
+          value={`₹${(aovPaise / 100).toLocaleString('en-IN')}`}
           delta={{ value: '+4.2%', isPositive: true }}
           subtitle="Standard benchmark for core drops"
           icon={DollarSign}
@@ -189,28 +219,24 @@ export const AdminDashboardPage: React.FC = () => {
 
           {/* Clean minimalist bar visual */}
           <div className="h-52 w-full flex items-end gap-3 pt-6 pb-2 px-2 border-b border-[#242321]">
-            {[
-              { day: 'Mon', val: 32000, h: '45%' },
-              { day: 'Tue', val: 48000, h: '62%' },
-              { day: 'Wed', val: 41000, h: '55%' },
-              { day: 'Thu', val: 62000, h: '78%' },
-              { day: 'Fri', val: 89000, h: '94%' },
-              { day: 'Sat', val: 54000, h: '68%' },
-              { day: 'Sun', val: 76000, h: '88%' },
-            ].map((bar) => (
-              <div key={bar.day} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
-                <div className="text-[10px] text-[#A8A29E] opacity-0 group-hover:opacity-100 transition-opacity font-semibold">
-                  ₹{(bar.val / 1000).toFixed(0)}k
+            {salesTrend.map((bar) => {
+              const maxPaise = Math.max(...salesTrend.map((s) => s.amount_paise), 1);
+              const heightPct = Math.round((bar.amount_paise / maxPaise) * 85) + 10;
+              return (
+                <div key={bar.day} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+                  <div className="text-[10px] text-[#A8A29E] opacity-0 group-hover:opacity-100 transition-opacity font-semibold">
+                    ₹{Math.round(bar.amount_paise / 100000)}k
+                  </div>
+                  <div
+                    style={{ height: `${heightPct}%` }}
+                    className="w-full bg-[#201E1C] group-hover:bg-[#C85A2E] rounded-t-lg transition-all duration-300"
+                  />
+                  <span className="text-xs text-[#716B63] group-hover:text-[#F4F0E8] transition-colors font-medium">
+                    {bar.day}
+                  </span>
                 </div>
-                <div
-                  style={{ height: bar.h }}
-                  className="w-full bg-[#201E1C] group-hover:bg-[#C85A2E] rounded-t-lg transition-all duration-300"
-                />
-                <span className="text-xs text-[#716B63] group-hover:text-[#F4F0E8] transition-colors font-medium">
-                  {bar.day}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-4 flex items-center justify-between text-xs text-[#A8A29E]">

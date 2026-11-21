@@ -156,10 +156,10 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'home', onSelectCatego
             zIndex: 50,
           }}
         >
-          <span onClick={() => handleCollectionsClick('all')}>All Collections</span>
-          <span onClick={() => handleCollectionsClick('plain')}>Plain Tees</span>
-          <span onClick={() => handleCollectionsClick('wordmark')}>Wordmark Tees</span>
-          <span onClick={() => handleCollectionsClick('hoodies')}>Oversized Hoodies</span>
+          <span onClick={() => handleCollectionsClick('all')}>All Pieces</span>
+          <span onClick={() => handleCollectionsClick('oversized')}>Oversized Tees</span>
+          <span onClick={() => handleCollectionsClick('sweatshirt')}>Sweatshirts</span>
+          <span onClick={() => handleCollectionsClick('hoodies')}>Hoodies</span>
         </div>
       )}
 

@@ -48,18 +48,16 @@ describe('VYOMIK — Shop All Page Component & Interactions', () => {
     expect(screen.getByText(/explore our complete range of premium streetwear/i)).toBeInTheDocument();
   });
 
-  it('2. renders all 6 horizontal category selector options', () => {
+  it('2. renders all 4 horizontal category selector options', () => {
     renderWithProviders(<ShopAllPage />);
 
     const catNav = screen.getByRole('navigation', { name: /category selection/i });
     expect(catNav).toBeInTheDocument();
 
     expect(within(catNav).getByRole('button', { name: /all products/i })).toBeInTheDocument();
+    expect(within(catNav).getByRole('button', { name: /oversized/i })).toBeInTheDocument();
+    expect(within(catNav).getByRole('button', { name: /sweatshirts/i })).toBeInTheDocument();
     expect(within(catNav).getByRole('button', { name: /hoodies/i })).toBeInTheDocument();
-    expect(within(catNav).getByRole('button', { name: /t-shirts/i })).toBeInTheDocument();
-    expect(within(catNav).getByRole('button', { name: /cargos/i })).toBeInTheDocument();
-    expect(within(catNav).getByRole('button', { name: /jackets/i })).toBeInTheDocument();
-    expect(within(catNav).getByRole('button', { name: /accessories/i })).toBeInTheDocument();
   });
 
   it('3. filters product catalog when a horizontal category is clicked', async () => {
@@ -73,7 +71,7 @@ describe('VYOMIK — Shop All Page Component & Interactions', () => {
     await waitFor(() => {
       expect(screen.getByText(/core hoodie.*ivory/i)).toBeInTheDocument();
       expect(screen.getByText(/core hoodie.*rust/i)).toBeInTheDocument();
-      expect(screen.queryByText(/terrain cargos/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/cyber anime/i)).not.toBeInTheDocument();
     });
   });
 

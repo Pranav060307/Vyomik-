@@ -69,37 +69,28 @@ export const HomeFooter: React.FC<HomeFooterProps> = ({ onSelectCategory }) => {
               <li>
                 <button
                   type="button"
+                  onClick={() => handleCategoryClick('oversized')}
+                  className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
+                >
+                  Oversized Tees
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => handleCategoryClick('sweatshirt')}
+                  className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
+                >
+                  Sweatshirts
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   onClick={() => handleCategoryClick('hoodies')}
                   className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
                 >
                   Hoodies
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick('plain')}
-                  className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
-                >
-                  T-Shirts
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick('cargos')}
-                  className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
-                >
-                  Cargos
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick('accessories')}
-                  className="hover:text-[#A64B2A] transition-colors cursor-pointer text-left"
-                >
-                  Accessories
                 </button>
               </li>
             </ul>

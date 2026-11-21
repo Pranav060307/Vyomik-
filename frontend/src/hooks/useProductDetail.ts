@@ -17,6 +17,8 @@ export interface UseProductDetailResult {
   setQuantity: (qty: number) => void;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 export function useProductDetail(slug?: string): UseProductDetailResult {
   // Default to Core Hoodie – Ivory (vy-prod-01)
   const defaultProduct = SHOP_PRODUCTS[0];
@@ -51,12 +53,17 @@ export function useProductDetail(slug?: string): UseProductDetailResult {
         SHOP_PRODUCTS.find((p) => p.slug === slug || p.id === slug) || defaultProduct;
 
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/products/${slug || 'core-hoodie-ivory'}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/products/${slug || fallback.slug}`);
         if (!response.ok) {
           throw new Error(`Server returned status ${response.status}`);
         }
         const apiData = await response.json();
         if (isMounted && apiData) {
+          // Extract sizes and colors from API variants if available
+          const variantSizes = (apiData.variants && apiData.variants.length > 0)
+            ? Array.from(new Set(apiData.variants.map((v: any) => v.size as any)))
+            : fallback.availableSizes;
+
           // Merge API data with rich frontend presentation fields
           const merged: ShopProduct = {
             ...fallback,
@@ -64,6 +71,7 @@ export function useProductDetail(slug?: string): UseProductDetailResult {
             description: apiData.description || fallback.description,
             price: apiData.base_price ? Math.round(apiData.base_price / 100) : fallback.price,
             pricePaise: apiData.base_price || fallback.pricePaise,
+            availableSizes: variantSizes as any,
           };
           setProduct(merged);
           setError(null);

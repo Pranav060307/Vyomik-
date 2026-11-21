@@ -63,7 +63,7 @@ class CreateProductRequest(BaseModel):
     slug: str
     name: str
     description: str = ""
-    category: str = "plain-tees"
+    category: str = "oversized"
     base_price: int = 79900
     image_url: Optional[str] = None
     variants: List[CreateProductVariantInput] = []

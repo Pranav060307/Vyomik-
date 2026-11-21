@@ -93,13 +93,13 @@ describe('CollectionsPage Component', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/shop?cat=hoodies');
     }
 
-    // Click Urban Terrain card -> should navigate to /shop?cat=cargos
+    // Click Urban Terrain card -> should navigate to /shop?cat=sweatshirt
     const terrainHeading = screen.getByRole('heading', { name: 'URBAN TERRAIN' });
     const terrainCard = terrainHeading.closest('[role="button"]');
     expect(terrainCard).toBeTruthy();
     if (terrainCard) {
       fireEvent.click(terrainCard);
-      expect(mockNavigate).toHaveBeenCalledWith('/shop?cat=cargos');
+      expect(mockNavigate).toHaveBeenCalledWith('/shop?cat=sweatshirt');
     }
   });
 

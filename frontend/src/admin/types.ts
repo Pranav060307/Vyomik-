@@ -81,7 +81,7 @@ export interface AdminProduct {
   slug: string;
   title: string;
   description: string;
-  category: 'hoodies' | 'tees' | 'oversized' | 'accessories';
+  category: 'oversized' | 'sweatshirt' | 'hoodies';
   basePricePaise: number;
   compareAtPricePaise?: number;
   isActive: boolean;

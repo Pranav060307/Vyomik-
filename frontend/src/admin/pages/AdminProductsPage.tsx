@@ -65,7 +65,7 @@ const FALLBACK_PRODUCTS: AdminProduct[] = [
     slug: 'wordmark-tee-rust',
     title: 'Wordmark Tee — Rust',
     description: 'Relaxed drop-shoulder tee with screenprinted high-density chest typography.',
-    category: 'tees',
+    category: 'oversized',
     basePricePaise: 179900,
     compareAtPricePaise: 229900,
     isActive: true,
@@ -86,7 +86,7 @@ const FALLBACK_PRODUCTS: AdminProduct[] = [
     slug: 'element-tee-black',
     title: 'Element Tee — Black',
     description: 'Clean minimalist tee with subtle tonal mountain contour print on the reverse.',
-    category: 'tees',
+    category: 'oversized',
     basePricePaise: 179900,
     compareAtPricePaise: 219900,
     isActive: true,
@@ -113,7 +113,7 @@ export const AdminProductsPage: React.FC = () => {
 
   const [newTitle, setNewTitle] = useState('');
   const [newSlug, setNewSlug] = useState('');
-  const [newCategory, setNewCategory] = useState<'hoodies' | 'tees' | 'oversized' | 'accessories'>('hoodies');
+  const [newCategory, setNewCategory] = useState<'oversized' | 'sweatshirt' | 'hoodies'>('oversized');
   const [newPriceINR, setNewPriceINR] = useState('2499');
   const [newGsm, setNewGsm] = useState('420');
   const [newDescription, setNewDescription] = useState('');
@@ -131,7 +131,7 @@ export const AdminProductsPage: React.FC = () => {
             slug: p.slug,
             title: p.title || p.name,
             description: p.description || '',
-            category: p.category?.includes('hoodie') ? 'hoodies' : 'tees',
+            category: p.category === 'sweatshirt' ? 'sweatshirt' : p.category?.includes('hoodie') ? 'hoodies' : 'oversized',
             basePricePaise: p.base_price || 249900,
             isActive: p.is_active ?? true,
             featured: Boolean(p.featured),
@@ -456,10 +456,9 @@ export const AdminProductsPage: React.FC = () => {
                     onChange={(e) => setNewCategory(e.target.value as any)}
                     className="w-full bg-[#0B0B0B] border border-[#242321] focus:border-[#C85A2E] rounded-xl px-4 py-3 text-xs text-[#F4F0E8] outline-none cursor-pointer"
                   >
-                    <option value="hoodies">Hoodies</option>
-                    <option value="tees">Tees</option>
                     <option value="oversized">Oversized</option>
-                    <option value="accessories">Accessories</option>
+                    <option value="sweatshirt">Sweatshirt</option>
+                    <option value="hoodies">Hoodies</option>
                   </select>
                 </div>
                 <div>

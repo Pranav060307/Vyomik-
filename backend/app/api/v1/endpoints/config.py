@@ -39,18 +39,25 @@ async def get_store_config() -> StoreConfigResponse:
     now_utc = datetime.now(timezone.utc)
     gate_active = is_gate_active(now_utc)
 
+    # Read runtime overrides set via Admin Console if any
+    from app.api.v1.endpoints.admin import _runtime_settings_overrides
+
+    store_mode = _runtime_settings_overrides.get("STORE_MODE", settings.STORE_MODE)
+    free_shipping = _runtime_settings_overrides.get("FREE_SHIPPING_THRESHOLD_PAISE", settings.FREE_SHIPPING_THRESHOLD_PAISE)
+    cod_fee = _runtime_settings_overrides.get("COD_FEE_PAISE", settings.COD_FEE_PAISE)
+
     return StoreConfigResponse(
         store_name="VYOMIK",
-        store_mode=settings.STORE_MODE,
+        store_mode=store_mode,
         launch_date=settings.LAUNCH_DATE,
         launch_at=settings.LAUNCH_AT,
         server_time=now_utc.isoformat(),
         gate_enabled=gate_active,
         payment_provider=settings.PAYMENT_PROVIDER,
         cod_available=settings.COD_AVAILABLE,
-        free_shipping_threshold_paise=settings.FREE_SHIPPING_THRESHOLD_PAISE,
+        free_shipping_threshold_paise=free_shipping,
         default_shipping_fee_paise=settings.DEFAULT_SHIPPING_FEE_PAISE,
-        cod_fee_paise=settings.COD_FEE_PAISE,
+        cod_fee_paise=cod_fee,
         demo_content=True,
         contact_email=settings.CONTACT_EMAIL,
         instagram_url=settings.INSTAGRAM_URL,

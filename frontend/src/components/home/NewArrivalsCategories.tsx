@@ -10,28 +10,22 @@ export const NewArrivalsCategories: React.FC<NewArrivalsCategoriesProps> = ({ on
 
   const categories = [
     {
+      id: 'oversized',
+      label: 'OVERSIZED',
+      image: '/images/vyomik/new-arrivals/tshirts.webp',
+      alt: 'VYOMIK Oversized Graphic Tees',
+    },
+    {
+      id: 'sweatshirt',
+      label: 'SWEATSHIRTS',
+      image: '/images/vyomik/new-arrivals/cargos.webp',
+      alt: 'VYOMIK Heavyweight Crewneck Sweatshirts',
+    },
+    {
       id: 'hoodies',
       label: 'HOODIES',
       image: '/images/vyomik/new-arrivals/hoodies.webp',
-      alt: 'VYOMIK Oversized Hoodies',
-    },
-    {
-      id: 'plain',
-      label: 'T-SHIRTS',
-      image: '/images/vyomik/new-arrivals/tshirts.webp',
-      alt: 'VYOMIK Heavyweight T-Shirts',
-    },
-    {
-      id: 'cargos',
-      label: 'CARGOS',
-      image: '/images/vyomik/new-arrivals/cargos.webp',
-      alt: 'VYOMIK Technical Cargos',
-    },
-    {
-      id: 'accessories',
-      label: 'ACCESSORIES',
-      image: '/images/vyomik/new-arrivals/accessories.webp',
-      alt: 'VYOMIK Headwear and Accessories',
+      alt: 'VYOMIK Architectural Oversized Hoodies',
     },
   ];
 
@@ -39,7 +33,7 @@ export const NewArrivalsCategories: React.FC<NewArrivalsCategoriesProps> = ({ on
     if (onSelectCategory) {
       onSelectCategory(catId);
     } else {
-      navigate(`/collections?cat=${catId}`);
+      navigate(`/shop?cat=${catId}`);
     }
   };
 
@@ -47,7 +41,7 @@ export const NewArrivalsCategories: React.FC<NewArrivalsCategoriesProps> = ({ on
     if (onSelectCategory) {
       onSelectCategory('all');
     } else {
-      navigate('/collections');
+      navigate('/shop?cat=all');
     }
   };
 
@@ -79,8 +73,8 @@ export const NewArrivalsCategories: React.FC<NewArrivalsCategoriesProps> = ({ on
             </button>
           </div>
 
-          {/* Right Column: 4 Category Image Cards */}
-          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {/* Right Column: 3 Category Image Cards */}
+          <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
             {categories.map((cat) => (
               <div
                 key={cat.id}

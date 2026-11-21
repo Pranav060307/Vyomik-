@@ -38,10 +38,23 @@ export const AdminSettingsPage: React.FC = () => {
     fetchConfig();
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSavedFeedback(true);
-    setTimeout(() => setSavedFeedback(false), 2500);
+    try {
+      await fetch(`${API_BASE_URL}/api/v1/admin/settings`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          free_shipping_threshold_paise: Number(freeShippingThreshold) * 100,
+          cod_fee_paise: Number(codFee) * 100,
+          store_mode: storeMode,
+        }),
+      });
+      setSavedFeedback(true);
+      setTimeout(() => setSavedFeedback(false), 2500);
+    } catch (err) {
+      console.error('Failed to save settings:', err);
+    }
   };
 
   return (

@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SHOP_PRODUCTS } from '../../config/shopProducts';
+import { SHOP_PRODUCTS, ShopProduct } from '../../config/shopProducts';
 import { FilterSidebar, FilterState } from './FilterSidebar';
 import { ProductGridArea } from './ProductGridArea';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 interface ShopMainListingProps {
   initialCategory?: string;
@@ -32,9 +34,69 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
     category: urlCategory,
   });
 
+  const [catalogProducts, setCatalogProducts] = useState<ShopProduct[]>(SHOP_PRODUCTS);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState<boolean>(false);
+
+  // Fetch live products from backend to ensure Qikink / MongoDB items display
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveProducts() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/products`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0 && isMounted) {
+            const liveMapped: ShopProduct[] = data.map((p: any) => {
+              const existing = SHOP_PRODUCTS.find((sp) => sp.slug === p.slug);
+              if (existing) {
+                return {
+                  ...existing,
+                  price: p.base_price ? Math.round(p.base_price / 100) : existing.price,
+                  pricePaise: p.base_price || existing.pricePaise,
+                };
+              }
+              const isSweatshirt = p.category === 'sweatshirt' || p.slug?.includes('sweatshirt');
+              const isHoodie = p.category?.includes('hoodie') || p.slug?.includes('hoodie');
+              const catKey = isSweatshirt ? 'sweatshirt' : isHoodie ? 'hoodies' : 'oversized';
+              const catLabel = isSweatshirt ? 'Sweatshirt' : isHoodie ? 'Hoodies' : 'Oversized';
+              return {
+                id: String(p.id || p.slug),
+                slug: p.slug,
+                name: p.name || p.title,
+                category: catKey as any,
+                categoryLabel: catLabel,
+                price: p.base_price ? Math.round(p.base_price / 100) : 799,
+                oldPrice: p.base_price ? Math.round((p.base_price / 100) * 1.35) : 1199,
+                pricePaise: p.base_price || 79900,
+                color: '#F4F0E8',
+                colorName: 'White',
+                swatches: [{ name: 'White', hex: '#F4F0E8' }, { name: 'Black', hex: '#141414' }],
+                availableSizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+                primaryImage: p.images?.[0]?.url || '/assets/oversized-basic-tee.png',
+                hoverImage: '/assets/rack-tees.png',
+                description: p.description || '',
+                fabricSpecs: p.fabric_specs || '240 GSM Combed Cotton',
+              };
+            });
+
+            const combined = [...liveMapped];
+            for (const sp of SHOP_PRODUCTS) {
+              if (!combined.some((c) => c.slug === sp.slug)) {
+                combined.push(sp);
+              }
+            }
+            setCatalogProducts(combined);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load live products for shop catalog:', err);
+      }
+    }
+    loadLiveProducts();
+    return () => { isMounted = false; };
+  }, []);
 
   // Sync category changes from parent / URL
   useEffect(() => {
@@ -47,22 +109,20 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
   // Compute category counts
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {
-      all: SHOP_PRODUCTS.length,
+      all: catalogProducts.length,
+      oversized: 0,
+      sweatshirt: 0,
       hoodies: 0,
-      't-shirts': 0,
-      cargos: 0,
-      jackets: 0,
-      accessories: 0,
     };
 
-    SHOP_PRODUCTS.forEach((p) => {
+    catalogProducts.forEach((p) => {
       if (counts[p.category] !== undefined) {
         counts[p.category]++;
       }
     });
 
     return counts;
-  }, []);
+  }, [catalogProducts]);
 
   useEffect(() => {
     if (onCategoryCountChange) {
@@ -96,7 +156,7 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
 
   // Filter and sort execution
   const filteredAndSortedProducts = useMemo(() => {
-    let list = [...SHOP_PRODUCTS];
+    let list = [...catalogProducts];
 
     // 1. Category Filter
     if (filters.category && filters.category !== 'all') {
@@ -170,6 +230,7 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
               filters={filters}
               onChange={handleFilterChange}
               onClearAll={handleClearAll}
+              categoryCounts={categoryCounts}
             />
           </div>
 
@@ -211,6 +272,7 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
               onClearAll={handleClearAll}
               isMobileDrawer={true}
               onCloseMobileDrawer={() => setMobileDrawerOpen(false)}
+              categoryCounts={categoryCounts}
             />
           </div>
         </div>

@@ -35,17 +35,17 @@ const RECOMMENDED_PRODUCTS: RecommendedProduct[] = [
   },
   {
     id: 'vy-prod-03',
-    slug: 'terrain-cargos-charcoal',
-    name: 'Terrain Cargos – Charcoal',
-    price: 2299,
+    slug: 'heavyweight-sweatshirt-stone',
+    name: 'Heavyweight Sweatshirt – Stone',
+    price: 1499,
     image: '/images/vyomik/products/terrain-cargos-charcoal.webp',
   },
   {
     id: 'vy-prod-07',
-    slug: 'vyomik-cap-sand',
-    name: 'VYOMIK Cap – Sand',
-    price: 899,
-    image: '/images/vyomik/products/vyomik-cap-sand.webp',
+    slug: 'cyber-anime-oversized-tee-white',
+    name: 'Cyber Anime Oversized Tee',
+    price: 799,
+    image: '/assets/oversized-basic-tee.png',
   },
 ];
 

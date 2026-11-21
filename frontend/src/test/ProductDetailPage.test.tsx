@@ -240,8 +240,8 @@ describe('VYOMIK — Product Detail Page (PDP) Full Implementation', () => {
     expect(screen.getByText('Core Hoodie – Black')).toBeInTheDocument();
     expect(screen.getByText('Core Hoodie – Rust')).toBeInTheDocument();
     expect(screen.getByText('Element Tee – Black')).toBeInTheDocument();
-    expect(screen.getByText('Terrain Cargos – Charcoal')).toBeInTheDocument();
-    expect(screen.getByText('VYOMIK Cap – Sand')).toBeInTheDocument();
+    expect(screen.getByText('Heavyweight Sweatshirt – Stone')).toBeInTheDocument();
+    expect(screen.getByText('Cyber Anime Oversized Tee')).toBeInTheDocument();
   });
 
   it('11. opens fullscreen Lightbox when expand button is clicked', () => {

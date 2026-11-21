@@ -114,31 +114,31 @@ export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onSelectCategory }) => {
               <div className="absolute top-full left-0 mt-2 w-48 rounded-xl bg-[#141210]/95 backdrop-blur-md border border-[#242321] p-2 shadow-2xl flex flex-col gap-1 z-40">
                 <button
                   type="button"
+                  onClick={() => handleCategoryClick('oversized')}
+                  className="text-left px-3 py-2 text-xs font-montserrat text-[#D9D1C3] hover:text-[#F4F0E8] hover:bg-[#242321] rounded-lg transition-colors cursor-pointer"
+                >
+                  Oversized Tees
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCategoryClick('sweatshirt')}
+                  className="text-left px-3 py-2 text-xs font-montserrat text-[#D9D1C3] hover:text-[#F4F0E8] hover:bg-[#242321] rounded-lg transition-colors cursor-pointer"
+                >
+                  Sweatshirts
+                </button>
+                <button
+                  type="button"
                   onClick={() => handleCategoryClick('hoodies')}
                   className="text-left px-3 py-2 text-xs font-montserrat text-[#D9D1C3] hover:text-[#F4F0E8] hover:bg-[#242321] rounded-lg transition-colors cursor-pointer"
                 >
-                  Oversized Hoodies
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick('plain')}
-                  className="text-left px-3 py-2 text-xs font-montserrat text-[#D9D1C3] hover:text-[#F4F0E8] hover:bg-[#242321] rounded-lg transition-colors cursor-pointer"
-                >
-                  Boxy T-Shirts
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleCategoryClick('wordmark')}
-                  className="text-left px-3 py-2 text-xs font-montserrat text-[#D9D1C3] hover:text-[#F4F0E8] hover:bg-[#242321] rounded-lg transition-colors cursor-pointer"
-                >
-                  Signature Wordmark
+                  Hoodies
                 </button>
                 <button
                   type="button"
                   onClick={() => handleCategoryClick('all')}
                   className="text-left px-3 py-2 text-xs font-montserrat text-[#A64B2A] font-semibold hover:bg-[#242321] rounded-lg transition-colors cursor-pointer border-t border-[#242321] mt-1 pt-2"
                 >
-                  View All Products &rarr;
+                  View All Pieces &rarr;
                 </button>
               </div>
             )}
@@ -285,17 +285,24 @@ export const HomeNavbar: React.FC<HomeNavbarProps> = ({ onSelectCategory }) => {
           </button>
           <button
             type="button"
+            onClick={() => handleCategoryClick('oversized')}
+            className="text-left text-[#D9D1C3] text-sm py-1"
+          >
+            Shop Oversized Tees
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCategoryClick('sweatshirt')}
+            className="text-left text-[#D9D1C3] text-sm py-1"
+          >
+            Shop Sweatshirts
+          </button>
+          <button
+            type="button"
             onClick={() => handleCategoryClick('hoodies')}
             className="text-left text-[#D9D1C3] text-sm py-1"
           >
             Shop Hoodies
-          </button>
-          <button
-            type="button"
-            onClick={() => handleCategoryClick('plain')}
-            className="text-left text-[#D9D1C3] text-sm py-1"
-          >
-            Shop T-Shirts
           </button>
           <button
             type="button"

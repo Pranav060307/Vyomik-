@@ -37,7 +37,7 @@ export const SearchBar: React.FC = () => {
 
   if (!isSearchOpen) return null;
 
-  const trendingTags = ['Core Hoodie', 'Element Tee', 'Terrain Cargos', 'Cap', 'Rust Hoodie'];
+  const trendingTags = ['Oversized Tees', 'Cyber Anime', 'Sweatshirts', 'Core Hoodie', 'Retro Maroon'];
 
   return (
     <>
@@ -65,7 +65,7 @@ export const SearchBar: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Search hoodies, t-shirts, cargos, accessories…"
+              placeholder="Search oversized tees, sweatshirts, hoodies…"
               className="flex-1 bg-transparent outline-none text-[#F4F0E8] placeholder:text-[#716B63] text-base sm:text-xl font-medium tracking-wide"
             />
             {query && (

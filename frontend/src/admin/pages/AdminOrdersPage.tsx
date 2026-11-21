@@ -199,6 +199,66 @@ export const AdminOrdersPage: React.FC = () => {
   const [lookupLoading, setLookupLoading] = useState<boolean>(false);
   const [lookupError, setLookupError] = useState<string | null>(null);
 
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/orders`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped: AdminOrder[] = data.map((d: any) => ({
+            id: d.id,
+            orderNumber: d.order_number,
+            customerName: d.customer_name,
+            customerEmail: d.customer_email,
+            customerPhone: d.customer_phone,
+            status: d.status,
+            paymentStatus: d.payment_status,
+            paymentMethod: d.payment_method,
+            subtotalPaise: d.subtotal_paise,
+            shippingFeePaise: d.shipping_fee_paise,
+            codFeePaise: d.cod_fee_paise,
+            discountPaise: d.discount_paise || 0,
+            totalPaise: d.total_paise,
+            items: (d.items || []).map((it: any) => ({
+              id: it.id,
+              sku: it.sku,
+              productTitle: it.product_title,
+              variantTitle: it.variant_title,
+              quantity: it.quantity,
+              unitPricePaise: it.unit_price_paise,
+              totalPricePaise: it.total_price_paise,
+              image: it.image,
+            })),
+            shippingAddress: {
+              fullName: d.shipping_address?.full_name || '',
+              phone: d.shipping_address?.phone || '',
+              addressLine1: d.shipping_address?.address_line1 || '',
+              addressLine2: d.shipping_address?.address_line2 || '',
+              city: d.shipping_address?.city || '',
+              state: d.shipping_address?.state || '',
+              postalCode: d.shipping_address?.postal_code || '',
+              country: d.shipping_address?.country || 'India',
+            },
+            qikinkOrderId: d.qikink_order_id,
+            qikinkStatus: d.qikink_status,
+            trackingNumber: d.tracking_number,
+            trackingUrl: d.tracking_url,
+            notes: d.notes,
+            createdAt: d.created_at,
+            updatedAt: d.updated_at,
+          }));
+          setOrders(mapped);
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch orders from backend:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
   useEffect(() => {
     const searchTarget = searchParams.get('search');
     if (searchTarget) {

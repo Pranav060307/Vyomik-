@@ -15,6 +15,7 @@ interface FilterSidebarProps {
   onClearAll: () => void;
   isMobileDrawer?: boolean;
   onCloseMobileDrawer?: () => void;
+  categoryCounts?: Record<string, number>;
 }
 
 export const FilterSidebar: React.FC<FilterSidebarProps> = ({
@@ -23,6 +24,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   onClearAll,
   isMobileDrawer = false,
   onCloseMobileDrawer,
+  categoryCounts,
 }) => {
   const [openCategories, setOpenCategories] = useState(true);
   const [openSizes, setOpenSizes] = useState(true);
@@ -31,11 +33,9 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   const [openSort, setOpenSort] = useState(true);
 
   const categories = [
-    { id: 'hoodies', label: 'Hoodies', count: 12 },
-    { id: 't-shirts', label: 'T-Shirts', count: 18 },
-    { id: 'cargos', label: 'Cargos', count: 8 },
-    { id: 'jackets', label: 'Jackets', count: 6 },
-    { id: 'accessories', label: 'Accessories', count: 10 },
+    { id: 'oversized', label: 'Oversized', count: categoryCounts?.oversized ?? 5 },
+    { id: 'sweatshirt', label: 'Sweatshirt', count: categoryCounts?.sweatshirt ?? 3 },
+    { id: 'hoodies', label: 'Hoodies', count: categoryCounts?.hoodies ?? 3 },
   ];
 
   const sizeRows = [

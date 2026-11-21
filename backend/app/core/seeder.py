@@ -1,6 +1,10 @@
 """
 Catalog Seeder for Local Development and Initial Testing.
-Populates products with variants and real Qikink Store & Product SKU mappings.
+Populates products with variants and real Qikink Store & Product SKU mappings
+under the 3 core categories:
+1. Oversized (POD Graphic T-Shirts)
+2. Sweatshirt (Heavyweight Boxy Crewnecks)
+3. Hoodies (Architectural 450 GSM Oversized Hoodies)
 """
 
 import logging
@@ -12,152 +16,214 @@ from app.models.product import Product, ProductVariant, VariantQikinkSku, Qikink
 logger = logging.getLogger("vyomik.seeder")
 
 SEED_PRODUCTS = [
+    # -------------------------------------------------------------
+    # 1. Category: oversized
+    # -------------------------------------------------------------
     {
         "slug": "unisex-oversized-classic-t-shirt-white",
-        "name": "Unisex Oversized Classic T-Shirt — White",
-        "description": "Architectural oversized silhouette in premium combed cotton with durable dropped shoulder and dense collar band. Direct integration with Qikink production line.",
-        "category": "plain-tees",
+        "name": "Unisex Oversized T-Shirt – Cyber Graphic White",
+        "description": "Heavyweight architectural oversized t-shirt in crisp white with signature futuristic cyber graphic print. Tailored boxy drape that maintains structured drop shoulders all day.",
+        "category": "oversized",
         "base_price": 79900,  # Rs. 799.00
         "variants": [
-            ("XS", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HCc", "UOsMRnHs-Wh-XS"),
-            ("S", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOZ", "UOsMRnHs-Wh-S"),
-            ("M", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOa", "UOsMRnHs-Wh-M"),
-            ("L", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOb", "UOsMRnHs-Wh-L"),
-            ("XL", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOU", "UOsMRnHs-Wh-XL"),
-            ("XXL", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOV", "UOsMRnHs-Wh-XXL"),
+            ("XS", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HCc", "UOsMRnHs-Wh-XS"),
+            ("S", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOZ", "UOsMRnHs-Wh-S"),
+            ("M", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOa", "UOsMRnHs-Wh-M"),
+            ("L", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOb", "UOsMRnHs-Wh-L"),
+            ("XL", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOU", "UOsMRnHs-Wh-XL"),
+            ("XXL", "Cyber White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOV", "UOsMRnHs-Wh-XXL"),
         ],
     },
     {
-        "slug": "essential-oversized-tee-black",
-        "name": "Essential Oversized Tee — Pitch Black",
-        "description": "Our signature oversized fit dyed in deep pitch black. Retains structure and saturation wash after wash.",
-        "category": "plain-tees",
-        "base_price": 119900,
+        "slug": "unisex-oversized-t-shirt-sunset-black",
+        "name": "Unisex Oversized T-Shirt – Sunset Graphic Black",
+        "description": "Pitch black oversized silhouette featuring vivid burnt orange sunset graphic art on the back and subtle chest monogram. Deep reactive dye stays pitch black wash after wash.",
+        "category": "oversized",
+        "base_price": 79900,
         "variants": [
-            ("S", "Pitch Black", 119900, "VY-PL-BLK-S", "VY-PL-BLK-S-SBX"),
-            ("M", "Pitch Black", 119900, "VY-PL-BLK-M", "VY-PL-BLK-M-SBX"),
-            ("L", "Pitch Black", 119900, "VY-PL-BLK-L", "VY-PL-BLK-L-SBX"),
-            ("XL", "Pitch Black", 119900, "VY-PL-BLK-XL", "VY-PL-BLK-XL-SBX"),
+            ("XS", "Pitch Black", 79900, "v-65082462-XS", "UOsMRnHs-Blk-XS"),
+            ("S", "Pitch Black", 79900, "v-65082462-S", "UOsMRnHs-Blk-S"),
+            ("M", "Pitch Black", 79900, "v-65082462-M", "UOsMRnHs-Blk-M"),
+            ("L", "Pitch Black", 79900, "v-65082462-L", "UOsMRnHs-Blk-L"),
+            ("XL", "Pitch Black", 79900, "v-65082462-XL", "UOsMRnHs-Blk-XL"),
+            ("XXL", "Pitch Black", 79900, "v-65082462-XXL", "UOsMRnHs-Blk-XXL"),
         ],
     },
     {
-        "slug": "essential-oversized-tee-olive",
-        "name": "Essential Oversized Tee — Washed Olive",
-        "description": "A custom olive pigment wash designed to pair effortlessly with ecru denim or charcoal trousers.",
-        "category": "plain-tees",
-        "base_price": 124900,
+        "slug": "unisex-oversized-t-shirt-emerald-green",
+        "name": "Unisex Oversized T-Shirt – Emerald Typography Green",
+        "description": "Earthy pine emerald oversized tee engineered with clean minimalist typography across the front and wide back line print. Relaxed fit with room to breathe.",
+        "category": "oversized",
+        "base_price": 89900,
         "variants": [
-            ("M", "Washed Olive", 124900, "VY-PL-OLV-M", "VY-PL-OLV-M-SBX"),
-            ("L", "Washed Olive", 124900, "VY-PL-OLV-L", "VY-PL-OLV-L-SBX"),
+            ("S", "Pine Emerald", 89900, "v-65082446-S", "UOsMRnHs-Grn-S"),
+            ("M", "Pine Emerald", 89900, "v-65082446-M", "UOsMRnHs-Grn-M"),
+            ("L", "Pine Emerald", 89900, "v-65082446-L", "UOsMRnHs-Grn-L"),
+            ("XL", "Pine Emerald", 89900, "v-65082446-XL", "UOsMRnHs-Grn-XL"),
         ],
     },
     {
-        "slug": "vyomik-wordmark-tee-ivory",
-        "name": "VYOMIK Signature Wordmark Tee — Ivory",
-        "description": "High-density matte plastisol print of the VYOMIK wordmark across the chest. Quiet branding for discerning wardrobes.",
-        "category": "wordmark-tees",
-        "base_price": 139900,
+        "slug": "unisex-oversized-t-shirt-retro-maroon",
+        "name": "Unisex Oversized T-Shirt – Retro Graphic Maroon",
+        "description": "Deep wine burgundy oversized t-shirt featuring vintage editorial illustrations. Soft-hand feel with durable boxy silhouette tailored for Indian streetwear.",
+        "category": "oversized",
+        "base_price": 89900,
         "variants": [
-            ("S", "Ivory", 139900, "VY-WM-IVO-S", "VY-WM-IVO-S-SBX"),
-            ("M", "Ivory", 139900, "VY-WM-IVO-M", "VY-WM-IVO-M-SBX"),
-            ("L", "Ivory", 139900, "VY-WM-IVO-L", "VY-WM-IVO-L-SBX"),
+            ("S", "Vintage Wine", 89900, "v-65080554-S", "UOsMRnHs-Mrn-S"),
+            ("M", "Vintage Wine", 89900, "v-65080554-M", "UOsMRnHs-Mrn-M"),
+            ("L", "Vintage Wine", 89900, "v-65080554-L", "UOsMRnHs-Mrn-L"),
+            ("XL", "Vintage Wine", 89900, "v-65080554-XL", "UOsMRnHs-Mrn-XL"),
         ],
     },
     {
-        "slug": "vyomik-wordmark-tee-black",
-        "name": "VYOMIK Signature Wordmark Tee — Black",
-        "description": "Charcoal base fabric contrasted with warm ivory micro-tracked wordmark.",
-        "category": "wordmark-tees",
-        "base_price": 139900,
+        "slug": "unisex-oversized-t-shirt-core-black",
+        "name": "Unisex Oversized T-Shirt – Minimalist Core Black",
+        "description": "The foundational black oversized streetwear tee. Minimalist chest emblem, heavy ribbed collar, and relaxed drop-shoulder cut.",
+        "category": "oversized",
+        "base_price": 79900,
         "variants": [
-            ("M", "Pitch Black", 139900, "VY-WM-BLK-M", "VY-WM-BLK-M-SBX"),
-            ("L", "Pitch Black", 139900, "VY-WM-BLK-L", "VY-WM-BLK-L-SBX"),
+            ("S", "Pitch Black", 79900, "v-65068402-S", "UOsMRnHs-CBlk-S"),
+            ("M", "Pitch Black", 79900, "v-65068402-M", "UOsMRnHs-CBlk-M"),
+            ("L", "Pitch Black", 79900, "v-65068402-L", "UOsMRnHs-CBlk-L"),
+            ("XL", "Pitch Black", 79900, "v-65068402-XL", "UOsMRnHs-CBlk-XL"),
+        ],
+    },
+
+    # -------------------------------------------------------------
+    # 2. Category: sweatshirt
+    # -------------------------------------------------------------
+    {
+        "slug": "heavyweight-oversized-sweatshirt-stone",
+        "name": "Heavyweight Oversized Sweatshirt – Raw Stone",
+        "description": "Heavyweight crewneck sweatshirt crafted from 380 GSM diagonal loopback French Terry in neutral raw stone. Perfectly balanced boxy silhouette.",
+        "category": "sweatshirt",
+        "base_price": 199900,
+        "variants": [
+            ("S", "Raw Stone", 199900, "VYO-SWT-STN-S", "VYO-SWT-STN-S-SBX"),
+            ("M", "Raw Stone", 199900, "VYO-SWT-STN-M", "VYO-SWT-STN-M-SBX"),
+            ("L", "Raw Stone", 199900, "VYO-SWT-STN-L", "VYO-SWT-STN-L-SBX"),
+            ("XL", "Raw Stone", 199900, "VYO-SWT-STN-XL", "VYO-SWT-STN-XL-SBX"),
         ],
     },
     {
-        "slug": "heavyweight-hoodie-stone",
-        "name": "Heavyweight Relaxed Hoodie — Raw Stone",
-        "description": "Constructed from loopback French terry with heavy ribbed hem and cuff bindings. No drawstrings for a pure, distraction-free neckline.",
+        "slug": "signature-oversized-sweatshirt-black",
+        "name": "Signature Oversized Sweatshirt – Pitch Black",
+        "description": "Monochromatic luxury sweatshirt with dropped shoulder profile, dense collar ribbing, and tactile tonal embroidery.",
+        "category": "sweatshirt",
+        "base_price": 199900,
+        "variants": [
+            ("S", "Pitch Black", 199900, "VYO-SWT-BLK-S", "VYO-SWT-BLK-S-SBX"),
+            ("M", "Pitch Black", 199900, "VYO-SWT-BLK-M", "VYO-SWT-BLK-M-SBX"),
+            ("L", "Pitch Black", 199900, "VYO-SWT-BLK-L", "VYO-SWT-BLK-L-SBX"),
+            ("XL", "Pitch Black", 199900, "VYO-SWT-BLK-XL", "VYO-SWT-BLK-XL-SBX"),
+        ],
+    },
+    {
+        "slug": "boxy-vintage-sweatshirt-olive",
+        "name": "Boxy Vintage Sweatshirt – Washed Olive",
+        "description": "Vintage-washed boxy sweatshirt in muted tactical olive. Heavyweight 400 GSM fleece provides warmth without stiffness.",
+        "category": "sweatshirt",
+        "base_price": 219900,
+        "variants": [
+            ("S", "Washed Olive", 219900, "VYO-SWT-OLV-S", "VYO-SWT-OLV-S-SBX"),
+            ("M", "Washed Olive", 219900, "VYO-SWT-OLV-M", "VYO-SWT-OLV-M-SBX"),
+            ("L", "Washed Olive", 219900, "VYO-SWT-OLV-L", "VYO-SWT-OLV-L-SBX"),
+            ("XL", "Washed Olive", 219900, "VYO-SWT-OLV-XL", "VYO-SWT-OLV-XL-SBX"),
+        ],
+    },
+
+    # -------------------------------------------------------------
+    # 3. Category: hoodies
+    # -------------------------------------------------------------
+    {
+        "slug": "core-hoodie-ivory",
+        "name": "Core Heavyweight Hoodie – Warm Ivory",
+        "description": "The defining VYOMIK silhouette. 450 GSM luxury French Terry, double-lined crossover hood that stays upright, and dropped shoulders.",
         "category": "hoodies",
-        "base_price": 279900,
+        "base_price": 249900,
         "variants": [
-            ("S", "Raw Stone", 279900, "VY-HD-STN-S", "VY-HD-STN-S-SBX"),
-            ("M", "Raw Stone", 279900, "VY-HD-STN-M", "VY-HD-STN-M-SBX"),
-            ("L", "Raw Stone", 279900, "VY-HD-STN-L", "VY-HD-STN-L-SBX"),
+            ("S", "Warm Ivory", 249900, "VYO-HOOD-IVR-S", "VYO-HOOD-IVR-S-SBX"),
+            ("M", "Warm Ivory", 249900, "VYO-HOOD-IVR-M", "VYO-HOOD-IVR-M-SBX"),
+            ("L", "Warm Ivory", 249900, "VYO-HOOD-IVR-L", "VYO-HOOD-IVR-L-SBX"),
+            ("XL", "Warm Ivory", 249900, "VYO-HOOD-IVR-XL", "VYO-HOOD-IVR-XL-SBX"),
         ],
     },
     {
-        "slug": "heavyweight-hoodie-olive",
-        "name": "Heavyweight Relaxed Hoodie — Washed Olive",
-        "description": "Rich olive French terry with substantial weight and drape. Kangaroo pouch pocket reinforced with bartacks.",
+        "slug": "core-hoodie-black",
+        "name": "Signature Boxy Hoodie – Midnight Black",
+        "description": "Architectural streetwear hoodie in jet black. Built for cold studio nights and everyday movement with a boxy oversized drape.",
         "category": "hoodies",
-        "base_price": 279900,
+        "base_price": 249900,
         "variants": [
-            ("M", "Washed Olive", 279900, "VY-HD-OLV-M", "VY-HD-OLV-M-SBX"),
-            ("L", "Washed Olive", 279900, "VY-HD-OLV-L", "VY-HD-OLV-L-SBX"),
+            ("S", "Midnight Black", 249900, "VYO-HOOD-BLK-S", "VYO-HOOD-BLK-S-SBX"),
+            ("M", "Midnight Black", 249900, "VYO-HOOD-BLK-M", "VYO-HOOD-BLK-M-SBX"),
+            ("L", "Midnight Black", 249900, "VYO-HOOD-BLK-L", "VYO-HOOD-BLK-L-SBX"),
+            ("XL", "Midnight Black", 249900, "VYO-HOOD-BLK-XL", "VYO-HOOD-BLK-XL-SBX"),
         ],
     },
     {
-        "slug": "heavyweight-hoodie-black",
-        "name": "Heavyweight Relaxed Hoodie — Pitch Black",
-        "description": "Maximum warmth, clean dropped-shoulder drape, engineered without cords for a modern, uncluttered look.",
+        "slug": "core-hoodie-rust",
+        "name": "Terracotta Drop Shoulder Hoodie – Burnt Rust",
+        "description": "Earthy terracotta oversized hoodie dyed in rich burnt rust. Finished with durable dropped shoulder seams and structured collar contour.",
         "category": "hoodies",
-        "base_price": 279900,
+        "base_price": 249900,
         "variants": [
-            ("S", "Pitch Black", 279900, "VY-HD-BLK-S", "VY-HD-BLK-S-SBX"),
-            ("M", "Pitch Black", 279900, "VY-HD-BLK-M", "VY-HD-BLK-M-SBX"),
-            ("L", "Pitch Black", 279900, "VY-HD-BLK-L", "VY-HD-BLK-L-SBX"),
+            ("S", "Burnt Rust", 249900, "VYO-HOOD-RST-S", "VYO-HOOD-RST-S-SBX"),
+            ("M", "Burnt Rust", 249900, "VYO-HOOD-RST-M", "VYO-HOOD-RST-M-SBX"),
+            ("L", "Burnt Rust", 249900, "VYO-HOOD-RST-L", "VYO-HOOD-RST-L-SBX"),
+            ("XL", "Burnt Rust", 249900, "VYO-HOOD-RST-XL", "VYO-HOOD-RST-XL-SBX"),
         ],
     },
 ]
 
 
 async def seed_demo_products_if_empty(session: AsyncSession) -> None:
-    """Inserts or updates products with real Qikink variant SKUs."""
-    # Check if the Unisex Oversized Classic T-Shirt exists
-    res = await session.execute(
-        select(Product).where(Product.slug == "unisex-oversized-classic-t-shirt-white")
-    )
-    existing_qikink_product = res.scalars().first()
-
-    if not existing_qikink_product:
-        logger.info("Adding Unisex Oversized Classic T-Shirt with active Qikink SKUs...")
-        item = SEED_PRODUCTS[0]
-        p = Product(
-            slug=item["slug"],
-            name=item["name"],
-            description=item["description"],
-            category=item["category"],
-            base_price=item["base_price"],
-            is_active=True,
-            is_demo=False,
+    """Inserts or updates products with real Qikink variant SKUs across all 3 categories."""
+    for item in SEED_PRODUCTS:
+        res = await session.execute(
+            select(Product).where(Product.slug == item["slug"])
         )
-        session.add(p)
-        await session.flush()
+        existing = res.scalars().first()
 
-        for size, color, price, live_sku, sandbox_sku in item["variants"]:
-            v = ProductVariant(
-                product_id=p.id,
-                size=size,
-                color=color,
-                price=price,
+        if not existing:
+            p = Product(
+                slug=item["slug"],
+                name=item["name"],
+                description=item["description"],
+                category=item["category"],
+                base_price=item["base_price"],
                 is_active=True,
+                is_demo=False,
             )
-            session.add(v)
+            session.add(p)
             await session.flush()
 
-            # Map Qikink SKU for sandbox & live
-            q_sku_sandbox = VariantQikinkSku(
-                variant_id=v.id,
-                environment=QikinkEnvironment.SANDBOX,
-                qikink_sku=sandbox_sku,
-            )
-            q_sku_live = VariantQikinkSku(
-                variant_id=v.id,
-                environment=QikinkEnvironment.LIVE,
-                qikink_sku=live_sku,
-            )
-            session.add_all([q_sku_sandbox, q_sku_live])
+            for size, color, price, live_sku, sandbox_sku in item["variants"]:
+                v = ProductVariant(
+                    product_id=p.id,
+                    size=size,
+                    color=color,
+                    price=price,
+                    is_active=True,
+                )
+                session.add(v)
+                await session.flush()
 
-        await session.commit()
-        logger.info("Unisex Oversized Classic T-Shirt with 6 sizes seeded successfully.")
+                q_sku_sandbox = VariantQikinkSku(
+                    variant_id=v.id,
+                    environment=QikinkEnvironment.SANDBOX,
+                    qikink_sku=sandbox_sku,
+                )
+                q_sku_live = VariantQikinkSku(
+                    variant_id=v.id,
+                    environment=QikinkEnvironment.LIVE,
+                    qikink_sku=live_sku,
+                )
+                session.add_all([q_sku_sandbox, q_sku_live])
+        else:
+            # Update category and name if needed
+            existing.category = item["category"]
+            existing.name = item["name"]
+
+    await session.commit()
+    logger.info("Synchronized 11 products with 3 exclusive categories in SQL database.")
