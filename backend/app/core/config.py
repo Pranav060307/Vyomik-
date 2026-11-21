@@ -74,6 +74,16 @@ class Settings(BaseSettings):
         description="Synchronous PostgreSQL connection URI used for Alembic migrations"
     )
 
+    # MongoDB Configuration
+    MONGODB_URL: str = Field(
+        default="mongodb://127.0.0.1:27017",
+        description="MongoDB connection URI"
+    )
+    MONGODB_DB_NAME: str = Field(
+        default="vyomik_db",
+        description="MongoDB database name"
+    )
+
     # Redis Cache & Background Queue
     REDIS_URL: str = "redis://localhost:6379/0"
 

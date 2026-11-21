@@ -104,12 +104,13 @@ export const BagPage: React.FC = () => {
       payment_method: form.paymentMethod,
       items: items.map((item) => ({
         product_id: item.productId,
-        title: item.title || item.name,
-        color: item.color,
-        size: item.size,
-        qty: item.quantity,
+        variant_id: item.variantId,
+        title: item.title || item.name || "VYOMIK Apparel",
+        color: item.color || "White",
+        size: item.size || "M",
+        qty: item.quantity || 1,
         price_paise: item.pricePaise || (item.price ? item.price * 100 : 249900),
-        sku: `VY-${(item.title || item.name || '').includes('Hoodie') ? 'HD' : (item.title || item.name || '').includes('Sweatshirt') ? 'SW' : 'TS'}-${(item.color || 'BLK').slice(0, 3).toUpperCase()}-${item.size || 'M'}`,
+        sku: (item as any).sku || (item as any).store_sku || (item as any).qikinkSkuMock || `VY-${(item.title || item.name || '').includes('Hoodie') ? 'HD' : (item.title || item.name || '').includes('Sweatshirt') ? 'SW' : 'TS'}-${(item.color || 'BLK').slice(0, 3).toUpperCase()}-${item.size || 'M'}`,
       })),
       total_paise: totalPaise,
       subtotal_paise: subtotalPaise,
@@ -117,7 +118,7 @@ export const BagPage: React.FC = () => {
     };
 
     try {
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/api/v1/orders/sandbox-test`;
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/api/v1/orders`;
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {

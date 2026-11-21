@@ -11,6 +11,14 @@ router = APIRouter()
 
 @router.get("/health", summary="Health check endpoint")
 async def health_check() -> Dict[str, Any]:
+    from app.mongodb.models.product import ProductDoc
+    mongo_status = "connected"
+    try:
+        mongo_count = await ProductDoc.count()
+    except Exception:
+        mongo_status = "disconnected"
+        mongo_count = 0
+
     return {
         "status": "ok",
         "service": settings.PROJECT_NAME,
@@ -19,5 +27,10 @@ async def health_check() -> Dict[str, Any]:
         "store_mode": settings.STORE_MODE,
         "payment_provider": settings.PAYMENT_PROVIDER,
         "qikink_mode": settings.QIKINK_MODE,
+        "mongodb": {
+            "status": mongo_status,
+            "database": settings.MONGODB_DB_NAME,
+            "products_count": mongo_count,
+        },
     }
 

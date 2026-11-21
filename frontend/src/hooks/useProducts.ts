@@ -81,8 +81,8 @@ export function useProducts(category?: string) {
               const logo = isWordmark ? 1 : 0;
               const fallbackImg = getFallbackImage(cat, type, logo);
               const cleanName = p.name.replace(/—.*$/, '').replace(/-.*$/, '').trim();
-              const salePrice = isHoodie ? 1799 : isWordmark ? 999 : 899;
-              const oldPrice = isHoodie ? 2299 : isWordmark ? 1399 : 1199;
+              const salePrice = p.base_price ? Math.round(p.base_price / 100) : (isHoodie ? 1799 : isWordmark ? 999 : 899);
+              const oldPrice = p.base_price ? Math.round((p.base_price / 100) * 1.35) : (isHoodie ? 2299 : isWordmark ? 1399 : 1199);
 
               const swatches = isHoodie
                 ? ['#a81818', '#111111', '#ffffff', '#3a2a1e']

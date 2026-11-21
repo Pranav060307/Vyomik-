@@ -19,6 +19,10 @@ class ProductVariantRead(BaseModel):
     color: str
     price: int
     is_active: bool
+    sku: Optional[str] = None
+    store_sku: Optional[str] = None
+    product_sku: Optional[str] = None
+    qikink_skus: List[VariantQikinkSkuRead] = []
 
     model_config = {"from_attributes": True}
 
@@ -45,4 +49,22 @@ class ProductRead(BaseModel):
     images: List[ProductImageRead] = []
 
     model_config = {"from_attributes": True}
+
+
+class CreateProductVariantInput(BaseModel):
+    size: str
+    color: str = "White"
+    price: int = 79900
+    store_sku: Optional[str] = None
+    product_sku: Optional[str] = None
+
+
+class CreateProductRequest(BaseModel):
+    slug: str
+    name: str
+    description: str = ""
+    category: str = "plain-tees"
+    base_price: int = 79900
+    image_url: Optional[str] = None
+    variants: List[CreateProductVariantInput] = []
 

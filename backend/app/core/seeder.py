@@ -1,28 +1,30 @@
 """
 Catalog Seeder for Local Development and Initial Testing.
-Populates 8 demo products with variants and Qikink SKU mappings if database is empty.
+Populates products with variants and real Qikink Store & Product SKU mappings.
 """
 
 import logging
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.product import Product, ProductVariant, VariantQikinkSku, ProductImage, QikinkEnvironment
+from app.models.product import Product, ProductVariant, VariantQikinkSku, QikinkEnvironment
 
 logger = logging.getLogger("vyomik.seeder")
 
-DEMO_SEED_DATA = [
+SEED_PRODUCTS = [
     {
-        "slug": "essential-oversized-tee-ivory",
-        "name": "Essential Oversized Plain Tee",
-        "description": "Designed with a dropped shoulder, dense ribbed neckband, and a roomy silhouette that drapes without sagging. A foundation piece for everyday presence.",
+        "slug": "unisex-oversized-classic-t-shirt-white",
+        "name": "Unisex Oversized Classic T-Shirt — White",
+        "description": "Architectural oversized silhouette in premium combed cotton with durable dropped shoulder and dense collar band. Direct integration with Qikink production line.",
         "category": "plain-tees",
-        "base_price": 119900,
+        "base_price": 79900,  # Rs. 799.00
         "variants": [
-            ("S", "Ivory", 119900, "VY-PL-IVO-S"),
-            ("M", "Ivory", 119900, "VY-PL-IVO-M"),
-            ("L", "Ivory", 119900, "VY-PL-IVO-L"),
-            ("XL", "Ivory", 119900, "VY-PL-IVO-XL"),
+            ("XS", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HCc", "UOsMRnHs-Wh-XS"),
+            ("S", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOZ", "UOsMRnHs-Wh-S"),
+            ("M", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOa", "UOsMRnHs-Wh-M"),
+            ("L", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOb", "UOsMRnHs-Wh-L"),
+            ("XL", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOU", "UOsMRnHs-Wh-XL"),
+            ("XXL", "White", 79900, "v-9R6n0iSDaVZW1sMHNxYpubfWpQPb8HOV", "UOsMRnHs-Wh-XXL"),
         ],
     },
     {
@@ -32,9 +34,10 @@ DEMO_SEED_DATA = [
         "category": "plain-tees",
         "base_price": 119900,
         "variants": [
-            ("S", "Pitch Black", 119900, "VY-PL-BLK-S"),
-            ("M", "Pitch Black", 119900, "VY-PL-BLK-M"),
-            ("L", "Pitch Black", 119900, "VY-PL-BLK-L"),
+            ("S", "Pitch Black", 119900, "VY-PL-BLK-S", "VY-PL-BLK-S-SBX"),
+            ("M", "Pitch Black", 119900, "VY-PL-BLK-M", "VY-PL-BLK-M-SBX"),
+            ("L", "Pitch Black", 119900, "VY-PL-BLK-L", "VY-PL-BLK-L-SBX"),
+            ("XL", "Pitch Black", 119900, "VY-PL-BLK-XL", "VY-PL-BLK-XL-SBX"),
         ],
     },
     {
@@ -44,8 +47,8 @@ DEMO_SEED_DATA = [
         "category": "plain-tees",
         "base_price": 124900,
         "variants": [
-            ("M", "Washed Olive", 124900, "VY-PL-OLV-M"),
-            ("L", "Washed Olive", 124900, "VY-PL-OLV-L"),
+            ("M", "Washed Olive", 124900, "VY-PL-OLV-M", "VY-PL-OLV-M-SBX"),
+            ("L", "Washed Olive", 124900, "VY-PL-OLV-L", "VY-PL-OLV-L-SBX"),
         ],
     },
     {
@@ -55,9 +58,9 @@ DEMO_SEED_DATA = [
         "category": "wordmark-tees",
         "base_price": 139900,
         "variants": [
-            ("S", "Ivory", 139900, "VY-WM-IVO-S"),
-            ("M", "Ivory", 139900, "VY-WM-IVO-M"),
-            ("L", "Ivory", 139900, "VY-WM-IVO-L"),
+            ("S", "Ivory", 139900, "VY-WM-IVO-S", "VY-WM-IVO-S-SBX"),
+            ("M", "Ivory", 139900, "VY-WM-IVO-M", "VY-WM-IVO-M-SBX"),
+            ("L", "Ivory", 139900, "VY-WM-IVO-L", "VY-WM-IVO-L-SBX"),
         ],
     },
     {
@@ -67,8 +70,8 @@ DEMO_SEED_DATA = [
         "category": "wordmark-tees",
         "base_price": 139900,
         "variants": [
-            ("M", "Pitch Black", 139900, "VY-WM-BLK-M"),
-            ("L", "Pitch Black", 139900, "VY-WM-BLK-L"),
+            ("M", "Pitch Black", 139900, "VY-WM-BLK-M", "VY-WM-BLK-M-SBX"),
+            ("L", "Pitch Black", 139900, "VY-WM-BLK-L", "VY-WM-BLK-L-SBX"),
         ],
     },
     {
@@ -78,9 +81,9 @@ DEMO_SEED_DATA = [
         "category": "hoodies",
         "base_price": 279900,
         "variants": [
-            ("S", "Raw Stone", 279900, "VY-HD-STN-S"),
-            ("M", "Raw Stone", 279900, "VY-HD-STN-M"),
-            ("L", "Raw Stone", 279900, "VY-HD-STN-L"),
+            ("S", "Raw Stone", 279900, "VY-HD-STN-S", "VY-HD-STN-S-SBX"),
+            ("M", "Raw Stone", 279900, "VY-HD-STN-M", "VY-HD-STN-M-SBX"),
+            ("L", "Raw Stone", 279900, "VY-HD-STN-L", "VY-HD-STN-L-SBX"),
         ],
     },
     {
@@ -90,8 +93,8 @@ DEMO_SEED_DATA = [
         "category": "hoodies",
         "base_price": 279900,
         "variants": [
-            ("M", "Washed Olive", 279900, "VY-HD-OLV-M"),
-            ("L", "Washed Olive", 279900, "VY-HD-OLV-L"),
+            ("M", "Washed Olive", 279900, "VY-HD-OLV-M", "VY-HD-OLV-M-SBX"),
+            ("L", "Washed Olive", 279900, "VY-HD-OLV-L", "VY-HD-OLV-L-SBX"),
         ],
     },
     {
@@ -101,23 +104,25 @@ DEMO_SEED_DATA = [
         "category": "hoodies",
         "base_price": 279900,
         "variants": [
-            ("S", "Pitch Black", 279900, "VY-HD-BLK-S"),
-            ("M", "Pitch Black", 279900, "VY-HD-BLK-M"),
-            ("L", "Pitch Black", 279900, "VY-HD-BLK-L"),
+            ("S", "Pitch Black", 279900, "VY-HD-BLK-S", "VY-HD-BLK-S-SBX"),
+            ("M", "Pitch Black", 279900, "VY-HD-BLK-M", "VY-HD-BLK-M-SBX"),
+            ("L", "Pitch Black", 279900, "VY-HD-BLK-L", "VY-HD-BLK-L-SBX"),
         ],
     },
 ]
 
 
 async def seed_demo_products_if_empty(session: AsyncSession) -> None:
-    """Inserts demo products if products table is currently empty."""
-    res = await session.execute(select(Product))
-    existing = res.scalars().first()
-    if existing:
-        return
+    """Inserts or updates products with real Qikink variant SKUs."""
+    # Check if the Unisex Oversized Classic T-Shirt exists
+    res = await session.execute(
+        select(Product).where(Product.slug == "unisex-oversized-classic-t-shirt-white")
+    )
+    existing_qikink_product = res.scalars().first()
 
-    logger.info("Seeding 8 demo products into catalog...")
-    for item in DEMO_SEED_DATA:
+    if not existing_qikink_product:
+        logger.info("Adding Unisex Oversized Classic T-Shirt with active Qikink SKUs...")
+        item = SEED_PRODUCTS[0]
         p = Product(
             slug=item["slug"],
             name=item["name"],
@@ -125,12 +130,12 @@ async def seed_demo_products_if_empty(session: AsyncSession) -> None:
             category=item["category"],
             base_price=item["base_price"],
             is_active=True,
-            is_demo=True,
+            is_demo=False,
         )
         session.add(p)
         await session.flush()
 
-        for size, color, price, sku in item["variants"]:
+        for size, color, price, live_sku, sandbox_sku in item["variants"]:
             v = ProductVariant(
                 product_id=p.id,
                 size=size,
@@ -141,19 +146,18 @@ async def seed_demo_products_if_empty(session: AsyncSession) -> None:
             session.add(v)
             await session.flush()
 
-            # Map mock Qikink SKU for sandbox & live
+            # Map Qikink SKU for sandbox & live
             q_sku_sandbox = VariantQikinkSku(
                 variant_id=v.id,
                 environment=QikinkEnvironment.SANDBOX,
-                qikink_sku=f"{sku}-SBX",
+                qikink_sku=sandbox_sku,
             )
             q_sku_live = VariantQikinkSku(
                 variant_id=v.id,
                 environment=QikinkEnvironment.LIVE,
-                qikink_sku=sku,
+                qikink_sku=live_sku,
             )
             session.add_all([q_sku_sandbox, q_sku_live])
 
-    await session.commit()
-    logger.info("Demo products, variants, and Qikink SKU mappings seeded successfully.")
-
+        await session.commit()
+        logger.info("Unisex Oversized Classic T-Shirt with 6 sizes seeded successfully.")

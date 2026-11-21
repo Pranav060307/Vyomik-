@@ -47,7 +47,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
         logger.info("Local SQLite database initialized with all 12 tables and seeded catalog.")
 
+    # Initialize MongoDB & Beanie ODM
+    from app.mongodb.connection import init_mongodb, close_mongodb
+    from app.mongodb.seeder import seed_mongodb_products_if_empty
+    mongo_ok = await init_mongodb()
+    if mongo_ok:
+        await seed_mongodb_products_if_empty()
+
     yield
+    await close_mongodb()
     logger.info("Gracefully shutting down VYOMIK application.")
 
 
