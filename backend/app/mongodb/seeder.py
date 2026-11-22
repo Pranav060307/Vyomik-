@@ -29,8 +29,9 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Heavyweight architectural oversized t-shirt in crisp white with signature futuristic cyber graphic print. Tailored boxy drape that maintains structured drop shoulders all day.",
         "fabric_specs": "240 GSM 100% Combed Cotton · High-Density Plastisol Print · Bio-Washed",
         "images": [
-            {"url": "/images/vyomik/products/qikink-tee-cyber-white.png", "sort_order": 0},
-            {"url": "/assets/rack-tees.png", "sort_order": 1},
+            {"url": "/images/vyomik/products/qikink-tee-cyber-white.png", "sort_order": 0, "color": "Cyber White", "is_primary": True},
+            {"url": "/images/vyomik/products/qikink-tee-cyber-black.png", "sort_order": 1, "color": "Pitch Black"},
+            {"url": "/assets/rack-tees.png", "sort_order": 2},
         ],
         "variants": [
             {
@@ -121,8 +122,9 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Pitch black oversized silhouette featuring vivid burnt orange sunset graphic art on the back and subtle chest monogram. Deep reactive dye stays pitch black wash after wash.",
         "fabric_specs": "240 GSM Combed Cotton · Double-Needle Seams · Reactive Dye",
         "images": [
-            {"url": "/images/vyomik/products/qikink-tee-sunset-black.png", "sort_order": 0},
-            {"url": "/images/vyomik/collections/hero-black-tee.png", "sort_order": 1},
+            {"url": "/images/vyomik/products/qikink-tee-sunset-black.png", "sort_order": 0, "color": "Pitch Black", "is_primary": True},
+            {"url": "/images/vyomik/products/qikink-tee-sunset-white.png", "sort_order": 1, "color": "Cyber White"},
+            {"url": "/images/vyomik/collections/hero-black-tee.png", "sort_order": 2},
         ],
         "variants": [
             {
@@ -213,8 +215,9 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Earthy pine emerald oversized tee engineered with clean minimalist typography across the front and wide back line print. Relaxed fit with room to breathe.",
         "fabric_specs": "240 GSM Premium Jersey · Silk Screen Monogram · Anti-Pilling",
         "images": [
-            {"url": "/images/vyomik/products/qikink-tee-emerald-green.png", "sort_order": 0},
-            {"url": "/images/vyomik/products/essential-tee-ivory.webp", "sort_order": 1},
+            {"url": "/images/vyomik/products/qikink-tee-emerald-green.png", "sort_order": 0, "color": "Pine Emerald", "is_primary": True},
+            {"url": "/images/vyomik/products/qikink-tee-emerald-black.png", "sort_order": 1, "color": "Pitch Black"},
+            {"url": "/images/vyomik/products/essential-tee-ivory.webp", "sort_order": 2},
         ],
         "variants": [
             {
@@ -279,8 +282,9 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Deep wine burgundy oversized t-shirt featuring vintage editorial illustrations. Soft-hand feel with durable boxy silhouette tailored for Indian streetwear.",
         "fabric_specs": "240 GSM Combed Cotton · Pigment Dye · Bio-Washed",
         "images": [
-            {"url": "/images/vyomik/products/qikink-tee-retro-maroon.png", "sort_order": 0},
-            {"url": "/assets/oversized-basic-tee.png", "sort_order": 1},
+            {"url": "/images/vyomik/products/qikink-tee-retro-maroon.png", "sort_order": 0, "color": "Vintage Wine", "is_primary": True},
+            {"url": "/images/vyomik/products/qikink-tee-retro-black.png", "sort_order": 1, "color": "Pitch Black"},
+            {"url": "/assets/oversized-basic-tee.png", "sort_order": 2},
         ],
         "variants": [
             {
@@ -345,8 +349,9 @@ MONGODB_SEED_PRODUCTS = [
         "description": "The foundational black oversized streetwear tee. Minimalist chest emblem, heavy ribbed collar, and relaxed drop-shoulder cut.",
         "fabric_specs": "240 GSM Combed Cotton · High-Density Rubber Print · Pre-Shrunk",
         "images": [
-            {"url": "/images/vyomik/products/qikink-tee-core-black.png", "sort_order": 0},
-            {"url": "/assets/rack-tees.png", "sort_order": 1},
+            {"url": "/images/vyomik/products/qikink-tee-core-black.png", "sort_order": 0, "color": "Pitch Black", "is_primary": True},
+            {"url": "/images/vyomik/products/qikink-tee-core-white.png", "sort_order": 1, "color": "Cyber White"},
+            {"url": "/assets/rack-tees.png", "sort_order": 2},
         ],
         "variants": [
             {
@@ -760,9 +765,10 @@ async def seed_mongodb_products_if_empty() -> None:
         ]
         images = [
             ProductImageDoc(
-                color=None,
+                color=img.get("color"),
                 url=img["url"],
                 sort_order=img["sort_order"],
+                is_primary=img.get("is_primary", False),
             )
             for img in item.get("images", [])
         ]

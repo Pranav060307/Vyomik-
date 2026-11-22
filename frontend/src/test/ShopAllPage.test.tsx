@@ -156,4 +156,27 @@ describe('VYOMIK — Shop All Page Component & Interactions', () => {
     expect(instagramLink).toHaveAttribute('href', 'https://www.instagram.com/simplyvyomik');
     expect(instagramLink).toHaveAttribute('target', '_blank');
   });
+
+  it('9. updates card preview image dynamically when clicking color swatches on product card', async () => {
+    renderWithProviders(<ShopAllPage initialCategory="oversized" />);
+
+    // Find the Cyber Graphic White card
+    const cyberHeading = await screen.findByRole('heading', {
+      name: /Unisex Oversized T-Shirt – Cyber Graphic White/i,
+    });
+    const card = cyberHeading.closest('.group') as HTMLElement;
+    expect(card).toBeInTheDocument();
+
+    const cardImg = within(card).getByAltText(
+      /Unisex Oversized T-Shirt – Cyber Graphic White/i
+    ) as HTMLImageElement;
+    expect(cardImg.src).toContain('qikink-tee-cyber-white.png');
+
+    // Click Pitch Black swatch on the card
+    const pitchBlackSwatch = within(card).getByRole('button', { name: /Pitch Black/i });
+    fireEvent.click(pitchBlackSwatch);
+
+    // Card image immediately switches to qikink-tee-cyber-black.png
+    expect(cardImg.src).toContain('qikink-tee-cyber-black.png');
+  });
 });

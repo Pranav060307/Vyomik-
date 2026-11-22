@@ -65,7 +65,12 @@ export const ProductDetailPage: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const galleryImages =
+  const currentSwatch = product.swatches?.find(
+    (s) => s.name.toLowerCase() === selectedColor.toLowerCase()
+  );
+  const colorGarmentImage = currentSwatch?.img || product.primaryImage;
+
+  const baseGallery =
     product.gallery && product.gallery.length > 0
       ? product.gallery
       : [
@@ -76,7 +81,8 @@ export const ProductDetailPage: React.FC = () => {
           '/images/vyomik/products/pdp/core-hoodie-ivory-video.jpg',
         ];
 
-  const activeImage = galleryImages[selectedImageIndex] || product.primaryImage;
+  const galleryImages = [colorGarmentImage, ...baseGallery.slice(1)];
+  const activeImage = galleryImages[selectedImageIndex] || colorGarmentImage;
   const isVideoActive = selectedImageIndex === 4;
 
   const handleScrollToReviews = () => {
@@ -96,11 +102,11 @@ export const ProductDetailPage: React.FC = () => {
       type: product.category,
       color: selectedColor,
       size: selectedSize,
-      img: product.primaryImage,
-      image: product.primaryImage,
+      img: colorGarmentImage,
+      image: colorGarmentImage,
       quantity,
     });
-    toast(`${product.name} (${selectedSize}) added to bag`);
+    toast(`${product.name} (${selectedSize} · ${selectedColor}) added to bag`);
     openBag();
   };
 
@@ -152,7 +158,10 @@ export const ProductDetailPage: React.FC = () => {
               <ProductPurchasePanel
                 product={product}
                 selectedColor={selectedColor}
-                onSelectColor={setSelectedColor}
+                onSelectColor={(colorName) => {
+                  setSelectedColor(colorName);
+                  setSelectedImageIndex(0);
+                }}
                 selectedSize={selectedSize}
                 onSelectSize={setSelectedSize}
                 quantity={quantity}
