@@ -11,7 +11,9 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const pages = [1, 2, 3, 4, 5];
+  if (totalPages <= 1) return null;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <nav
@@ -32,7 +34,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
         </svg>
       </button>
 
-      {/* Numbered Page Buttons matching reference screenshot: 1, 2, 3, 4, 5, ... */}
+      {/* Numbered Page Buttons */}
       <div className="flex items-center gap-2">
         {pages.map((p) => {
           const isActive = p === currentPage;
@@ -52,9 +54,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
             </button>
           );
         })}
-
-        {/* Ellipsis */}
-        <span className="text-xs text-[#716B63] px-1 select-none">...</span>
       </div>
 
       {/* Next Button */}

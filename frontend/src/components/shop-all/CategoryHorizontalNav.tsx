@@ -55,11 +55,10 @@ export const CategoryHorizontalNav: React.FC<CategoryHorizontalNavProps> = ({
                 key={cat.id}
                 type="button"
                 onClick={() => onSelectCategory(cat.id)}
-                className={`w-full min-h-[110px] sm:min-h-[125px] p-3 sm:p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer select-none group relative ${
-                  isActive
+                className={`w-full min-h-[110px] sm:min-h-[125px] p-3 sm:p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 cursor-pointer select-none group relative ${isActive
                     ? 'bg-[#181818] border-2 border-[#C85A2E] shadow-[0_0_20px_rgba(200,90,46,0.3)]'
                     : 'bg-[#141414] border border-white/5 hover:border-white/20 hover:bg-[#181818] hover:scale-[1.02]'
-                }`}
+                  }`}
                 aria-pressed={isActive}
               >
                 {/* Top: 2x2 Grid Icon for All Products, or Image for other categories */}
@@ -83,9 +82,8 @@ export const CategoryHorizontalNav: React.FC<CategoryHorizontalNavProps> = ({
 
                 {/* Category Name */}
                 <span
-                  className={`text-xs sm:text-[13px] font-montserrat font-semibold tracking-wide capitalize truncate max-w-full ${
-                    isActive ? 'text-[#F4F0E8]' : 'text-[#D9D1C3] group-hover:text-white'
-                  }`}
+                  className={`text-xs sm:text-[13px] font-montserrat font-semibold tracking-wide capitalize truncate max-w-full ${isActive ? 'text-[#F4F0E8]' : 'text-[#D9D1C3] group-hover:text-white'
+                    }`}
                 >
                   {cat.name}
                 </span>

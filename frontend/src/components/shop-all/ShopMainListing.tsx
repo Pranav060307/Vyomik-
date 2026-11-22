@@ -50,17 +50,41 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
           if (Array.isArray(data) && data.length > 0 && isMounted) {
             const liveMapped: ShopProduct[] = data.map((p: any) => {
               const existing = SHOP_PRODUCTS.find((sp) => sp.slug === p.slug);
-              if (existing) {
-                return {
-                  ...existing,
-                  price: p.base_price ? Math.round(p.base_price / 100) : existing.price,
-                  pricePaise: p.base_price || existing.pricePaise,
-                };
-              }
+              const liveImg = p.images?.[0]?.url || p.image_url || p.primaryImage;
               const isSweatshirt = p.category === 'sweatshirt' || p.slug?.includes('sweatshirt');
               const isHoodie = p.category?.includes('hoodie') || p.slug?.includes('hoodie');
               const catKey = isSweatshirt ? 'sweatshirt' : isHoodie ? 'hoodies' : 'oversized';
               const catLabel = isSweatshirt ? 'Sweatshirt' : isHoodie ? 'Hoodies' : 'Oversized';
+
+              if (existing) {
+                return {
+                  ...existing,
+                  name: p.name || existing.name,
+                  category: catKey as any,
+                  categoryLabel: catLabel,
+                  price: p.base_price ? Math.round(p.base_price / 100) : existing.price,
+                  pricePaise: p.base_price || existing.pricePaise,
+                  primaryImage: liveImg || existing.primaryImage,
+                };
+              }
+
+              const variantColors = Array.isArray(p.variants) && p.variants.length > 0
+                ? Array.from(new Set(p.variants.map((v: any) => v.color))).filter(Boolean)
+                : [];
+              const liveSwatches = variantColors.length > 0
+                ? variantColors.map((cName: any) => {
+                    const match = p.variants.find((v: any) => v.color === cName);
+                    return {
+                      name: String(cName),
+                      hex: match?.color_hex || (String(cName).toLowerCase().includes('black') ? '#141414' : String(cName).toLowerCase().includes('stone') ? '#D9D1C3' : '#F4F0E8'),
+                    };
+                  })
+                : [{ name: 'Default', hex: '#141414' }];
+
+              const liveSizes = Array.isArray(p.variants) && p.variants.length > 0
+                ? (Array.from(new Set(p.variants.map((v: any) => v.size))).filter(Boolean) as any)
+                : ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
               return {
                 id: String(p.id || p.slug),
                 slug: p.slug,
@@ -70,11 +94,11 @@ export const ShopMainListing: React.FC<ShopMainListingProps> = ({
                 price: p.base_price ? Math.round(p.base_price / 100) : 799,
                 oldPrice: p.base_price ? Math.round((p.base_price / 100) * 1.35) : 1199,
                 pricePaise: p.base_price || 79900,
-                color: '#F4F0E8',
-                colorName: 'White',
-                swatches: [{ name: 'White', hex: '#F4F0E8' }, { name: 'Black', hex: '#141414' }],
-                availableSizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-                primaryImage: p.images?.[0]?.url || '/assets/oversized-basic-tee.png',
+                color: liveSwatches[0]?.hex || '#F4F0E8',
+                colorName: liveSwatches[0]?.name || 'Default',
+                swatches: liveSwatches,
+                availableSizes: liveSizes,
+                primaryImage: liveImg || '/images/vyomik/products/qikink-tee-cyber-white.png',
                 hoverImage: '/assets/rack-tees.png',
                 description: p.description || '',
                 fabricSpecs: p.fabric_specs || '240 GSM Combed Cotton',

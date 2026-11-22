@@ -29,7 +29,7 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Heavyweight architectural oversized t-shirt in crisp white with signature futuristic cyber graphic print. Tailored boxy drape that maintains structured drop shoulders all day.",
         "fabric_specs": "240 GSM 100% Combed Cotton · High-Density Plastisol Print · Bio-Washed",
         "images": [
-            {"url": "/assets/oversized-basic-tee.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/qikink-tee-cyber-white.png", "sort_order": 0},
             {"url": "/assets/rack-tees.png", "sort_order": 1},
         ],
         "variants": [
@@ -121,7 +121,7 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Pitch black oversized silhouette featuring vivid burnt orange sunset graphic art on the back and subtle chest monogram. Deep reactive dye stays pitch black wash after wash.",
         "fabric_specs": "240 GSM Combed Cotton · Double-Needle Seams · Reactive Dye",
         "images": [
-            {"url": "/images/vyomik/products/element-tee-black.webp", "sort_order": 0},
+            {"url": "/images/vyomik/products/qikink-tee-sunset-black.png", "sort_order": 0},
             {"url": "/images/vyomik/collections/hero-black-tee.png", "sort_order": 1},
         ],
         "variants": [
@@ -213,7 +213,7 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Earthy pine emerald oversized tee engineered with clean minimalist typography across the front and wide back line print. Relaxed fit with room to breathe.",
         "fabric_specs": "240 GSM Premium Jersey · Silk Screen Monogram · Anti-Pilling",
         "images": [
-            {"url": "/images/vyomik/collections/col-core-elements-clean.webp", "sort_order": 0},
+            {"url": "/images/vyomik/products/qikink-tee-emerald-green.png", "sort_order": 0},
             {"url": "/images/vyomik/products/essential-tee-ivory.webp", "sort_order": 1},
         ],
         "variants": [
@@ -279,7 +279,7 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Deep wine burgundy oversized t-shirt featuring vintage editorial illustrations. Soft-hand feel with durable boxy silhouette tailored for Indian streetwear.",
         "fabric_specs": "240 GSM Combed Cotton · Pigment Dye · Bio-Washed",
         "images": [
-            {"url": "/images/vyomik/collections/rust-tee.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/qikink-tee-retro-maroon.png", "sort_order": 0},
             {"url": "/assets/oversized-basic-tee.png", "sort_order": 1},
         ],
         "variants": [
@@ -345,7 +345,7 @@ MONGODB_SEED_PRODUCTS = [
         "description": "The foundational black oversized streetwear tee. Minimalist chest emblem, heavy ribbed collar, and relaxed drop-shoulder cut.",
         "fabric_specs": "240 GSM Combed Cotton · High-Density Rubber Print · Pre-Shrunk",
         "images": [
-            {"url": "/assets/vyomik-logo-tee.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/qikink-tee-core-black.png", "sort_order": 0},
             {"url": "/assets/rack-tees.png", "sort_order": 1},
         ],
         "variants": [
@@ -415,8 +415,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Heavyweight crewneck sweatshirt crafted from 380 GSM diagonal loopback French Terry in neutral raw stone. Perfectly balanced boxy silhouette.",
         "fabric_specs": "380 GSM 100% Loopback French Terry · Mineral Wash",
         "images": [
-            {"url": "/assets/home/hoodie-charcoal-art.png", "sort_order": 0},
-            {"url": "/assets/home/col-core-essentials.jpg", "sort_order": 1},
+            {"url": "/images/vyomik/products/sweatshirt-raw-stone.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/sweatshirt-pitch-black.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -469,8 +469,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Monochromatic luxury sweatshirt with dropped shoulder profile, dense collar ribbing, and tactile tonal embroidery.",
         "fabric_specs": "380 GSM Cotton Blend · Tonal Satin Embroidery · Double Stitched",
         "images": [
-            {"url": "/assets/home/hoodie-black-back.png", "sort_order": 0},
-            {"url": "/assets/home/col-monochrome-edit.jpg", "sort_order": 1},
+            {"url": "/images/vyomik/products/sweatshirt-pitch-black.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/sweatshirt-raw-stone.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -523,8 +523,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Vintage-washed boxy sweatshirt in muted tactical olive. Heavyweight 400 GSM fleece provides warmth without stiffness.",
         "fabric_specs": "400 GSM Heavy French Terry · Vintage Wash · Brushed Interior",
         "images": [
-            {"url": "/images/vyomik/collections/col-essentials-clean.webp", "sort_order": 0},
-            {"url": "/assets/home/col-urban-terrain.jpg", "sort_order": 1},
+            {"url": "/images/vyomik/products/sweatshirt-washed-olive.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/sweatshirt-pitch-black.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -581,8 +581,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "The defining VYOMIK silhouette. 450 GSM luxury French Terry, double-lined crossover hood that stays upright, and dropped shoulders.",
         "fabric_specs": "450 GSM 100% Cotton French Terry · Double-Layered Hood · Pre-Shrunk",
         "images": [
-            {"url": "/images/vyomik/products/pdp/core-hoodie-ivory-front.jpg", "sort_order": 0},
-            {"url": "/images/vyomik/products/pdp/core-hoodie-ivory-back.jpg", "sort_order": 1},
+            {"url": "/images/vyomik/products/hoodie-warm-ivory.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/hoodie-midnight-black.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -635,8 +635,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Architectural streetwear hoodie in jet black. Built for cold studio nights and everyday movement with a boxy oversized drape.",
         "fabric_specs": "450 GSM Cotton French Terry · Pre-Shrunk · Heavy Ribbed Trims",
         "images": [
-            {"url": "/assets/essential-hoodie.png", "sort_order": 0},
-            {"url": "/images/vyomik/products/element-hoodie-black.webp", "sort_order": 1},
+            {"url": "/images/vyomik/products/hoodie-midnight-black.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/hoodie-warm-ivory.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -689,8 +689,8 @@ MONGODB_SEED_PRODUCTS = [
         "description": "Earthy terracotta oversized hoodie dyed in rich burnt rust. Finished with durable dropped shoulder seams and structured collar contour.",
         "fabric_specs": "450 GSM Cotton French Terry · Custom Pigment Dye · Bio-Washed",
         "images": [
-            {"url": "/images/vyomik/products/core-hoodie-rust.png", "sort_order": 0},
-            {"url": "/assets/home/hoodie-rust.png", "sort_order": 1},
+            {"url": "/images/vyomik/products/hoodie-burnt-rust.png", "sort_order": 0},
+            {"url": "/images/vyomik/products/hoodie-warm-ivory.png", "sort_order": 1},
         ],
         "variants": [
             {
@@ -739,14 +739,8 @@ MONGODB_SEED_PRODUCTS = [
 
 
 async def seed_mongodb_products_if_empty() -> None:
-    """Synchronizes or seeds products into MongoDB collection with 3-category catalog."""
-    count = await ProductDoc.count()
-    if count >= 11:
-        logger.info(f"MongoDB already contains {count} products.")
-        return
-
-    # If count is less than 11 or contains legacy categories, upsert the full 11-product catalog
-    logger.info("Synchronizing 11 distinct products (Oversized, Sweatshirt, Hoodies) into MongoDB...")
+    """Synchronizes or seeds products into MongoDB collection with 3-category catalog and clean mockups."""
+    logger.info("Synchronizing 11 distinct products (Oversized, Sweatshirt, Hoodies) with mockups into MongoDB...")
     for item in MONGODB_SEED_PRODUCTS:
         existing = await ProductDoc.find_one(ProductDoc.slug == item["slug"])
         variants = [

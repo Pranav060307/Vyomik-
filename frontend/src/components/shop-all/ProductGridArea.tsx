@@ -20,6 +20,7 @@ interface ProductGridAreaProps {
 
 export const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   products,
+  totalProductsCount,
   viewMode,
   onToggleViewMode,
   sortBy,
@@ -31,6 +32,10 @@ export const ProductGridArea: React.FC<ProductGridAreaProps> = ({
   onResetFilters,
   activeFilterCount,
 }) => {
+  const pageSize = 6;
+  const startIndex = totalProductsCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const endIndex = Math.min(currentPage * pageSize, totalProductsCount);
+
   return (
     <div className="flex-1 flex flex-col text-left">
       {/* Top Toolbar */}
@@ -54,7 +59,7 @@ export const ProductGridArea: React.FC<ProductGridAreaProps> = ({
           </button>
 
           <span className="text-xs sm:text-[13px] font-montserrat text-[#D9D1C3]">
-            Showing 1 – 12 of 54 Products
+            Showing {totalProductsCount === 0 ? 0 : `${startIndex} – ${endIndex}`} of {totalProductsCount} Products
           </span>
         </div>
 
