@@ -6,7 +6,7 @@ Handles dynamic cart checkout, database persistence, and automated Qikink dispat
 import logging
 from typing import List, Optional, Any, Dict
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import select, or_, desc
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -41,8 +41,8 @@ async def _resolve_item_sku(
     color: str,
     size: str,
     provided_sku: Optional[str] = None,
-    variant_id: Optional[int] = None,
-    product_id: Optional[int] = None,
+    variant_id: Optional[Any] = None,
+    product_id: Optional[Any] = None,
 ) -> str:
     """
     Dynamically resolves the active Qikink SKU for an item.
@@ -51,13 +51,16 @@ async def _resolve_item_sku(
     if provided_sku and provided_sku.strip():
         return provided_sku.strip()
 
+    num_vid = int(variant_id) if isinstance(variant_id, int) or (isinstance(variant_id, str) and variant_id.isdigit()) else None
+    num_pid = int(product_id) if isinstance(product_id, int) or (isinstance(product_id, str) and product_id.isdigit()) else None
+
     # Query variant by variant_id or size/color
     stmt = select(ProductVariant).options(selectinload(ProductVariant.qikink_skus))
-    if variant_id:
-        stmt = stmt.where(ProductVariant.id == variant_id)
-    elif product_id:
+    if num_vid:
+        stmt = stmt.where(ProductVariant.id == num_vid)
+    elif num_pid:
         stmt = stmt.where(
-            ProductVariant.product_id == product_id,
+            ProductVariant.product_id == num_pid,
             ProductVariant.size == size,
             ProductVariant.color == color,
         )
@@ -313,6 +316,92 @@ async def create_order(
         total_paise=pricing.total,
         raw_response=raw_response,
     )
+
+
+@router.get(
+    "/orders/customer/{email}",
+    summary="Get all orders and receipts for a specific customer email",
+)
+async def get_customer_orders(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+) -> List[Dict[str, Any]]:
+    """Fetches full order history, line items, and downloadable receipts for a customer."""
+    clean_email = email.strip().lower()
+    stmt = (
+        select(Order)
+        .options(
+            selectinload(Order.customer),
+            selectinload(Order.items).selectinload(OrderItem.variant),
+            selectinload(Order.payments).selectinload(Payment.receipt),
+        )
+        .where(
+            or_(
+                Order.customer.has(Customer.email.ilike(clean_email)),
+                Order.customer.has(Customer.email == clean_email),
+            )
+        )
+        .order_by(desc(Order.id))
+    )
+    res = await db.execute(stmt)
+    orders = res.scalars().all()
+
+    results: List[Dict[str, Any]] = []
+    for o in orders:
+        active_payment = None
+        receipt_url = None
+        receipt_number = None
+        utr_number = None
+        tr = None
+
+        if o.payments:
+            sorted_payments = sorted(
+                o.payments,
+                key=lambda p: (1 if p.status == "paid" else 0, p.id),
+                reverse=True,
+            )
+            active_payment = sorted_payments[0]
+            tr = active_payment.tr
+            utr_number = active_payment.utr_number
+            if active_payment.receipt:
+                receipt_number = active_payment.receipt.receipt_number
+                receipt_url = f"/api/v1/payments/receipt/{active_payment.tr}/download"
+            elif active_payment.status == "paid" and active_payment.tr:
+                receipt_url = f"/api/v1/payments/receipt/{active_payment.tr}/download"
+
+        results.append({
+            "id": o.id,
+            "order_number": o.public_order_number,
+            "order_status": getattr(o.order_status, "value", str(o.order_status)),
+            "payment_method": getattr(o.payment_method, "value", str(o.payment_method)),
+            "payment_status": getattr(o.payment_status, "value", str(o.payment_status)),
+            "subtotal": o.subtotal,
+            "shipping_fee": o.shipping_fee,
+            "cod_fee": o.cod_fee,
+            "total": o.total,
+            "total_inr": o.total / 100.0,
+            "created_at": o.created_at.isoformat() if hasattr(o, "created_at") and o.created_at else "",
+            "shipping_address": o.address_snapshot or {},
+            "tr": tr,
+            "utr_number": utr_number,
+            "receipt_number": receipt_number,
+            "receipt_url": receipt_url,
+            "items": [
+                {
+                    "id": item.id,
+                    "title": item.sku_snapshot,
+                    "size": getattr(getattr(item, "variant", None), "size", "M"),
+                    "color": getattr(getattr(item, "variant", None), "color", "Standard"),
+                    "qty": item.qty,
+                    "unit_price": item.unit_price,
+                    "unit_price_inr": item.unit_price / 100.0,
+                    "sku_snapshot": item.sku_snapshot,
+                }
+                for item in (o.items or [])
+            ],
+        })
+
+    return results
 
 
 @router.get(

@@ -1,0 +1,24 @@
+{
+  "name": "vyomik-gmail-watcher",
+  "version": "1.0.0",
+  "description": "Automated Gmail IMAP Watcher for HDFC Bank UPI Credit Notifications — VYOMIK E-Commerce",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "axios": "^1.7.4",
+    "dotenv": "^16.4.5",
+    "imapflow": "^1.0.170",
+    "ioredis": "^5.4.1",
+    "mailparser": "^3.7.1"
+  },
+  "devDependencies": {
+    "@types/mailparser": "^3.4.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
+  }
+}

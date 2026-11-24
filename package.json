@@ -1,0 +1,12 @@
+{
+  "name": "vyomik-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VYOMIK - High-End Luxury Cyberpunk Streetwear",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "watcher": "npm --prefix vyomik-gmail-watcher start",
+    "watcher:build": "npm --prefix vyomik-gmail-watcher run build"
+  }
+}

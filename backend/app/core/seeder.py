@@ -17,6 +17,25 @@ logger = logging.getLogger("vyomik.seeder")
 
 SEED_PRODUCTS = [
     # -------------------------------------------------------------
+    # 0. Live UPI Test Product (Rs. 1.00)
+    # -------------------------------------------------------------
+    {
+        "slug": "vyomik-test-tee-1rs",
+        "name": "VYOMIK Live Test Tee — ₹1",
+        "description": "Special 1 Rupee test product configured for live end-to-end UPI payment verification, Gmail watcher notification, and automatic receipt generation testing.",
+        "category": "oversized",
+        "base_price": 100,  # Rs. 1.00
+        "image_url": "/images/vyomik/products/qikink-tee-cyber-white.png",
+        "variants": [
+            ("XS", "Cyber White", 100, "v-test-1rs-XS", "UOsMRnHs-Wh-XS"),
+            ("S", "Cyber White", 100, "v-test-1rs-S", "UOsMRnHs-Wh-S"),
+            ("M", "Cyber White", 100, "v-test-1rs-M", "UOsMRnHs-Wh-M"),
+            ("L", "Cyber White", 100, "v-test-1rs-L", "UOsMRnHs-Wh-L"),
+            ("XL", "Cyber White", 100, "v-test-1rs-XL", "UOsMRnHs-Wh-XL"),
+            ("XXL", "Cyber White", 100, "v-test-1rs-XXL", "UOsMRnHs-Wh-XXL"),
+        ],
+    },
+    # -------------------------------------------------------------
     # 1. Category: oversized
     # -------------------------------------------------------------
     {

@@ -3,6 +3,7 @@ import { NavLink, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard,
   ShoppingBag,
+  QrCode,
   Layers,
   Boxes,
   Users,
@@ -25,6 +26,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Orders', path: '/admin/orders', icon: ShoppingBag },
+  { label: 'UPI Payments', path: '/admin/payments', icon: QrCode },
   { label: 'Products', path: '/admin/products', icon: Layers },
   { label: 'Inventory', path: '/admin/inventory', icon: Boxes },
   { label: 'Customers & VIP', path: '/admin/customers', icon: Users },

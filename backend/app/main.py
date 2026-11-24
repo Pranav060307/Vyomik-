@@ -37,6 +37,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         from app.models import (  # noqa: F401
             Product, ProductVariant, VariantQikinkSku, ProductImage,
             Customer, Address, Order, OrderItem, Return, Payment,
+            BankTransaction, PaymentReceipt,
             WaitlistSignup, WebhookEvent
         )
         async with engine.begin() as conn:

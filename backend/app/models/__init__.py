@@ -21,7 +21,7 @@ from app.models.order import (
     OrderStatus,
     ReturnStatus,
 )
-from app.models.payment import Payment
+from app.models.payment import Payment, BankTransaction, PaymentReceipt
 from app.models.waitlist import WaitlistSignup
 from app.models.webhook import WebhookEvent
 
@@ -42,6 +42,8 @@ __all__ = [
     "OrderStatus",
     "ReturnStatus",
     "Payment",
+    "BankTransaction",
+    "PaymentReceipt",
     "WaitlistSignup",
     "WebhookEvent",
 ]

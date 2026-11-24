@@ -116,7 +116,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const subtotalPaise = items.reduce((sum, item) => sum + (item.pricePaise || 0) * item.quantity, 0);
   const subtotalRupees = items.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
   const shippingFeePaise =
-    subtotalPaise === 0 || subtotalPaise >= FREE_SHIPPING_THRESHOLD_PAISE
+    subtotalPaise === 0 || subtotalPaise >= FREE_SHIPPING_THRESHOLD_PAISE || subtotalPaise <= 100
       ? 0
       : DEFAULT_SHIPPING_FEE_PAISE;
   const totalPaise = subtotalPaise + shippingFeePaise;

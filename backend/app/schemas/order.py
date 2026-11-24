@@ -2,25 +2,25 @@
 Pydantic v2 validation contracts for Orders, Checkout, and Fulfillment.
 """
 
-from typing import List, Optional, Any, Dict
+from typing import List, Optional, Any, Dict, Union
 from pydantic import BaseModel, Field, EmailStr
 
 
 class OrderAddressSchema(BaseModel):
     first_name: str = Field(min_length=1, max_length=100)
     last_name: Optional[str] = Field(default="", max_length=100)
-    address1: str = Field(min_length=3, max_length=255)
+    address1: str = Field(min_length=1, max_length=255)
     address2: Optional[str] = Field(default="", max_length=255)
-    city: str = Field(min_length=2, max_length=100)
-    state: str = Field(min_length=2, max_length=100)
-    zipcode: str = Field(pattern=r"^\d{6}$", description="Valid 6-digit Indian PIN code")
-    phone: str = Field(min_length=10, max_length=15, description="Customer contact phone number")
+    city: str = Field(min_length=1, max_length=100)
+    state: str = Field(min_length=1, max_length=100)
+    zipcode: str = Field(min_length=3, max_length=20, description="Postal code")
+    phone: str = Field(min_length=5, max_length=25, description="Customer contact phone number")
     email: EmailStr = Field(description="Customer receipt and tracking notification email")
 
 
 class OrderItemInput(BaseModel):
-    product_id: Optional[int] = None
-    variant_id: Optional[int] = None
+    product_id: Optional[Union[int, str]] = None
+    variant_id: Optional[Union[int, str]] = None
     title: str = Field(min_length=1)
     color: str = Field(default="White")
     size: str = Field(default="M")

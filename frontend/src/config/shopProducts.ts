@@ -29,6 +29,47 @@ export interface ShopProduct {
 
 export const SHOP_PRODUCTS: ShopProduct[] = [
   // =========================================================================
+  // 0. LIVE TEST PRODUCT (₹1 For UPI Verification & Watcher Verification Test)
+  // =========================================================================
+  {
+    id: 'vyomik-test-tee-1rs',
+    slug: 'vyomik-test-tee-1rs',
+    name: 'VYOMIK Live Test Tee — ₹1',
+    category: 'oversized',
+    categoryLabel: 'Live UPI Test',
+    price: 1,
+    oldPrice: 999,
+    pricePaise: 100,
+    isNew: true,
+    badge: '₹1 TEST',
+    rating: 5.0,
+    reviewCount: 1,
+    color: '#F4F0E8',
+    colorName: 'Cyber White',
+    qikinkProductId: 'test-1rs',
+    swatches: [
+      { name: 'Cyber White', hex: '#F4F0E8' },
+      { name: 'Pitch Black', hex: '#141414' },
+    ],
+    availableSizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+    primaryImage: '/images/vyomik/products/qikink-tee-cyber-white.png',
+    hoverImage: '/assets/rack-tees.png',
+    gallery: [
+      '/images/vyomik/products/qikink-tee-cyber-white.png',
+      '/assets/rack-tees.png',
+      '/assets/vyomik-logo-tee.png',
+    ],
+    features: [
+      '₹1.00 Live UPI Verification Product',
+      'Immediate dynamic UPI QR generation',
+      'Instant automated Gmail HDFC Bank notification matching',
+      'Automatic downloadable branded PDF receipt',
+    ],
+    description: 'Special 1 Rupee test product configured for live end-to-end UPI payment verification, Gmail watcher notification, and automatic receipt generation testing.',
+    fabricSpecs: '100% Cotton — Live Test Variant (1 INR)',
+  },
+
+  // =========================================================================
   // 1. OVERSIZED TEES (Real Qikink POD Store Products with Distinct Artworks)
   // =========================================================================
   {

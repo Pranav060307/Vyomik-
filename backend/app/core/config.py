@@ -104,9 +104,27 @@ class Settings(BaseSettings):
         return v
 
     # Payment Provider Abstraction
-    # Provider is decoupled so Razorpay, Cashfree, PhonePe or Stripe can be plugged in later
-    PAYMENT_PROVIDER: Literal["mock", "razorpay", "cashfree", "stripe"] = "mock"
+    # Provider is decoupled so upi_qr, mock, Razorpay, Cashfree, PhonePe or Stripe can be plugged in
+    PAYMENT_PROVIDER: Literal["upi_qr", "mock", "razorpay", "cashfree", "stripe"] = "upi_qr"
     MOCK_PAYMENT_AUTO_SUCCESS: bool = True
+
+    # Automatic UPI QR & Watcher Settings
+    WATCH_API_KEY: str = Field(
+        default="vyomik_sec_watch_2026_prod_token",
+        description="Shared secret key between external Gmail watcher on Render and VYOMIK API",
+    )
+    MERCHANT_VPA: str = Field(
+        default="champsarena@naviaxis",
+        description="Primary receiving UPI ID for dynamic QR codes",
+    )
+    MERCHANT_NAME: str = Field(
+        default="VYOMIK",
+        description="Business/brand payee name displayed in UPI apps",
+    )
+    UPI_QR_EXPIRY_MINUTES: int = Field(
+        default=30,
+        description="Validity window in minutes for generated dynamic UPI QR codes",
+    )
 
     # Qikink Integration Settings
     # Default to "mock" for zero-network end-to-end development

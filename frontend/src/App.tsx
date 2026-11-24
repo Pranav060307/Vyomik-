@@ -13,6 +13,8 @@ import { TermsPage } from './pages/TermsPage';
 import { ComingSoon } from './pages/ComingSoon';
 import { BagPage } from './pages/BagPage';
 import { ProductDetailPage } from './pages/ProductDetailPage';
+import { PaymentPage } from './pages/PaymentPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { useLaunchGate } from './hooks/useLaunchGate';
 
 // Admin Console Components & Pages
@@ -30,6 +32,7 @@ import { AdminDiscountsPage } from './admin/pages/AdminDiscountsPage';
 import { AdminReviewsPage } from './admin/pages/AdminReviewsPage';
 import { AdminContentPage } from './admin/pages/AdminContentPage';
 import { AdminSettingsPage } from './admin/pages/AdminSettingsPage';
+import { AdminPaymentsPage } from './admin/pages/AdminPaymentsPage';
 
 /**
  * Gate-aware root route component.
@@ -79,9 +82,16 @@ export const App: React.FC = () => {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/login" element={<SignInPage />} />
 
+        {/* Customer Profile & Order History */}
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/account" element={<ProfilePage />} />
+        <Route path="/orders" element={<ProfilePage />} />
+
         {/* Direct deep links */}
         <Route path="/bag" element={<BagPage />} />
         <Route path="/cart" element={<BagPage />} />
+        <Route path="/payment/:orderNumber" element={<PaymentPage />} />
+        <Route path="/checkout/payment/:orderNumber" element={<PaymentPage />} />
         <Route path="/about" element={<OurStoryPage />} />
         <Route path="/our-story" element={<OurStoryPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -102,6 +112,7 @@ export const App: React.FC = () => {
           <Route index element={<AdminDashboardPage />} />
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="payments" element={<AdminPaymentsPage />} />
           <Route path="products" element={<AdminProductsPage />} />
           <Route path="inventory" element={<AdminInventoryPage />} />
           <Route path="customers" element={<AdminCustomersPage />} />

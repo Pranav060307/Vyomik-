@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { AnnouncementBar } from '../components/home/AnnouncementBar';
 import { HomeNavbar } from '../components/home/HomeNavbar';
@@ -9,6 +9,8 @@ import { useToast } from '../context/ToastContext';
 
 export const SignInPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || '/home';
   const { signin, forgotPassword } = useAuth();
   const { toast } = useToast();
 
@@ -53,7 +55,7 @@ export const SignInPage: React.FC = () => {
         const firstName = res.name ? res.name.split(' ')[0] : 'there';
         toast(`Welcome back, ${firstName}!`);
         setTimeout(() => {
-          navigate('/home');
+          navigate(redirectUrl);
         }, 900);
       }
     } finally {
@@ -248,7 +250,7 @@ export const SignInPage: React.FC = () => {
             Don't have an account?{' '}
             <button
               type="button"
-              onClick={() => navigate('/sign-up')}
+              onClick={() => navigate(redirectUrl !== '/home' ? `/sign-up?redirect=${encodeURIComponent(redirectUrl)}` : '/sign-up')}
               className="text-[#C85A2E] hover:underline font-bold uppercase tracking-wider ml-1 cursor-pointer"
             >
               CREATE ACCOUNT

@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     preview,
     orders,
     admin,
+    payments,
 )
 
 api_router = APIRouter()
@@ -21,4 +22,5 @@ api_router.include_router(waitlist.router, tags=["Waitlist"])
 api_router.include_router(products.router, tags=["Products"])
 api_router.include_router(preview.router, tags=["Preview"])
 api_router.include_router(orders.router, tags=["Orders"])
+api_router.include_router(payments.router, tags=["Payments"])
 api_router.include_router(admin.router, tags=["Admin"])

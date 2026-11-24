@@ -40,9 +40,14 @@ class PricingDoc(BaseModel):
 
 class PaymentDoc(BaseModel):
     method: str = "prepaid"  # "prepaid" | "cod"
-    status: str = "captured"  # "pending" | "captured" | "failed"
-    provider: str = "mock"  # "razorpay" | "cashfree" | "stripe" | "mock"
+    status: str = "captured"  # "awaiting_payment" | "verifying" | "paid" | "captured" | "failed" | "manual_review"
+    provider: str = "upi_qr"  # "upi_qr" | "razorpay" | "cashfree" | "stripe" | "mock"
     transaction_id: Optional[str] = None
+    tr: Optional[str] = None
+    customer_upi_id: Optional[str] = None
+    utr_number: Optional[str] = None
+    verified_at: Optional[datetime] = None
+    receipt_number: Optional[str] = None
     raw_payload: Dict[str, Any] = Field(default_factory=dict)
 
 

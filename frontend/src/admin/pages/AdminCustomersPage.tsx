@@ -17,40 +17,16 @@ const CUSTOMER_COHORTS: AdminCustomer[] = [
 export const AdminCustomersPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'waitlist' | 'customers'>('waitlist');
   const [waitlistEmails, setWaitlistEmails] = useState<string[]>([]);
-  const [customers, setCustomers] = useState<AdminCustomer[]>(CUSTOMER_COHORTS);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchWaitlist = async () => {
     setLoading(true);
     try {
-      const [wlRes, custRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/v1/waitlist/emails`).catch(() => null),
-        fetch(`${API_BASE_URL}/api/v1/admin/customers`).catch(() => null),
-      ]);
-
-      if (wlRes && wlRes.ok) {
-        const data = await wlRes.json();
+      const res = await fetch(`${API_BASE_URL}/api/v1/waitlist/emails`);
+      if (res.ok) {
+        const data = await res.json();
         const emails: string[] = data.emails || [];
         setWaitlistEmails(emails);
-      }
-
-      if (custRes && custRes.ok) {
-        const custData = await custRes.json();
-        if (Array.isArray(custData) && custData.length > 0) {
-          setCustomers(
-            custData.map((c: any) => ({
-              id: c.id,
-              fullName: c.full_name || c.fullName,
-              email: c.email,
-              phone: c.phone,
-              city: c.city,
-              totalOrders: c.total_orders ?? c.totalOrders ?? 1,
-              totalSpentPaise: c.total_spent_paise ?? c.totalSpentPaise ?? 0,
-              lastOrderDate: c.last_order_date || c.lastOrderDate || '2026-11-21',
-              isVip: c.is_vip ?? c.isVip ?? false,
-            }))
-          );
-        }
       }
     } catch {
       setWaitlistEmails(['founder@vyomik.com', 'vip.collector@gmail.com', 'hypebeast.mumbai@outlook.com']);
@@ -215,7 +191,7 @@ export const AdminCustomersPage: React.FC = () => {
           className={`pb-3 transition-colors relative cursor-pointer ${activeTab === 'customers' ? 'text-[#F4F0E8] font-bold' : 'text-[#716B63] hover:text-[#A8A29E]'
             }`}
         >
-          <span>Customer Directory & LTV ({customers.length})</span>
+          <span>Customer Directory & LTV ({CUSTOMER_COHORTS.length})</span>
           {activeTab === 'customers' && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C85A2E]" />
           )}
@@ -233,7 +209,7 @@ export const AdminCustomersPage: React.FC = () => {
       ) : (
         <DataTable
           columns={customerColumns}
-          data={customers}
+          data={CUSTOMER_COHORTS}
           searchKey={(c) => `${c.fullName} ${c.email} ${c.city}`}
           searchPlaceholder="Search customer by name, email, or city..."
         />

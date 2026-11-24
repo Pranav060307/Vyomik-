@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vyomik-gmail-watcher
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_URL
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: SITE_CALLBACK_BASE
+        value: https://api.vyomik.com
+      - key: WATCH_API_KEY
+        sync: false
+      - key: POLL_INTERVAL
+        value: "5000"
+      - key: MERCHANT_VPA
+        value: vyomik@okhdfcbank

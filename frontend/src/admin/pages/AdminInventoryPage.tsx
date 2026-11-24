@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Boxes, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
 import { StatusBadge } from '../components/StatusBadge';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 interface InventoryItem {
   id: string;
@@ -30,64 +28,17 @@ const INVENTORY_DATA: InventoryItem[] = [
   { id: '9', sku: 'VYO-TEE-WDM-RST-S', productTitle: 'Wordmark Tee — Rust', category: 'Tees', size: 'S', color: 'Rust', stockType: 'POD On-Demand', inStock: true, unitsAvailable: 14, lowStockThreshold: 5 },
   { id: '10', sku: 'VYO-TEE-WDM-RST-M', productTitle: 'Wordmark Tee — Rust', category: 'Tees', size: 'M', color: 'Rust', stockType: 'POD On-Demand', inStock: true, unitsAvailable: 3, lowStockThreshold: 5 },
   { id: '11', sku: 'VYO-TEE-ELM-BLK-L', productTitle: 'Element Tee — Black', category: 'Tees', size: 'L', color: 'Black', stockType: 'POD On-Demand', inStock: true, unitsAvailable: 19, lowStockThreshold: 5 },
-  { id: '12', sku: 'VYO-SWT-STN-M', productTitle: 'Heavyweight Sweatshirt — Stone', category: 'Sweatshirt', size: 'M', color: 'Raw Stone', stockType: 'POD On-Demand', inStock: true, unitsAvailable: 28, lowStockThreshold: 5 },
+  { id: '12', sku: 'VYO-CAP-SND-OS', productTitle: 'VYOMIK Cap — Sand', category: 'Accessories', size: 'OS', color: 'Sand Khaki', stockType: 'Buffered Stock', inStock: true, unitsAvailable: 45, lowStockThreshold: 10 },
 ];
 
 export const AdminInventoryPage: React.FC = () => {
   const [items, setItems] = useState<InventoryItem[]>(INVENTORY_DATA);
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  const fetchInventory = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/admin/inventory`);
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          setItems(
-            data.map((d: any) => ({
-              id: d.id,
-              sku: d.sku,
-              productTitle: d.product_title,
-              category: d.category,
-              size: d.size,
-              color: d.color,
-              stockType: d.stock_type,
-              inStock: d.in_stock,
-              unitsAvailable: d.units_available,
-              lowStockThreshold: d.low_stock_threshold,
-            }))
-          );
-        }
-      }
-    } catch (err) {
-      console.warn('Failed to fetch inventory from backend:', err);
-    }
-  };
-
-  useEffect(() => {
-    fetchInventory();
-  }, []);
-
-  const toggleStock = async (id: string) => {
-    const target = items.find((it) => it.id === id);
-    if (!target) return;
-
-    const newInStock = !target.inStock;
-    const newUnits = newInStock ? 25 : 0;
-
+  const toggleStock = (id: string) => {
     setItems((prev) =>
-      prev.map((it) => (it.id === id ? { ...it, inStock: newInStock, unitsAvailable: newUnits } : it))
+      prev.map((it) => (it.id === id ? { ...it, inStock: !it.inStock, unitsAvailable: !it.inStock ? 10 : 0 } : it))
     );
-
-    try {
-      await fetch(`${API_BASE_URL}/api/v1/admin/inventory/${encodeURIComponent(target.sku)}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ in_stock: newInStock, units_available: newUnits }),
-      });
-    } catch (err) {
-      console.error('Failed to update inventory in backend:', err);
-    }
   };
 
   const filteredItems = items.filter((it) => {
@@ -150,11 +101,10 @@ export const AdminInventoryPage: React.FC = () => {
       render: (i) => (
         <button
           onClick={() => toggleStock(i.id)}
-          className={`px-3 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-xl border transition-colors cursor-pointer ${
-            i.inStock
-              ? 'bg-[#241416] text-[#D47984] border-[#48282D] hover:bg-[#34181B]'
-              : 'bg-[#162116] text-[#86C286] border-[#233823] hover:bg-[#1E2D1E]'
-          }`}
+          className={`px-3 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-xl border transition-colors cursor-pointer ${i.inStock
+            ? 'bg-[#241416] text-[#D47984] border-[#48282D] hover:bg-[#34181B]'
+            : 'bg-[#162116] text-[#86C286] border-[#233823] hover:bg-[#1E2D1E]'
+            }`}
         >
           {i.inStock ? 'Mark Out of Stock' : 'Restock'}
         </button>

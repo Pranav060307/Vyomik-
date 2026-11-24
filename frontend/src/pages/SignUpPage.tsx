@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { User, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { AnnouncementBar } from '../components/home/AnnouncementBar';
 import { HomeNavbar } from '../components/home/HomeNavbar';
@@ -9,6 +9,8 @@ import { useToast } from '../context/ToastContext';
 
 export const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect') || '/home';
   const { signup } = useAuth();
   const { toast } = useToast();
 
@@ -63,7 +65,7 @@ export const SignUpPage: React.FC = () => {
       } else {
         toast(`Account created. Welcome, ${trimmedName.split(' ')[0]}!`);
         setTimeout(() => {
-          navigate('/home');
+          navigate(redirectUrl);
         }, 1000);
       }
     } finally {
@@ -311,7 +313,7 @@ export const SignUpPage: React.FC = () => {
             Already have an account?{' '}
             <button
               type="button"
-              onClick={() => navigate('/sign-in')}
+              onClick={() => navigate(redirectUrl !== '/home' ? `/sign-in?redirect=${encodeURIComponent(redirectUrl)}` : '/sign-in')}
               className="text-[#C85A2E] hover:underline font-bold uppercase tracking-wider ml-1 cursor-pointer"
             >
               SIGN IN
