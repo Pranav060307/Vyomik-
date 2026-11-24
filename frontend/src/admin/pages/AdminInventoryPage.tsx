@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Boxes, AlertTriangle, ShieldAlert } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Boxes, AlertTriangle, ShieldAlert, RefreshCw } from 'lucide-react';
 import { DataTable, Column } from '../components/DataTable';
 import { StatusBadge } from '../components/StatusBadge';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 interface InventoryItem {
   id: string;
@@ -34,11 +36,60 @@ const INVENTORY_DATA: InventoryItem[] = [
 export const AdminInventoryPage: React.FC = () => {
   const [items, setItems] = useState<InventoryItem[]>(INVENTORY_DATA);
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const toggleStock = (id: string) => {
+  const fetchInventory = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/inventory`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setItems(
+            data.map((d: any) => ({
+              id: String(d.id),
+              sku: d.sku,
+              productTitle: d.product_title,
+              category: d.category,
+              size: d.size,
+              color: d.color,
+              stockType: d.stock_type || 'POD On-Demand',
+              inStock: Boolean(d.in_stock),
+              unitsAvailable: d.units_available ?? 25,
+              lowStockThreshold: d.low_stock_threshold ?? 5,
+            }))
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch live inventory:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInventory();
+  }, []);
+
+  const toggleStock = async (id: string) => {
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+
+    const nextInStock = !item.inStock;
     setItems((prev) =>
-      prev.map((it) => (it.id === id ? { ...it, inStock: !it.inStock, unitsAvailable: !it.inStock ? 10 : 0 } : it))
+      prev.map((it) => (it.id === id ? { ...it, inStock: nextInStock, unitsAvailable: nextInStock ? 10 : 0 } : it))
     );
+
+    try {
+      await fetch(`${API_BASE_URL}/api/v1/admin/inventory/${encodeURIComponent(item.sku)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ in_stock: nextInStock }),
+      });
+    } catch (err) {
+      console.error('Failed to update inventory in database:', err);
+    }
   };
 
   const filteredItems = items.filter((it) => {
@@ -115,16 +166,26 @@ export const AdminInventoryPage: React.FC = () => {
   return (
     <div className="space-y-6 font-montserrat">
       {/* Header */}
-      <div>
-        <span className="text-[10px] uppercase font-bold tracking-[0.24em] text-[#C85A2E] block mb-1">
-          SUPPLY ASSURANCE
-        </span>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F4F0E8]">
-          Inventory & Stock Management<span className="text-[#C85A2E]">.</span>
-        </h1>
-        <p className="text-xs text-[#A8A29E] mt-1">
-          Monitor Qikink on-demand POD capacity, buffered merchandise, and stockout thresholds
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-[10px] uppercase font-bold tracking-[0.24em] text-[#C85A2E] block mb-1">
+            SUPPLY ASSURANCE
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#F4F0E8]">
+            Inventory & Stock Management<span className="text-[#C85A2E]">.</span>
+          </h1>
+          <p className="text-xs text-[#A8A29E] mt-1">
+            Monitor Qikink on-demand POD capacity, buffered merchandise, and stockout thresholds
+          </p>
+        </div>
+
+        <button
+          onClick={fetchInventory}
+          className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#141414] hover:bg-[#1C1A18] border border-[#242321] rounded-xl text-xs font-semibold text-[#D9D1C3] hover:text-[#F4F0E8] transition-colors cursor-pointer self-start sm:self-auto"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#C85A2E]' : ''}`} />
+          <span>Refresh</span>
+        </button>
       </div>
 
       {/* Stock Summary Metrics */}

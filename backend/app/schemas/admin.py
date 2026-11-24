@@ -4,11 +4,20 @@ Pydantic schemas for VYOMIK Admin Operations Console.
 
 from typing import List, Optional, Any, Dict
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
+from pydantic.alias_generators import to_camel
+
+
+class AdminBaseModel(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        extra="ignore",
+    )
 
 
 # --- Orders & Fulfillment ---
-class AdminOrderItemResponse(BaseModel):
+class AdminOrderItemResponse(AdminBaseModel):
     id: str
     sku: str
     product_title: str
@@ -19,7 +28,7 @@ class AdminOrderItemResponse(BaseModel):
     image: Optional[str] = None
 
 
-class AdminShippingAddressResponse(BaseModel):
+class AdminShippingAddressResponse(AdminBaseModel):
     full_name: str
     phone: str
     address_line1: str
@@ -30,7 +39,7 @@ class AdminShippingAddressResponse(BaseModel):
     country: str = "India"
 
 
-class AdminOrderResponse(BaseModel):
+class AdminOrderResponse(AdminBaseModel):
     id: str
     order_number: str
     customer_name: str

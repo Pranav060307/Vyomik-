@@ -34,7 +34,7 @@ describe('Automatic UPI QR Payment Flow & Admin Console', () => {
 
     expect(screen.getByText(/Scan Dynamic UPI QR/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/e\.g\. yourname@okhdfcbank/i)).toBeInTheDocument();
-    expect(screen.getByText(/I Have Completed Payment/i)).toBeInTheDocument();
+    expect(screen.getByText(/Check Status Now/i)).toBeInTheDocument();
     expect(screen.getByText(/No screenshot uploads needed/i)).toBeInTheDocument();
   });
 

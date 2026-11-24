@@ -6,6 +6,7 @@ MongoDB Seeder for VYOMIK Catalog with Real Qikink SKUs & 3 Exclusive Categories
 """
 
 import logging
+from datetime import datetime, timezone, timedelta
 from app.mongodb.models.product import (
     ProductDoc,
     ProductVariantDoc,
@@ -14,6 +15,15 @@ from app.mongodb.models.product import (
 )
 from app.mongodb.models.discount import DiscountDoc
 from app.mongodb.models.review import ReviewDoc
+from app.mongodb.models.customer import CustomerDoc
+from app.mongodb.models.order import (
+    OrderDoc,
+    ShippingAddressDoc,
+    OrderItemDoc,
+    PricingDoc,
+    PaymentDoc,
+    FulfillmentDoc,
+)
 
 logger = logging.getLogger("vyomik.mongodb.seeder")
 
@@ -799,6 +809,7 @@ async def seed_mongodb_products_if_empty() -> None:
 
     logger.info("Successfully seeded/synced 11 products into MongoDB 'products' collection!")
     await seed_discounts_and_reviews_if_empty()
+    await seed_orders_and_customers_if_empty()
 
 
 async def seed_discounts_and_reviews_if_empty() -> None:
@@ -878,3 +889,367 @@ async def seed_discounts_and_reviews_if_empty() -> None:
         for r in reviews:
             await r.insert()
         logger.info("Seeded 3 product reviews into MongoDB.")
+
+    await seed_orders_and_customers_if_empty()
+
+
+async def seed_orders_and_customers_if_empty() -> None:
+    """Seeds initial production-like customer orders and CRM records into MongoDB if empty."""
+    if await OrderDoc.find_one(OrderDoc.public_order_number == "VYO-784912") is None:
+        logger.info("Seeding initial live orders into MongoDB 'orders' collection...")
+        now = datetime.now(timezone.utc)
+        initial_orders = [
+            OrderDoc(
+                public_order_number="VYO-784912",
+                customer_email="aarav.sharma@example.com",
+                shipping_address=ShippingAddressDoc(
+                    first_name="Aarav",
+                    last_name="Sharma",
+                    address1="Flat 402, Skyline Residency, Bandra West",
+                    address2="Opposite Bandstand",
+                    city="Mumbai",
+                    state="Maharashtra",
+                    zipcode="400050",
+                    phone="+91 98765 43210",
+                    email="aarav.sharma@example.com",
+                ),
+                items=[
+                    OrderItemDoc(
+                        title="Core Hoodie — Black",
+                        size="L",
+                        color="Midnight Black",
+                        qty=1,
+                        price_paise=249900,
+                        sku="v-core-hoodie-blk-l",
+                    )
+                ],
+                pricing=PricingDoc(
+                    subtotal_paise=249900,
+                    shipping_fee_paise=0,
+                    cod_fee_paise=0,
+                    total_paise=249900,
+                ),
+                payment=PaymentDoc(
+                    method="prepaid",
+                    status="paid",
+                    provider="upi_qr",
+                    tr="TR-VYO-784912",
+                    customer_upi_id="aarav@okhdfcbank",
+                    utr_number="630155807241",
+                    verified_at=now - timedelta(minutes=45),
+                    receipt_number="VYREC-20261123-8912",
+                ),
+                fulfillment=FulfillmentDoc(
+                    provider="qikink",
+                    environment="sandbox",
+                    qikink_order_id="QIK-89124",
+                    status="SUBMITTED",
+                    courier_partner="Delhivery Surface",
+                    awb_number="DELHIVERY-789123441",
+                    tracking_url="https://www.delhivery.com/track/package/789123441",
+                    pushed_at=now - timedelta(minutes=40),
+                ),
+                order_status="CONFIRMED",
+                created_at=now - timedelta(minutes=50),
+                updated_at=now - timedelta(minutes=40),
+            ),
+            OrderDoc(
+                public_order_number="VYO-784911",
+                customer_email="ishaan.v@example.com",
+                shipping_address=ShippingAddressDoc(
+                    first_name="Ishaan",
+                    last_name="Verma",
+                    address1="Tech Zone 4, Greater Noida West",
+                    address2="Tower C, Apt 1102",
+                    city="Noida",
+                    state="Uttar Pradesh",
+                    zipcode="201301",
+                    phone="+91 91234 56789",
+                    email="ishaan.v@example.com",
+                ),
+                items=[
+                    OrderItemDoc(
+                        title="Unisex Oversized T-Shirt – Cyber Graphic White",
+                        size="M",
+                        color="Cyber White",
+                        qty=2,
+                        price_paise=79900,
+                        sku="UOsMRnHs-Wh-M",
+                    )
+                ],
+                pricing=PricingDoc(
+                    subtotal_paise=159800,
+                    shipping_fee_paise=0,
+                    cod_fee_paise=0,
+                    total_paise=159800,
+                ),
+                payment=PaymentDoc(
+                    method="prepaid",
+                    status="paid",
+                    provider="upi_qr",
+                    tr="TR-VYO-784911",
+                    customer_upi_id="ishaan@icici",
+                    utr_number="630155807242",
+                    verified_at=now - timedelta(hours=2),
+                    receipt_number="VYREC-20261123-8913",
+                ),
+                fulfillment=FulfillmentDoc(
+                    provider="qikink",
+                    environment="sandbox",
+                    qikink_order_id="QIK-89125",
+                    status="SUBMITTED",
+                    courier_partner="Delhivery Surface",
+                    awb_number="DELHIVERY-789123442",
+                    tracking_url="https://www.delhivery.com/track/package/789123442",
+                    pushed_at=now - timedelta(hours=1, minutes=50),
+                ),
+                order_status="PROCESSING",
+                created_at=now - timedelta(hours=2, minutes=10),
+                updated_at=now - timedelta(hours=1, minutes=50),
+            ),
+            OrderDoc(
+                public_order_number="VYO-784910",
+                customer_email="rhea.patel@example.com",
+                shipping_address=ShippingAddressDoc(
+                    first_name="Rhea",
+                    last_name="Patel",
+                    address1="12th Cross, Indiranagar",
+                    address2="Near Defense Colony",
+                    city="Bengaluru",
+                    state="Karnataka",
+                    zipcode="560038",
+                    phone="+91 98111 22334",
+                    email="rhea.patel@example.com",
+                ),
+                items=[
+                    OrderItemDoc(
+                        title="Heavyweight Oversized Sweatshirt – Raw Stone",
+                        size="S",
+                        color="Raw Stone",
+                        qty=1,
+                        price_paise=199900,
+                        sku="v-sweat-stone-s",
+                    )
+                ],
+                pricing=PricingDoc(
+                    subtotal_paise=199900,
+                    shipping_fee_paise=0,
+                    cod_fee_paise=0,
+                    total_paise=199900,
+                ),
+                payment=PaymentDoc(
+                    method="prepaid",
+                    status="paid",
+                    provider="upi_qr",
+                    tr="TR-VYO-784910",
+                    customer_upi_id="rhea@paytm",
+                    utr_number="630155807243",
+                    verified_at=now - timedelta(hours=5),
+                    receipt_number="VYREC-20261123-8914",
+                ),
+                fulfillment=FulfillmentDoc(
+                    provider="qikink",
+                    environment="sandbox",
+                    qikink_order_id="QIK-89098",
+                    status="DISPATCHED",
+                    courier_partner="BlueDart Express",
+                    awb_number="BLUEDART-55442211",
+                    tracking_url="https://www.bluedart.com",
+                    pushed_at=now - timedelta(hours=4),
+                ),
+                order_status="DISPATCHED",
+                created_at=now - timedelta(hours=5, minutes=15),
+                updated_at=now - timedelta(hours=4),
+            ),
+            OrderDoc(
+                public_order_number="VYO-784909",
+                customer_email="kabir.m@example.com",
+                shipping_address=ShippingAddressDoc(
+                    first_name="Kabir",
+                    last_name="Mehta",
+                    address1="CG Road, Navrangpura",
+                    address2="Opp Municipal Market",
+                    city="Ahmedabad",
+                    state="Gujarat",
+                    zipcode="380009",
+                    phone="+91 97654 32109",
+                    email="kabir.m@example.com",
+                ),
+                items=[
+                    OrderItemDoc(
+                        title="Unisex Oversized T-Shirt – Sunset Graphic Black",
+                        size="L",
+                        color="Pitch Black",
+                        qty=1,
+                        price_paise=79900,
+                        sku="UOsMRnHs-Blk-L",
+                    )
+                ],
+                pricing=PricingDoc(
+                    subtotal_paise=79900,
+                    shipping_fee_paise=9900,
+                    cod_fee_paise=4900,
+                    total_paise=94700,
+                ),
+                payment=PaymentDoc(
+                    method="cod",
+                    status="pending",
+                    provider="cod",
+                ),
+                fulfillment=FulfillmentDoc(
+                    provider="qikink",
+                    environment="sandbox",
+                    qikink_order_id="QIK-88942",
+                    status="DELIVERED",
+                    courier_partner="Delhivery Surface",
+                    awb_number="DELHIVERY-99887766",
+                    tracking_url="https://www.delhivery.com",
+                    pushed_at=now - timedelta(days=1),
+                ),
+                order_status="DELIVERED",
+                created_at=now - timedelta(days=1, hours=2),
+                updated_at=now - timedelta(hours=6),
+            ),
+            OrderDoc(
+                public_order_number="VYO-784908",
+                customer_email="devika.n@example.com",
+                shipping_address=ShippingAddressDoc(
+                    first_name="Devika",
+                    last_name="Nair",
+                    address1="Panampilly Nagar",
+                    address2="Avenue 4, House 12",
+                    city="Kochi",
+                    state="Kerala",
+                    zipcode="682036",
+                    phone="+91 95432 10987",
+                    email="devika.n@example.com",
+                ),
+                items=[
+                    OrderItemDoc(
+                        title="Core Hoodie – Rust",
+                        size="M",
+                        color="Burnt Rust",
+                        qty=1,
+                        price_paise=249900,
+                        sku="v-hoodie-rust-m",
+                    )
+                ],
+                pricing=PricingDoc(
+                    subtotal_paise=249900,
+                    shipping_fee_paise=0,
+                    cod_fee_paise=0,
+                    total_paise=249900,
+                ),
+                payment=PaymentDoc(
+                    method="prepaid",
+                    status="awaiting_payment",
+                    provider="upi_qr",
+                    tr="TR-VYO-784908",
+                    customer_upi_id="devika@axis",
+                ),
+                fulfillment=FulfillmentDoc(
+                    provider="qikink",
+                    environment="sandbox",
+                    status="PENDING",
+                ),
+                order_status="PROCESSING",
+                created_at=now - timedelta(minutes=20),
+                updated_at=now - timedelta(minutes=20),
+            ),
+        ]
+        for ord_doc in initial_orders:
+            await ord_doc.insert()
+        logger.info("Successfully seeded 5 initial live orders into MongoDB 'orders' collection.")
+
+    if await CustomerDoc.count() == 0:
+        logger.info("Seeding initial customers into MongoDB 'customers' collection...")
+        customers = [
+            CustomerDoc(
+                name="Aarav Sharma",
+                email="aarav.sharma@example.com",
+                phone="+91 98765 43210",
+                saved_addresses=[
+                    ShippingAddressDoc(
+                        first_name="Aarav",
+                        last_name="Sharma",
+                        address1="Flat 402, Skyline Residency, Bandra West",
+                        city="Mumbai",
+                        state="Maharashtra",
+                        zipcode="400050",
+                        phone="+91 98765 43210",
+                        email="aarav.sharma@example.com",
+                    )
+                ],
+            ),
+            CustomerDoc(
+                name="Ishaan Verma",
+                email="ishaan.v@example.com",
+                phone="+91 91234 56789",
+                saved_addresses=[
+                    ShippingAddressDoc(
+                        first_name="Ishaan",
+                        last_name="Verma",
+                        address1="Tech Zone 4, Greater Noida West",
+                        city="Noida",
+                        state="Uttar Pradesh",
+                        zipcode="201301",
+                        phone="+91 91234 56789",
+                        email="ishaan.v@example.com",
+                    )
+                ],
+            ),
+            CustomerDoc(
+                name="Rhea Patel",
+                email="rhea.patel@example.com",
+                phone="+91 98111 22334",
+                saved_addresses=[
+                    ShippingAddressDoc(
+                        first_name="Rhea",
+                        last_name="Patel",
+                        address1="12th Cross, Indiranagar",
+                        city="Bengaluru",
+                        state="Karnataka",
+                        zipcode="560038",
+                        phone="+91 98111 22334",
+                        email="rhea.patel@example.com",
+                    )
+                ],
+            ),
+            CustomerDoc(
+                name="Kabir Mehta",
+                email="kabir.m@example.com",
+                phone="+91 97654 32109",
+                saved_addresses=[
+                    ShippingAddressDoc(
+                        first_name="Kabir",
+                        last_name="Mehta",
+                        address1="CG Road, Navrangpura",
+                        city="Ahmedabad",
+                        state="Gujarat",
+                        zipcode="380009",
+                        phone="+91 97654 32109",
+                        email="kabir.m@example.com",
+                    )
+                ],
+            ),
+            CustomerDoc(
+                name="Devika Nair",
+                email="devika.n@example.com",
+                phone="+91 95432 10987",
+                saved_addresses=[
+                    ShippingAddressDoc(
+                        first_name="Devika",
+                        last_name="Nair",
+                        address1="Panampilly Nagar",
+                        city="Kochi",
+                        state="Kerala",
+                        zipcode="682036",
+                        phone="+91 95432 10987",
+                        email="devika.n@example.com",
+                    )
+                ],
+            ),
+        ]
+        for cust in customers:
+            await cust.insert()
+        logger.info("Successfully seeded 5 initial customers into MongoDB 'customers' collection.")

@@ -199,7 +199,7 @@ describe('VYOMIK Main Ecommerce Homepage', () => {
     );
     expect(screen.getByRole('link', { name: /email vyomik/i })).toHaveAttribute(
       'href',
-      'mailto:simplyvyomik@gmail.com'
+      'mailto:smiplyvyomik@vyomik.co'
     );
 
     // Copyright

@@ -30,8 +30,8 @@ describe('Brand Details & Polish Verification (TASK 1, 2, 3)', () => {
     expect(brand.brandName).toBe('VYOMIK');
     expect(brand.instagramUrl).toBe('https://www.instagram.com/simplyvyomik');
     expect(brand.instagramHandle).toBe('@simplyvyomik');
-    expect(brand.contactEmail).toBe('simplyvyomik@gmail.com');
-    expect(brand.mailtoUrl).toBe('mailto:simplyvyomik@gmail.com');
+    expect(brand.contactEmail).toBe('smiplyvyomik@vyomik.co');
+    expect(brand.mailtoUrl).toBe('mailto:smiplyvyomik@vyomik.co');
 
     // Assert no query parameters on Instagram URL
     const url = new URL(brand.instagramUrl);
@@ -53,8 +53,8 @@ describe('Brand Details & Polish Verification (TASK 1, 2, 3)', () => {
 
     // Mailto link
     const mailLink = screen.getByRole('link', { name: /email vyomik/i });
-    expect(mailLink).toHaveAttribute('href', 'mailto:simplyvyomik@gmail.com');
-    expect(mailLink.textContent).toContain('simplyvyomik@gmail.com');
+    expect(mailLink).toHaveAttribute('href', 'mailto:smiplyvyomik@vyomik.co');
+    expect(mailLink.textContent).toContain('smiplyvyomik@vyomik.co');
 
     // Contact page link
     expect(screen.getByRole('link', { name: /^contact$/i })).toHaveAttribute('href', '/contact');
@@ -70,8 +70,8 @@ describe('Brand Details & Polish Verification (TASK 1, 2, 3)', () => {
     expect(igLink.getAttribute('rel')).toContain('noreferrer');
 
     const emailLink = screen.getByRole('link', { name: /email vyomik/i });
-    expect(emailLink).toHaveAttribute('href', 'mailto:simplyvyomik@gmail.com');
-    expect(emailLink.textContent).toContain('simplyvyomik@gmail.com');
+    expect(emailLink).toHaveAttribute('href', 'mailto:smiplyvyomik@vyomik.co');
+    expect(emailLink.textContent).toContain('smiplyvyomik@vyomik.co');
   });
 
   it('Contact page renders Instagram link and mailto email address', () => {
@@ -90,10 +90,10 @@ describe('Brand Details & Polish Verification (TASK 1, 2, 3)', () => {
     const emailLinks = screen.getAllByRole('link', { name: /email vyomik/i });
     expect(emailLinks.length).toBeGreaterThanOrEqual(1);
     const mainEmail = emailLinks.find(
-      (l) => l.getAttribute('href') === 'mailto:simplyvyomik@gmail.com'
+      (l) => l.getAttribute('href') === 'mailto:smiplyvyomik@vyomik.co'
     );
     expect(mainEmail).toBeDefined();
-    expect(mainEmail?.textContent).toContain('simplyvyomik@gmail.com');
+    expect(mainEmail?.textContent).toContain('smiplyvyomik@vyomik.co');
   });
 
   it('verifies that no rogue "@vyomik" without "simply" exists in rendered text', () => {
@@ -113,8 +113,9 @@ describe('Brand Details & Polish Verification (TASK 1, 2, 3)', () => {
       termsContainer.textContent,
     ].join(' ');
 
-    // Match any "@vyomik" that is not preceded or succeeded by "simply"
-    const rogueHandles = allText.match(/@vyomik(?!\b_)/gi);
+    // Match any social handle "@vyomik" that is not preceded or succeeded by "simply" (excluding email addresses like @vyomik.co)
+    const nonEmailText = allText.replace(/[\w.-]+@[\w.-]+\.\w+/g, '');
+    const rogueHandles = nonEmailText.match(/@vyomik(?!\b_)/gi);
     expect(rogueHandles).toBeNull();
   });
 

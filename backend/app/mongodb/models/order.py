@@ -76,6 +76,10 @@ class OrderDoc(Document):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+    @property
+    def order_number(self) -> str:
+        return self.public_order_number
+
     class Settings:
         name = "orders"
         indexes = [

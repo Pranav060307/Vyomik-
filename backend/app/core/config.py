@@ -44,7 +44,7 @@ class Settings(BaseSettings):
 
     # Brand Details & Public Links
     CONTACT_EMAIL: str = Field(
-        default="simplyvyomik@gmail.com",
+        default="smiplyvyomik@vyomik.co",
         description="Official brand contact email address",
     )
     INSTAGRAM_URL: str = Field(

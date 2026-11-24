@@ -136,7 +136,7 @@ async def create_upi_qr(
 
     # Sync to MongoDB OrderDoc if available
     try:
-        mongo_order = await OrderDoc.find_one(OrderDoc.order_number == order.public_order_number)
+        mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == order.public_order_number)
         if mongo_order:
             mongo_order.payment.provider = "upi_qr"
             mongo_order.payment.status = "awaiting_payment"
@@ -454,7 +454,7 @@ async def _confirm_payment(
 
     # Sync to MongoDB OrderDoc if available
     try:
-        mongo_order = await OrderDoc.find_one(OrderDoc.order_number == order.public_order_number)
+        mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == order.public_order_number)
         if mongo_order:
             mongo_order.payment.status = "captured"
             mongo_order.payment.utr_number = clean_utr
@@ -611,6 +611,42 @@ async def get_receipt_data(
     payment = res.scalars().first()
 
     if not payment or not payment.order or not payment.receipt:
+        # Check MongoDB OrderDoc
+        try:
+            mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == tr)
+            if not mongo_order:
+                mongo_order = await OrderDoc.find_one(OrderDoc.payment.tr == tr)
+            if mongo_order and mongo_order.payment and mongo_order.payment.status in ["paid", "captured"]:
+                c_name = f"{mongo_order.shipping_address.first_name} {mongo_order.shipping_address.last_name or ''}".strip() if mongo_order.shipping_address else "Valued Customer"
+                rec_num = mongo_order.payment.receipt_number or f"VYREC-{mongo_order.public_order_number}"
+                rec_items = [
+                    {"title": it.title, "color": it.color, "size": it.size, "qty": it.qty, "price_paise": it.price_paise}
+                    for it in (mongo_order.items or [])
+                ]
+                rec_pricing = {
+                    "subtotal_paise": mongo_order.pricing.subtotal_paise if mongo_order.pricing else 0,
+                    "shipping_fee_paise": mongo_order.pricing.shipping_fee_paise if mongo_order.pricing else 0,
+                    "total_paise": mongo_order.pricing.total_paise if mongo_order.pricing else 0,
+                }
+                return ReceiptDetailResponse(
+                    receipt_number=rec_num,
+                    order_number=mongo_order.public_order_number,
+                    customer_name=c_name,
+                    customer_email=mongo_order.customer_email,
+                    customer_upi_id=mongo_order.payment.customer_upi_id,
+                    amount_paise=mongo_order.pricing.total_paise if mongo_order.pricing else 0,
+                    amount_inr=(mongo_order.pricing.total_paise / 100.0) if mongo_order.pricing else 0.0,
+                    utr_number=mongo_order.payment.utr_number or "N/A",
+                    receiving_vpa=settings.MERCHANT_VPA,
+                    payment_status="PAID",
+                    issued_at=mongo_order.payment.verified_at or mongo_order.created_at,
+                    items=rec_items,
+                    pricing=rec_pricing,
+                    download_url=f"/api/v1/payments/receipt/{mongo_order.public_order_number}/download",
+                )
+        except Exception as me:
+            logger.debug(f"MongoDB receipt fetch: {me}")
+
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Verified receipt for '{tr}' not found",
@@ -653,6 +689,49 @@ async def download_receipt_pdf(
     payment = res.scalars().first()
 
     if not payment or not payment.order or not payment.receipt:
+        # Check MongoDB OrderDoc
+        try:
+            mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == tr)
+            if not mongo_order:
+                mongo_order = await OrderDoc.find_one(OrderDoc.payment.tr == tr)
+            if mongo_order and mongo_order.payment and mongo_order.payment.status in ["paid", "captured"]:
+                c_name = f"{mongo_order.shipping_address.first_name} {mongo_order.shipping_address.last_name or ''}".strip() if mongo_order.shipping_address else "Valued Customer"
+                rec_num = mongo_order.payment.receipt_number or f"VYREC-{mongo_order.public_order_number}"
+                rec_items = [
+                    {"title": it.title, "color": it.color, "size": it.size, "qty": it.qty, "price_paise": it.price_paise}
+                    for it in (mongo_order.items or [])
+                ]
+                rec_pricing = {
+                    "subtotal_paise": mongo_order.pricing.subtotal_paise if mongo_order.pricing else 0,
+                    "shipping_fee_paise": mongo_order.pricing.shipping_fee_paise if mongo_order.pricing else 0,
+                    "total_paise": mongo_order.pricing.total_paise if mongo_order.pricing else 0,
+                }
+                pdf_receipt_data = {
+                    "receipt_number": rec_num,
+                    "order_number": mongo_order.public_order_number,
+                    "date_str": mongo_order.created_at.strftime("%d %B %Y, %I:%M %p IST") if hasattr(mongo_order, "created_at") else "23 November 2026, 09:38 PM IST",
+                    "customer_name": c_name,
+                    "customer_email": mongo_order.customer_email,
+                    "customer_upi_id": mongo_order.payment.customer_upi_id,
+                    "receiving_vpa": settings.MERCHANT_VPA,
+                    "utr_number": mongo_order.payment.utr_number or "N/A",
+                    "amount_paise": mongo_order.pricing.total_paise if mongo_order.pricing else 0,
+                    "items": rec_items,
+                    "pricing": rec_pricing,
+                }
+                pdf_bytes = generate_vyomik_pdf_receipt(pdf_receipt_data)
+                filename = f"VYOMIK_Receipt_{mongo_order.public_order_number}.pdf"
+                return Response(
+                    content=pdf_bytes,
+                    media_type="application/pdf",
+                    headers={
+                        "Content-Disposition": f'attachment; filename="{filename}"',
+                        "Cache-Control": "public, max-age=86400",
+                    },
+                )
+        except Exception as me:
+            logger.debug(f"MongoDB receipt fetch: {me}")
+
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Verified receipt for '{tr}' not found",
@@ -747,10 +826,66 @@ async def list_admin_payments(
             )
         )
 
+    # Always merge live payments from MongoDB OrderDoc
+    try:
+        existing_orders = {i.order_number for i in items}
+        mongo_orders = await OrderDoc.find_all().to_list()
+        for idx, mo in enumerate(mongo_orders):
+            if not hasattr(mo, "payment") or not mo.payment:
+                continue
+            if mo.public_order_number in existing_orders:
+                continue
+            p_status = mo.payment.status or "paid"
+            if p_status == "captured":
+                p_status = "paid"
+            p_amount = mo.pricing.total_paise if hasattr(mo, "pricing") else 0
+            
+            # Check status filter if provided
+            if status_filter and status_filter.lower() != "all":
+                if p_status.lower() != status_filter.lower():
+                    continue
+
+            # Check search query if provided
+            if q and q.strip():
+                term = q.strip().lower()
+                m_tr = (mo.payment.tr or "").lower()
+                m_utr = (mo.payment.utr_number or "").lower()
+                m_ord = (mo.public_order_number or "").lower()
+                m_upi = (mo.payment.customer_upi_id or "").lower()
+                if term not in m_tr and term not in m_utr and term not in m_ord and term not in m_upi:
+                    continue
+
+            c_name = f"{mo.shipping_address.first_name} {mo.shipping_address.last_name or ''}".strip() if mo.shipping_address else "Valued Customer"
+            items.append(
+                PaymentAuditItem(
+                    id=len(items) + idx + 1,
+                    tr=mo.payment.tr or f"TR-{mo.public_order_number}",
+                    order_number=mo.public_order_number,
+                    customer_name=c_name,
+                    customer_email=mo.customer_email,
+                    customer_upi_id=mo.payment.customer_upi_id,
+                    amount_paise=p_amount,
+                    amount_inr=p_amount / 100.0,
+                    status=p_status,
+                    utr_number=mo.payment.utr_number,
+                    created_at=mo.created_at,
+                    verified_at=mo.payment.verified_at or mo.created_at,
+                    receipt_number=mo.payment.receipt_number,
+                )
+            )
+
+        total_volume_paise = sum(i.amount_paise for i in items if i.status == "paid")
+        verified_count = sum(1 for i in items if i.status == "paid")
+        awaiting_count = sum(1 for i in items if i.status in ["created", "awaiting_payment", "verifying"])
+        manual_review_count = sum(1 for i in items if i.status == "manual_review")
+        failed_count = sum(1 for i in items if i.status in ["failed", "expired"])
+    except Exception as me:
+        logger.debug(f"MongoDB payment sync ignored: {me}")
+
     return AdminPaymentsListResponse(
         total_volume_paise=total_volume_paise,
         total_volume_inr=total_volume_paise / 100.0,
-        total_count=len(all_payments),
+        total_count=len(items),
         verified_count=verified_count,
         awaiting_count=awaiting_count,
         manual_review_count=manual_review_count,
@@ -784,6 +919,34 @@ async def manual_reconcile_payment(
     payment = res.scalars().first()
 
     if not payment or not payment.order:
+        # Check MongoDB OrderDoc fallback
+        try:
+            mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == payload.tr)
+            if not mongo_order:
+                mongo_order = await OrderDoc.find_one(OrderDoc.payment.tr == payload.tr)
+            if mongo_order:
+                now = datetime.now(timezone.utc)
+                receipt_num = f"VYREC-{now.strftime('%Y%m%d')}-{random.randint(1000, 9999)}"
+                mongo_order.payment.status = "captured"
+                mongo_order.payment.utr_number = clean_utr
+                mongo_order.payment.verified_at = now
+                mongo_order.payment.receipt_number = receipt_num
+                mongo_order.order_status = "CONFIRMED"
+                await mongo_order.save()
+                await mark_utr_processed(clean_utr)
+                logger.info(f"[Admin Reconcile] MongoDB Payment {payload.tr} manually approved by {payload.admin_email}")
+                return {
+                    "ok": True,
+                    "tr": mongo_order.payment.tr or payload.tr,
+                    "order_number": mongo_order.public_order_number,
+                    "status": "paid",
+                    "utr": clean_utr,
+                    "receipt_number": receipt_num,
+                    "receipt_url": f"/api/v1/payments/receipt/{mongo_order.public_order_number}/download",
+                }
+        except Exception as me:
+            logger.debug(f"MongoDB reconcile fallback check failed: {me}")
+
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Payment with TR '{payload.tr}' not found",
@@ -853,6 +1016,19 @@ async def manual_reconcile_payment(
 
     await db.commit()
     await mark_utr_processed(clean_utr)
+
+    # Sync to MongoDB OrderDoc if available
+    try:
+        mongo_order = await OrderDoc.find_one(OrderDoc.public_order_number == order.public_order_number)
+        if mongo_order:
+            mongo_order.payment.status = "captured"
+            mongo_order.payment.utr_number = clean_utr
+            mongo_order.payment.verified_at = now
+            mongo_order.payment.receipt_number = receipt_num
+            mongo_order.order_status = "CONFIRMED"
+            await mongo_order.save()
+    except Exception as e:
+        logger.debug(f"MongoDB manual reconcile sync ignored: {e}")
 
     logger.info(f"[Admin Reconcile] Payment {payment.tr} manually approved by {payload.admin_email}")
 

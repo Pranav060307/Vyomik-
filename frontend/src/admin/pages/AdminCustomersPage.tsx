@@ -17,6 +17,7 @@ const CUSTOMER_COHORTS: AdminCustomer[] = [
 export const AdminCustomersPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'waitlist' | 'customers'>('waitlist');
   const [waitlistEmails, setWaitlistEmails] = useState<string[]>([]);
+  const [customers, setCustomers] = useState<AdminCustomer[]>(CUSTOMER_COHORTS);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchWaitlist = async () => {
@@ -35,9 +36,41 @@ export const AdminCustomersPage: React.FC = () => {
     }
   };
 
+  const fetchCustomers = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/v1/admin/customers`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setCustomers(
+            data.map((c: any) => ({
+              id: String(c.id),
+              fullName: c.full_name || c.fullName || 'Customer',
+              email: c.email,
+              phone: c.phone || 'N/A',
+              city: c.city || 'India',
+              totalOrders: c.total_orders || c.totalOrders || 1,
+              totalSpentPaise: c.total_spent_paise || c.totalSpentPaise || 0,
+              lastOrderDate: c.last_order_date || c.lastOrderDate || '2026-11-21',
+              isVip: Boolean(c.is_vip ?? c.isVip),
+            }))
+          );
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to fetch customers from live API:', err);
+    }
+  };
+
   useEffect(() => {
     fetchWaitlist();
+    fetchCustomers();
   }, []);
+
+  const handleSyncAll = () => {
+    fetchWaitlist();
+    fetchCustomers();
+  };
 
   const handleExportCSV = () => {
     if (waitlistEmails.length === 0) return;
@@ -156,7 +189,7 @@ export const AdminCustomersPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={fetchWaitlist}
+            onClick={handleSyncAll}
             className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#141414] hover:bg-[#1C1A18] border border-[#242321] rounded-xl text-xs font-semibold text-[#D9D1C3] hover:text-[#F4F0E8] transition-colors cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[#C85A2E]' : ''}`} />
@@ -191,7 +224,7 @@ export const AdminCustomersPage: React.FC = () => {
           className={`pb-3 transition-colors relative cursor-pointer ${activeTab === 'customers' ? 'text-[#F4F0E8] font-bold' : 'text-[#716B63] hover:text-[#A8A29E]'
             }`}
         >
-          <span>Customer Directory & LTV ({CUSTOMER_COHORTS.length})</span>
+          <span>Customer Directory & LTV ({customers.length})</span>
           {activeTab === 'customers' && (
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C85A2E]" />
           )}
@@ -209,7 +242,7 @@ export const AdminCustomersPage: React.FC = () => {
       ) : (
         <DataTable
           columns={customerColumns}
-          data={CUSTOMER_COHORTS}
+          data={customers}
           searchKey={(c) => `${c.fullName} ${c.email} ${c.city}`}
           searchPlaceholder="Search customer by name, email, or city..."
         />

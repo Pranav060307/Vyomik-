@@ -9,9 +9,13 @@ import { ShopHeroBanner } from '../components/shop-all/ShopHeroBanner';
 import { CategoryHorizontalNav } from '../components/shop-all/CategoryHorizontalNav';
 import { ShopMainListing } from '../components/shop-all/ShopMainListing';
 
-export const ShopAllPage: React.FC = () => {
+interface ShopAllPageProps {
+  initialCategory?: string;
+}
+
+export const ShopAllPage: React.FC<ShopAllPageProps> = ({ initialCategory }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeCategory = searchParams.get('cat') || 'all';
+  const activeCategory = searchParams.get('cat') || initialCategory || 'all';
 
   useEffect(() => {
     document.title = 'Shop All — VYOMIK Oversized Essentials';

@@ -325,7 +325,7 @@ def generate_vyomik_pdf_receipt(receipt_data: Dict[str, Any]) -> bytes:
     story.append(Paragraph(
         "This official electronic receipt is issued by VYOMIK for the specified order. "
         "Payment was executed via the Unified Payments Interface (UPI) and confirmed via automatic bank transaction reference matching.<br/>"
-        "Customer Support: simplyvyomik@gmail.com | Official Portal: vyomik.com",
+        "Customer Support: smiplyvyomik@vyomik.co | Official Portal: vyomik.com",
         style_footer,
     ))
 
