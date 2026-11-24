@@ -273,4 +273,30 @@ describe('VYOMIK — Product Detail Page (PDP) Full Implementation', () => {
     const savedWishlist = JSON.parse(localStorage.getItem('vyomik_wishlist') || '[]');
     expect(savedWishlist).toContain('vy-prod-01');
   });
+
+  it('13. dynamically changes product pedestal preview image when switching color swatches', () => {
+    renderProductDetailPage('unisex-oversized-classic-t-shirt-white');
+
+    // Helper to get active showcase image
+    const getShowcaseImg = () =>
+      screen.getByRole('button', { name: /View full screen image/i }).previousSibling as HTMLImageElement;
+
+    // Initially Cyber White tee is displayed on the main showcase
+    expect(getShowcaseImg().src).toContain('qikink-tee-cyber-white.png');
+
+    // Click "Pitch Black" color swatch
+    const pitchBlackSwatch = screen.getByRole('radio', { name: 'Pitch Black' });
+    fireEvent.click(pitchBlackSwatch);
+
+    // Color name label updates to Pitch Black
+    expect(screen.getByText('Pitch Black')).toBeInTheDocument();
+
+    // Showcase pedestal image immediately switches to qikink-tee-cyber-black.png with identical artwork
+    expect(getShowcaseImg().src).toContain('qikink-tee-cyber-black.png');
+
+    // Click back to Cyber White
+    const cyberWhiteSwatch = screen.getByRole('radio', { name: 'Cyber White' });
+    fireEvent.click(cyberWhiteSwatch);
+    expect(getShowcaseImg().src).toContain('qikink-tee-cyber-white.png');
+  });
 });

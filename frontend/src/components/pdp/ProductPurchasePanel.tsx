@@ -80,6 +80,11 @@ export const ProductPurchasePanel: React.FC<ProductPurchasePanelProps> = ({
   };
 
   const handleAddToCart = () => {
+    const currentSwatch = product.swatches?.find(
+      (s) => s.name.toLowerCase() === selectedColor.toLowerCase()
+    );
+    const colorGarmentImage = currentSwatch?.img || product.primaryImage;
+
     addItem({
       id: `${product.id}-${selectedColor}-${selectedSize}`,
       productId: product.id,
@@ -90,11 +95,11 @@ export const ProductPurchasePanel: React.FC<ProductPurchasePanelProps> = ({
       type: product.category,
       color: selectedColor,
       size: selectedSize,
-      img: product.primaryImage,
-      image: product.primaryImage,
+      img: colorGarmentImage,
+      image: colorGarmentImage,
       quantity,
     });
-    toast(`${product.name} (${selectedSize}) added to bag`);
+    toast(`${product.name} (${selectedSize} · ${selectedColor}) added to bag`);
     openBag();
   };
 
@@ -183,7 +188,7 @@ export const ProductPurchasePanel: React.FC<ProductPurchasePanelProps> = ({
         <div className="flex items-center gap-2.5" role="radiogroup" aria-label="Available Colors">
           {product.swatches && product.swatches.length > 0 ? (
             product.swatches.map((swatch) => {
-              const isSelected = selectedColor === swatch.name;
+              const isSelected = selectedColor.toLowerCase() === swatch.name.toLowerCase();
               return (
                 <button
                   key={swatch.name}

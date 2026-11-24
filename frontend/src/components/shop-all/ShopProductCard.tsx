@@ -57,6 +57,12 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
   );
   const [isHovered, setIsHovered] = useState(false);
 
+  const currentSwatch =
+    product.swatches.find((s) => s.hex === selectedColor) || product.swatches[0];
+  const activeGarmentImage = currentSwatch?.img || product.primaryImage;
+  const currentCardImage =
+    isHovered && product.hoverImage ? product.hoverImage : activeGarmentImage;
+
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     const nextState = toggleProductWishlist(product.id);
@@ -67,17 +73,17 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
     addItem({
-      id: `${product.id}-${selectedColor}`,
+      id: `${product.id}-${currentSwatch?.name || selectedColor}`,
       productId: product.id,
       name: product.name,
       title: product.name,
       price: product.price,
       pricePaise: product.pricePaise || product.price * 100,
       type: product.category,
-      color: selectedColor,
+      color: currentSwatch?.name || product.colorName,
       size: product.availableSizes[0] || 'M',
-      img: product.primaryImage,
-      image: product.primaryImage,
+      img: activeGarmentImage,
+      image: activeGarmentImage,
       quantity: 1,
     });
     toast(`${product.name} added to bag`);
@@ -92,7 +98,7 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
       >
         <div className="w-full sm:w-44 h-48 sm:h-44 rounded-xl overflow-hidden bg-[#0B0B0B] relative flex-none">
           <img
-            src={product.primaryImage}
+            src={activeGarmentImage}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
@@ -164,7 +170,7 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
       {/* Product Image Area */}
       <div className="relative aspect-[4/5] w-full bg-[#0B0B0B] overflow-hidden">
         <img
-          src={isHovered && product.hoverImage ? product.hoverImage : product.primaryImage}
+          src={currentCardImage}
           alt={product.name}
           className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
           loading="lazy"
@@ -221,7 +227,10 @@ export const ShopProductCard: React.FC<ShopProductCardProps> = ({
               <button
                 key={swatch.hex}
                 type="button"
-                onClick={() => setSelectedColor(swatch.hex)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedColor(swatch.hex);
+                }}
                 style={{ backgroundColor: swatch.hex }}
                 className={`w-3.5 h-3.5 rounded-full border transition-all cursor-pointer ${
                   selectedColor === swatch.hex
